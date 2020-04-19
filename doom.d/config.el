@@ -51,6 +51,8 @@
 ;;
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
+;; (use-package "fzf" :init (setenv "FZF_DEFAULT_COMMAND" "fd --type f"))
+
 
 ;; Prettify symbols
 (global-prettify-symbols-mode +1)
@@ -64,12 +66,37 @@
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 ;; LSP For C/C++ (ccls)
-(require 'ccls)
-(setq ccls-executable "CCLS_PATH")
+;(require 'ccls)
+;(setq ccls-executable "CCLS_PATH")
+;(use-package lsp-mode :commands lsp)
+;(use-package lsp-ui :commands lsp-ui-mode)
+;(use-package company-lsp :commands company-lsp)
+;
+;(use-package ccls
+;  :hook ((c-mode c++-mode objc-mode cuda-mode) .
+;         (lambda () (require 'ccls) (lsp))))
 (use-package lsp-mode :commands lsp)
-(use-package lsp-ui :commands lsp-ui-mode)
-(use-package company-lsp :commands company-lsp)
+(use-package lsp-ui
+  ;; flycheck integration & higher level UI modules
+  :commands lsp-ui-mode)
 
-(use-package ccls
-  :hook ((c-mode c++-mode objc-mode cuda-mode) .
-         (lambda () (require 'ccls) (lsp))))
+(use-package company-lsp
+  ;; company-mode completion
+  :commands company-lsp
+  :config (push 'company-lsp company-backends))
+
+(use-package lsp-treemacs
+  ;; project wide overview
+  :commands lsp-treemacs-errors-list)
+
+(use-package dap-mode
+  :commands (dap-debug dap-debug-edit-template))
+(require 'dap-python)
+
+;Doesn't work yet, have to figure out why
+;(use-package ccls
+;  :ensure t
+;  :config
+;  (setq ccls-exectuable "/home/rmarr/.local/bin/ccls")
+;  :hook ((c-mode) . (lambda () (require 'ccls) (lsp)))
+;  )
