@@ -56,7 +56,7 @@
 
 ;; Prettify symbols
 (global-prettify-symbols-mode +1)
-(use-package lsp-mode
+(use-package! lsp-mode
   :config
   (add-hook 'c++-mode-hook #'lsp)
   (add-hook 'python-mode-hook #'lsp)
@@ -75,28 +75,35 @@
 ;(use-package ccls
 ;  :hook ((c-mode c++-mode objc-mode cuda-mode) .
 ;         (lambda () (require 'ccls) (lsp))))
-(use-package lsp-mode :commands lsp)
-(use-package lsp-ui
+(use-package! lsp-mode :commands lsp)
+(use-package! lsp-ui
   ;; flycheck integration & higher level UI modules
   :commands lsp-ui-mode)
 
-(use-package company-lsp
+(use-package! company-lsp
   ;; company-mode completion
   :commands company-lsp
   :config (push 'company-lsp company-backends))
 
-(use-package lsp-treemacs
+(use-package! lsp-treemacs
   ;; project wide overview
   :commands lsp-treemacs-errors-list)
 
-(use-package dap-mode
+(use-package! dap-mode
   :commands (dap-debug dap-debug-edit-template))
-(require 'dap-python)
+;(require 'dap-python)
+(require 'package)
 
+(add-to-list 'package-archives
+	     '("melpa" . "http://melpa.org/packages/") t)
+
+(package-initialize)
+(when (not package-archive-contents)
+  (package-refresh-contents))
 ;Doesn't work yet, have to figure out why
-;(use-package ccls
-;  :ensure t
-;  :config
-;  (setq ccls-exectuable "/home/rmarr/.local/bin/ccls")
-;  :hook ((c-mode) . (lambda () (require 'ccls) (lsp)))
-;  )
+(use-package! ccls
+  :ensure t
+  :config
+  (setq ccls-exectuable "/home/rmarr/.local/bin/ccls")
+  :hook ((c-mode) . (lambda () (require 'ccls) (lsp)))
+  )

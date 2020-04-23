@@ -3,7 +3,7 @@
 
 ;; To install a package with Doom you must declare them here, run 'doom sync' on
 ;; the command line, then restart Emacs for the changes to take effect.
-;; Alternatively, use M-x doom/reload.
+; Alternatively, use M-x doom/reload.
 
 
 ;; Doom's packages are pinned to a specific commit and updated from release to
@@ -45,5 +45,13 @@
 ;; This is required for some packages whose default branch isn't 'master' (which
 ;; our package manager can't deal with; see raxod502/straight.el#279)
 ;(package! builtin-package :recipe (:branch "develop"))
+;Doesn't work yet, have to figure out why
+;(use-package ccls
+;  :ensure t
+;  :config
+;  (setq ccls-exectuable "/home/rmarr/.local/bin/ccls")
+;  :hook ((c-mode) . (lambda () (require 'ccls) (lsp)))
+;  )
 
 (package! evil-commentary)
+(package! ccls)
