@@ -55,3 +55,4 @@
 
 (package! evil-commentary)
 (package! ccls)
+(package! dap-mode)

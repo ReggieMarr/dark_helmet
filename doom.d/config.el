@@ -89,11 +89,20 @@
   ;; project wide overview
   :commands lsp-treemacs-errors-list)
 
+; Requires pyenv to work properly
+(require 'package)
+(require 'dap-mode)
+(require 'dap-ui)
+(require 'dap-python)
+(dap-mode 1)
+(dap-ui-mode 1)
 (use-package! dap-mode
   :commands (dap-debug dap-debug-edit-template))
-;(require 'dap-python)
-(require 'package)
-
+;; (def-package! dap-mode
+;;   :after lsp-mode
+;;   :config
+;;   (dap-mode t)
+;;   (dap-ui-mode t))
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.org/packages/") t)
 
