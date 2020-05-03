@@ -2,7 +2,7 @@
       user-mail-address "dyereh@gmail.com"
 
       doom-scratch-initial-major-mode 'lisp-interaction-mode
-      doom-theme 'doom-dracula
+      doom-theme 'doom-monokai-classic
       ;;treemacs-width 32 ;;TODO
 
       ;; Improve performance & disable line #'s by defausdlt
@@ -35,24 +35,18 @@
     :desc "Open vterm" "t"    #'vterm)
   (:prefix "b"
     :desc "Switch to buffer" "b" #'switch-to-buffer)
+  (:prefix "f"
+    :desc "Find file in projects" "f" #'projectile-find-file-in-known-projects)
   :desc "Switchhh" "a" #'switch-to-buffer)
 
 
 ;; LATEX
 (setq +latex-viewrs '(pdf-tools))
 
-(add-to-list
-  'TeX-command-list
-  '("DVI to PDF"
-    "dvipdf %d"
-    TeX-run-command
-    nil                              ; ask for confirmation
-    t                                ; active in all modes
-    :help "Convert DVI->PDF"))
-
 (defun latex-compile ()
     (interactive)
     (save-buffer)
     (TeX-command "LaTeX" 'TeX-master-file))
 
-(define-key TeX-mode-map (kbd "C-c C-g") 'latex-compile)
+(eval-after-load 'latex
+  '(define-key TeX-mode-map (kbd "C-c C-g") 'latex-compile))
