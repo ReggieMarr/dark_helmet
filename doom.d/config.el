@@ -24,7 +24,7 @@
 
 (use-package vterm
   :load-path  "/home/edyer/Desktop/emacs-libvterm")
-;;;
+
 (use-package symbol-overlay)
 
 (use-package nov)
@@ -39,7 +39,7 @@
     :desc "Find file in projects" "f" #'projectile-find-file-in-known-projects)
   :desc "Switchhh" "a" #'switch-to-buffer)
 
-;
+
 
 ;; LATEX
 (setq +latex-viewrs '(pdf-tools))
@@ -52,11 +52,16 @@
 (eval-after-load 'latex
   '(define-key TeX-mode-map (kbd "C-c C-g") 'latex-compile))
 
+(with-eval-after-load 'evil-motion-state-map
+  (define-key evil-motion-state-map (kbd "C-o") nil))
 ;; MAGIT
 (with-eval-after-load 'magit
   ;; Nicer navigation
   (define-key magit-mode-map (kbd "M-j") 'magit-section-forward)
   (define-key magit-mode-map (kbd "M-k") 'magit-section-backward)
-  (define-key magit-mode-map (kbd "C-M-j") 'magit-section-backward-sibling)
+  (define-key magit-mode-map (kbd "C-M-j") 'magit-section-forward-sibling)
   (define-key magit-mode-map (kbd "C-M-k") 'magit-section-backward-sibling)
+  (define-key magit-mode-map (kbd "C-K") 'magit-section-up)
+  (define-key magit-mode-map (kbd "M-o") 'magit-section-toggle)
+  (define-key magit-mode-map (kbd "C-o") 'magit-section-cycle)
 )
