@@ -71,16 +71,20 @@
   )
 
 (with-eval-after-load 'magit
-  ;; Nicer navigation
+  ;; Register custom keybindings
+
+  ;; Navigation
   (define-key magit-mode-map (kbd "M-j") 'magit-section-forward)
   (define-key magit-mode-map (kbd "M-k") 'magit-section-backward)
   (define-key magit-mode-map (kbd "C-M-j") 'magit-section-forward-sibling)
   (define-key magit-mode-map (kbd "C-M-k") 'magit-section-backward-sibling)
   (define-key magit-mode-map (kbd "C-K") 'magit-section-up)
+
+  ;; Section folding/expansion
   (define-key magit-mode-map (kbd "M-o") 'magit-section-toggle)
   (define-key magit-mode-map (kbd "C-o") 'magit-section-cycle)
 
-  ;; Custom Commands
+  ;; Register Custom Commands
  (transient-append-suffix 'magit-commit "c"
                          '("h" "fixup head" fixup-head))
 
