@@ -55,15 +55,9 @@
 (with-eval-after-load 'evil-motion-state-map
   (define-key evil-motion-state-map (kbd "C-o") nil))
 
-;; MAGIT
-
-;;;###autoload
-(defun magit-add-all-things ()
-  (interactive)
-  (magit-run-git "add" "-A")
-  ;; (message "noice")
-  )
-
+;;###########################
+;;#          MAGIT          #
+;;###########################
 (define-suffix-command reset-upstream ()
   (interactive)
   (if (magit-confirm t (format "**WARNING** this will hard reset to upstream branch. Continue?"))
@@ -93,3 +87,6 @@
  (transient-append-suffix 'magit-reset "f"
                          '("u" "upstream" reset-upstream))
 )
+
+;; Automatically refresh status buffer
+(add-hook 'after-save-hook 'magit-after-save-refresh-status t)
