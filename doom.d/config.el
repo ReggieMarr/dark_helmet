@@ -90,6 +90,7 @@
   (if (magit-confirm t (format "**WARNING** this will hard reset to upstream branch. Continue?"))
       (magit-run-git "add" "-A"))
   )
+;;
 ;; (define-suffix-command magit-reset-hard-upstream ())
 ;;;###autoload (autoload 'magit-test "magit-test-commands" nil t)
 
