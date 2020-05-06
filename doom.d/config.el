@@ -55,6 +55,43 @@
 (with-eval-after-load 'evil-motion-state-map
   (define-key evil-motion-state-map (kbd "C-o") nil))
 ;; MAGIT
+
+;;;###autoload
+(defun magit-add-all ()
+  (interactive)
+  (magit-run-git "add" "-A")
+  ;; (message "noice")
+  )
+
+(defun magit-unadd-all ()
+  "Remove all changes from the staging area."
+  (interactive)
+  (when (or (magit-anything-unstaged-p)
+            (magit-untracked-files))
+    (magit-confirm 'unstage-all-changes))
+  (magit-wip-commit-before-change nil " before unstage")
+  (magit-run-git "reset" "HEAD" "--" magit-buffer-diff-files)
+  (magit-wip-commit-after-apply nil " after unstage"))
+
+(defun test-msg ()
+  (message "test_msg")
+  )
+;;(magit-reset-hard-upstream)
+
+(define-transient-command magit-reset-hard-upstream ())
+;; (define-suffix-command magit-reset-hard-upstream ())
+;;;###autoload (autoload 'magit-test "magit-test-commands" nil t)
+
+(define-transient-command magit-test ()
+  "Add, configure or remove a branch."
+  :man-page "git-branch"
+  ["Test"
+   ("m" "add all"   magit-add-all)
+   ("u" "unadd all" magit-unadd-all)]
+  ;;(interactive (list (magit-get-current-branch)))
+  ;; (transient-setup 'magit-test nil nil)
+  )
+
 (with-eval-after-load 'magit
   ;; Nicer navigation
   (define-key magit-mode-map (kbd "M-j") 'magit-section-forward)
@@ -64,4 +101,17 @@
   (define-key magit-mode-map (kbd "C-K") 'magit-section-up)
   (define-key magit-mode-map (kbd "M-o") 'magit-section-toggle)
   (define-key magit-mode-map (kbd "C-o") 'magit-section-cycle)
+
+  ;; Custom Commands
+ ;; (transient-append-suffix 'magit-commit "c"
+                         ;; '("n" "magit-test" test-msg))
+
+
+
+  ;; (transient-append-suffix 'magit-commit "c"
+                          ;; '("m" "c2" magit-reset-hard-upstream))
 )
+
+
+ (transient-append-suffix 'magit-commit "c"
+                         '("n" "magit-test" magit-test))
