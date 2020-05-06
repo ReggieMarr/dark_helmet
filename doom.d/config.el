@@ -56,7 +56,7 @@
   (define-key evil-motion-state-map (kbd "C-o") nil))
 
 ;; MAGIT
-;;
+
 ;;;###autoload
 (defun magit-add-all-things ()
   (interactive)
