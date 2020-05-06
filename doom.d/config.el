@@ -55,7 +55,6 @@
 (with-eval-after-load 'evil-motion-state-map
   (define-key evil-motion-state-map (kbd "C-o") nil))
 
-
 ;; MAGIT
 
 ;;;###autoload
