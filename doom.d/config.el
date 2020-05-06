@@ -63,7 +63,7 @@
   (if (magit-confirm t (format "**WARNING** this will hard reset to upstream branch. Continue?"))
       (magit-run-git "add" "-A"))
   )
-
+; fs
 (define-suffix-command fixup-head ()
   "Make current commit a fixup to HEAD"
   (interactive)

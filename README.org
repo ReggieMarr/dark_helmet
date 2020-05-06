@@ -1,0 +1,4 @@
+#+TITLE: Readme
+
+Clone repo down then symlink using
+ln -s ~/dark_helmet/doom.d ~/.doom.d
