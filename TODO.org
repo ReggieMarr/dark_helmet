@@ -1,0 +1,16 @@
+- Tab seems wrong..
+- How to easily go to end of line
+- How to make a new file in DIRED
+
+- more granular undo?
+- C-DEL is trash..
+
+- switch between 2 buffers
+  - change key
+    - Make it switch between 3 buffers?
+
+- rm should send to recycle bin instead of permanently deleting
+
+
+- alt j/k is up/down arrow in vterm
+- SCROLLLLLLLLLLLLLL
