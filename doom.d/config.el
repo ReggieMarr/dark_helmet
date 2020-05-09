@@ -94,3 +94,105 @@
 
 ;; Automatically refresh status buffer
 (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
+
+;; List of repositories
+(setq magit-repository-directories
+      ;; `(("~" . DEPTH1)))
+      `(("~/release"      . 1)
+        ("~/kinetis"      . 1)
+        ("~/dark_helmet"  . 1)))
+        ;; ("~/dark_helment" . DEPTH3)))
+
+(setq magit-repolist-columns
+      '(("Name"    25 magit-repolist-column-ident                  ())
+        ("Version" 25 magit-repolist-column-version                ())
+        ("D"        1 magit-repolist-column-dirty                  ())
+        ("L<U"      3 magit-repolist-column-unpulled-from-upstream ((:right-align t)))
+        ("L>U"      3 magit-repolist-column-unpushed-to-upstream   ((:right-align t)))
+        ("Path"    99 magit-repolist-column-path                   ())))
+;; Fun useless plugins
+
+;; Weather Forcast
+;;
+;;;; weather from wttr.in
+;; (use-package wttrin
+  ;; :ensure t
+  ;; :commands (wttrin)
+  ;; :init
+  ;; (setq wttrin-default-cities '("Hamilton"))
+  ;; (setq wttrin-default-accept-language '("Accept-Language" . "en-US"))
+  ;; )
+
+;; (defun bjm/wttrin ()
+    ;; "Open `wttrin' without prompting, using first city in `wttrin-default-cities'"
+    ;; (interactive)
+    ;; (wttrin-query (car wttrin-default-cities))
+    ;; )
+;; ;; function to open wttrin with first city on list
+;; (defun bjm/wttrin ()
+;;     "Open `wttrin' without prompting, using first city in `wttrin-default-cities'"
+;;     (interactive)
+;;     ;; save window arrangement to register
+;;     (window-configuration-to-register :pre-wttrin)
+;;     (delete-other-windows)
+;;     ;; save frame setup
+;;     (save-frame-config)
+;;     (set-frame-width (selected-frame) 130)
+;;     (set-frame-height (selected-frame) 48)
+;;     ;; call wttrin
+;;     (wttrin-query (car wttrin-default-cities))
+;;     )
+;; (advice-add 'wttrin :before #'bjm/wttrin-save-frame)
+
+
+;; (defun bjm/wttrin-restore-frame ()
+;;   "Restore frame and window configuration saved prior to launching wttrin."
+;;   (interactive)
+;;   (jump-to-frame-config-register)
+;;   (jump-to-register :pre-wttrin)
+  ;; )
+;; (advice-add 'wttrin-exit :after #'bjm/wttrin-restore-frame)
+
+;; PDF-Tools
+;; o - outline
+(with-eval-after-load 'pdf-tools
+(define-key pdf-view-mode-map (kbd "C-c C-h") 'outline-hide-other)
+;; (define-key pdf-view-mode-map (kbd "C-c C-a") 'outline-toggle-children)
+  ;; (define-key pdf-view-mode-map (kbd "M-h") 'pdf-outline)
+  ;; (define-key pdf-outline-minor-mode-map (kbd "i") 'pdf-outline)
+
+  ;; (define-key pdf-outline-buffer-mode-map (kbd "M-h") 'outline-toggle-children)
+  ;; (define-key outline-mode-map (kbd "a") 'outline-show-all)
+  (message "nice")
+  ;; (define-key pdf-outline-buffer-mode-map (kbd "M-o") 'outline-toggle-children)
+)
+
+;; LSP
+;;
+(setq ccls-executable "/snap/bin/ccls")
+
+;; (defmacro hydra-move-macro ()
+  ;; '(("h" evil-window-left "left")
+  ;; ("l" evil-window-right "right")))
+
+;; Window Navigation (faster using hydras)
+;; (defhydra hydra-move (:body-pre (evil-window-left 1))
+(defhydra hydra-move ()
+  "Move"
+  ("l" evil-window-right "right")
+  ("h" evil-window-left  "left")
+  ("k" evil-window-up    "up")
+  ("j" evil-window-down  "down"))
+
+(defun movement (dir)
+  "Call the original movement direction then enter hydra-move"
+  (cond ((string= dir "h") (evil-window-left 1))
+        ((string= dir "l") (evil-window-right 1))
+        ((string= dir "k") (evil-window-up 1))
+        ((string= dir "j") (evil-window-down 1)))
+  (hydra-move/body))
+
+(define-key doom-leader-map (kbd "w h") (lambda () (interactive) (movement "h")))
+(define-key doom-leader-map (kbd "w l") (lambda () (interactive) (movement "l")))
+;; (define-key doom-leader-map (kbd "w h") 'hydra-move-left/body)
+  ;; ("l" evil-window-right "right"))
