@@ -1,5 +1,5 @@
-(setq user-full-name "Eric Dyer"
-      user-mail-address "dyereh@gmail.com"
+(setq user-full-name "Reg Marr"
+      user-mail-address "reginald.t.marr@gmail.com"
 
       doom-scratch-initial-major-mode 'lisp-interaction-mode
       doom-theme 'doom-monokai-classic
@@ -22,8 +22,9 @@
 (require 'use-package)
 (setq use-package-always-ensure t) ;;Globally ensure that a package will be automatically installed
 
-(use-package vterm
-  :load-path  "/home/edyer/Desktop/emacs-libvterm")
+(use-package! vterm
+  :ensure t)
+;;  :load-path  "/home/edyer/Desktop/emacs-libvterm")
 
 (use-package symbol-overlay)
 
