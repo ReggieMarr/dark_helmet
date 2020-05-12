@@ -95,6 +95,10 @@
 ;; Automatically refresh status buffer
 (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
 
+;; Prevent long refnames from hiding commit messages in the log
+(setq magit-log-show-refname-after-summary t)
+(setq magit-log-margin '(t age-abbreviated 15 t 10))
+
 ;; List of repositories
 (setq magit-repository-directories
       ;; `(("~" . DEPTH1)))
