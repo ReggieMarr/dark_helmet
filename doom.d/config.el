@@ -26,8 +26,30 @@
 (require 'use-package)
 (setq use-package-always-ensure t) ;;Globally ensure that a package will be automatically installed
 
+;; VTERM
 (use-package vterm
   :load-path  "/home/edyer/Desktop/emacs-libvterm")
+
+(with-eval-after-load 'vterm
+  '(define-key vterm-mode-map (kbd "M-j") 'vterm-send-down)
+  '(define-key vterm-mode-map (kbd "M-k") 'vterm-send-up))
+
+(defun open-named-terminal ()
+  (interactive)
+  (vterm)
+  (rename-buffer "neat-term" t))
+
+(defun find-named-terminal ()
+  (interactive)
+  (setq bufferName "neat-term")
+  (setq bb (get-buffer bufferName))
+
+  (cond
+   ((string= bufferName (buffer-name bb)) (message "whatt exists"))
+   (t (message "couldn't find buffer")))
+  (message (buffer-name bb))
+  (message bufferName)
+  )
 
 (use-package symbol-overlay)
 
