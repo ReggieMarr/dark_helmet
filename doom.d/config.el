@@ -172,8 +172,18 @@
 )
 
 ;; LSP
-;;
 (setq ccls-executable "/snap/bin/ccls")
+(map!
+ ;; :after lsp
+ :leader
+ :prefix "l"
+ :desc "lsp-find-definition" "d" #'lsp-find-definition
+ :desc "lsp-find-references" "r" #'lsp-find-references
+ :desc "lsp-ui-imenu"        "i" #'lsp-ui-imenu
+ :desc "lsp-rename"          "n" #'lsp-rename)
+      ;; (:prefix "l")
+      ;; 'lsp
+  ;; (define-key lsp-mode-map (kbd "SPC")))
 
 ;; (defmacro hydra-move-macro ()
   ;; '(("h" evil-window-left "left")
