@@ -15,6 +15,10 @@
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
+;; Add directory & descendant directories to load path
+(let ((default-directory "~/dark_helmet/privatePlugins"))
+(normal-top-level-add-subdirs-to-load-path))
+
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
