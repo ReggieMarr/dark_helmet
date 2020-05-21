@@ -123,13 +123,19 @@
 (define-suffix-command reset-upstream ()
   (interactive)
   (if (magit-confirm t (format "**WARNING** this will hard reset to upstream branch. Continue?"))
-      (magit-run-git "add" "-A"))
+      (magit-run-git "reset" "--hard" "@{u}"))
   )
 ; fs
 (define-suffix-command fixup-head ()
   "Make current commit a fixup to HEAD"
   (interactive)
   (magit-run-git "commit" "--fixup" "HEAD")
+  )
+
+(define-suffix-command reset-head-to-previous-commit ()
+  "Soft reset head to the previous commit"
+  (interactive)
+  (magit-run-git "reset" "HEAD~")
   )
 
 (with-eval-after-load 'magit
@@ -152,6 +158,10 @@
 
  (transient-append-suffix 'magit-reset "f"
                          '("u" "upstream" reset-upstream))
+
+ (transient-append-suffix 'magit-reset "w"
+                         '("o" "previous-commit" reset-head-to-previous-commit))
+ )
 )
 
 ;; Automatically refresh status buffer
