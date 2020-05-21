@@ -34,22 +34,47 @@
   '(define-key vterm-mode-map (kbd "M-j") 'vterm-send-down)
   '(define-key vterm-mode-map (kbd "M-k") 'vterm-send-up))
 
-(defun open-named-terminal ()
-  (interactive)
+(defun open-named-terminal (termName2)
   (vterm)
-  (rename-buffer "neat-term" t))
+  (rename-buffer termName2 t)
+  (evil-normal-state))
 
-(defun find-named-terminal ()
-  (interactive)
-  (setq bufferName "neat-term")
-  (setq bb (get-buffer bufferName))
+(defun find-named-terminal (termName)
+  (catch 'exit-find-named-terminal
+    (if
+        (string-match-p termName (buffer-name (current-buffer)))
+        (bury-buffer (buffer-name (current-buffer))))
 
-  (cond
-   ((string= bufferName (buffer-name bb)) (message "whatt exists"))
-   (t (message "couldn't find buffer")))
-  (message (buffer-name bb))
-  (message bufferName)
+    (dolist (b (buffer-list))
+      (if (string-match-p termName (buffer-name b))
+          (progn
+           (switch-to-buffer b)
+           (throw 'exit-find-named-terminal nil))))
+
+    (open-named-terminal termName))
   )
+(defun find-std-terminal ()
+  (interactive)
+  (find-named-terminal "std-term"))
+
+(defun open-std-terminal ()
+  (interactive)
+  (open-named-terminal "std-term"))
+
+(defun find-maint-terminal ()
+  (interactive)
+  (find-named-terminal "maint-term"))
+
+(defun open-maint-terminal ()
+  (interactive)
+  (open-named-terminal "maint-term"))
+
+(map! :leader
+      (:prefix "w"
+        :desc "Open maint term"  "M"  #'open-maint-terminal
+        :desc "Go to maint term" "m"  #'find-maint-terminal
+        :desc "Open std term"    "T"  #'open-std-terminal
+        :desc "Go to std term"   "t"  #'find-std-terminal))
 
 (use-package symbol-overlay)
 
@@ -57,8 +82,8 @@
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 
 (map! :leader
-  (:prefix "w"
-    :desc "Open vterm" "t"    #'vterm)
+  ;; (:prefix "w"
+    ;; :desc "Open vterm" "t"    #'vterm)
   (:prefix "b"
     :desc "Switch to buffer" "b" #'switch-to-buffer)
   (:prefix "f"
