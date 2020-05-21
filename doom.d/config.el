@@ -162,6 +162,11 @@
  (transient-append-suffix 'magit-reset "w"
                          '("o" "previous-commit" reset-head-to-previous-commit))
  )
+
+(with-eval-after-load 'evil
+ (evil-define-key* '(normal visual) magit-mode-map
+   "C-t" #'my/evil-scroll-down
+   "C-v" #'my/evil-scroll-up)
 )
 
 ;; Automatically refresh status buffer
@@ -186,6 +191,11 @@
         ("L<U"      3 magit-repolist-column-unpulled-from-upstream ((:right-align t)))
         ("L>U"      3 magit-repolist-column-unpushed-to-upstream   ((:right-align t)))
         ("Path"    99 magit-repolist-column-path                   ())))
+
+;; Consistent Navigation
+(define-key magit-mode-map [remap evil-scroll-down] 'my/evil-scroll-down)
+(define-key magit-mode-map [remap evil-scroll-up]   'my/evil-scroll-up)
+
 ;; Fun useless plugins
 
 ;; Weather Forcast
