@@ -90,7 +90,18 @@
     :desc "Find file in projects" "f" #'projectile-find-file-in-known-projects)
   :desc "Switchhh" "a" #'switch-to-buffer)
 
+;; NAVIGATION
+(setq evil-scroll-count 5) ;; I like the scroll to be a bit more granular
+(defun my/evil-scroll-down ()
+  (interactive)
+  (evil-scroll-down 10))
 
+(defun my/evil-scroll-up ()
+  (interactive)
+  (evil-scroll-up 10))
+
+(define-key evil-normal-state-map (kbd "C-d") #'my/evil-scroll-down)
+(define-key evil-normal-state-map (kbd "C-u") #'my/evil-scroll-up)
 
 ;; LATEX
 (setq +latex-viewrs '(pdf-tools))
