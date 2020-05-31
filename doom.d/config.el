@@ -277,9 +277,11 @@
  :leader
  :prefix "l"
  :desc "lsp-find-definition" "d" #'lsp-find-definition
+ :desc "lsp-format"          "f" #'lsp-format-buffer
  :desc "lsp-find-references" "r" #'lsp-find-references
  :desc "lsp-ui-imenu"        "i" #'lsp-ui-imenu
- :desc "lsp-rename"          "n" #'lsp-rename)
+ :desc "lsp-rename"          "n" #'lsp-rename
+ :desc "find-related-file"   "o" #'ff-find-related-file)
       ;; (:prefix "l")
       ;; 'lsp
   ;; (define-key lsp-mode-map (kbd "SPC")))
