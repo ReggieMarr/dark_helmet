@@ -104,7 +104,8 @@
   (:prefix "b"
     :desc "Switch to buffer" "b" #'switch-to-buffer)
   (:prefix "f"
-    :desc "Find file in projects" "f" #'projectile-find-file-in-known-projects)
+    :desc "Find file in projects" "f" #'projectile-find-file-in-known-projects
+    :desc "Find file" "d" #'counsel-find-file)
   :desc "Switchhh" "a" #'switch-to-buffer)
 
 ;; NAVIGATION
