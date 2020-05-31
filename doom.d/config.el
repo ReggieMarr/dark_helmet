@@ -31,8 +31,25 @@
   :load-path  "/home/edyer/Desktop/emacs-libvterm")
 
 (with-eval-after-load 'vterm
-  '(define-key vterm-mode-map (kbd "M-j") 'vterm-send-down)
-  '(define-key vterm-mode-map (kbd "M-k") 'vterm-send-up))
+  ;; (define-key vterm-mode-map (kbd "C-j") 'vterm-send-down)
+  ;; (define-key vterm-mode-map (kbd "C-k") 'vterm-send-up)
+  (evil-define-key '(normal insert) vterm-mode-map
+    (kbd "M-k") 'vterm-send-up
+    (kbd "M-j") 'vterm-send-down)
+
+  ;; (setq frame-title-format '(:eval (if (buffer-file-name) (abbreviate-file-name (buffer-file-name)) "%b")))
+  ;; (setq frame-title-format "NEATO")
+  ;; (setq frame-title-format '("" "%b @ Emacs " emacs-version))
+
+  ;; (setq mode-line-format '("" "%b @ Emacs " default-directory))
+  (doom-modeline-set-project-modeline) ;; Display current working directory on modeline
+  (message "vterm-new-keybindings"))
+
+(defun show-current-working-dir-in-mode-line ()
+  "Shows current working directory in the modeline."
+  (interactive)
+  (setq mode-line-format '("" default-directory))
+  )
 
 (defun open-named-terminal (termName2)
   (vterm)
