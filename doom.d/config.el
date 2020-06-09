@@ -148,7 +148,10 @@
 (with-eval-after-load 'evil-motion-state-map
   (define-key evil-motion-state-map (kbd "C-o") nil))
 
-;;###########################
+;; DOXYGEN
+
+
+
 ;;#          MAGIT          #
 ;;###########################
 (define-suffix-command reset-upstream ()
