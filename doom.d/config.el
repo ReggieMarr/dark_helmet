@@ -117,6 +117,11 @@
   :desc "Switchhh" "a" #'switch-to-buffer)
 
 ;; NAVIGATION
+
+(map! :leader
+      (:desc "next buffer" "D" #'switch-to-next-buffer
+        :desc "prev buffer" "d" #'switch-to-prev-buffer))
+
 (setq evil-scroll-count 5) ;; I like the scroll to be a bit more granular
 (defun my/evil-scroll-down ()
   (interactive)
