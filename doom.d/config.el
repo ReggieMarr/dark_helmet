@@ -183,7 +183,7 @@
                          '("h" "fixup head" fixup-head))
 
  (transient-append-suffix 'magit-reset "f"
-                         '("u" "upstream" reset-upstream))
+                         '("u" "to upstream" reset-upstream))
 
  (transient-append-suffix 'magit-reset "w"
                          '("o" "previous-commit" reset-head-to-previous-commit))
