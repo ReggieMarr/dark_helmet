@@ -325,3 +325,9 @@
 (define-key doom-leader-map (kbd "w l") (lambda () (interactive) (movement "l")))
 ;; (define-key doom-leader-map (kbd "w h") 'hydra-move-left/body)
   ;; ("l" evil-window-right "right"))
+;; Compilation mode
+;;
+(map! :leader
+      (:prefix "c"
+        :desc "compile"  "C"  #'compile
+        :desc "recompile"  "c"  #'recompile))
