@@ -324,10 +324,16 @@
         ((string= dir "j") (evil-window-down 1)))
   (hydra-move/body))
 
-(define-key doom-leader-map (kbd "w h") (lambda () (interactive) (movement "h")))
-(define-key doom-leader-map (kbd "w l") (lambda () (interactive) (movement "l")))
-;; (define-key doom-leader-map (kbd "w h") 'hydra-move-left/body)
-  ;; ("l" evil-window-right "right"))
+;; (define-key doom-leader-map (kbd "w h") (lambda () (interactive) (movement "h")))
+;; (define-key doom-leader-map (kbd "w l") (lambda () (interactive) (movement "l")))
+(use-package windmove
+  :ensure nil
+  :bind
+  (("C-M-h". windmove-left)
+   ("C-M-l". windmove-right)
+   ("C-M-k". windmove-up)
+   ("C-M-j". windmove-down)))
+
 ;; Compilation mode
 ;;
 (map! :leader
