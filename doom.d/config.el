@@ -48,9 +48,9 @@
   ;; (setq frame-title-format '(:eval (if (buffer-file-name) (abbreviate-file-name (buffer-file-name)) "%b")))
   ;; (setq frame-title-format "NEATO")
   ;; (setq frame-title-format '("" "%b @ Emacs " emacs-version))
-
+  ;; (doom-modeline-set-modeline 'my-vterm-mode-line)
   ;; (setq mode-line-format '("" "%b @ Emacs " default-directory))
-  (doom-modeline-set-project-modeline) ;; Display current working directory on modeline
+  ;; (doom-modeline-set-project-modeline) ;; Display current working directory on modeline
   (message "vterm-new-keybindings"))
 
 (defun show-current-working-dir-in-mode-line ()
