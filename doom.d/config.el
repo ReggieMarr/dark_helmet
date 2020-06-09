@@ -30,6 +30,14 @@
 (use-package vterm
   :load-path  "/home/edyer/Desktop/emacs-libvterm")
 
+(require 'doom-modeline-core)
+(require 'doom-modeline-segments)
+(doom-modeline-def-modeline 'my-vterm-mode-line
+  '(bar workspace-name window-number modals matches buffer-default-directory buffer-info remote-host buffer-position word-count parrot selection-info)
+  '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
+
+(add-hook! 'vterm-mode-hook (doom-modeline-set-modeline 'my-vterm-mode-line))
+
 (with-eval-after-load 'vterm
   ;; (define-key vterm-mode-map (kbd "C-j") 'vterm-send-down)
   ;; (define-key vterm-mode-map (kbd "C-k") 'vterm-send-up)
