@@ -330,7 +330,8 @@
  :desc "lsp-find-references" "r" #'lsp-find-references
  :desc "lsp-ui-imenu"        "i" #'lsp-ui-imenu
  :desc "lsp-rename"          "n" #'lsp-rename
- :desc "find-related-file"   "o" #'ff-find-related-file)
+ :desc "find-related-file"   "o" #'ff-find-related-file
+ :desc "find-related-file-other-window" "O" #'projectile-find-other-file-other-window)
       ;; (:prefix "l")
       ;; 'lsp
   ;; (define-key lsp-mode-map (kbd "SPC")))
