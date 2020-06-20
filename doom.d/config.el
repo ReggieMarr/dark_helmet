@@ -351,5 +351,24 @@
 ;;
 (map! :leader
       (:prefix "c"
-        :desc "compile"  "C"  #'compile
-        :desc "recompile"  "c"  #'recompile))
+        :desc "ivy/compile"  "C"  #'compile
+        :desc "my/ivy/compile"  "d"  #'my/ivy/compile
+        :desc "recompile"  "c"  #'recompile
+        :desc "kill compilation" "k" #'kill-compilation
+        :desc "compilation set skip threshold" "t" #'compilation-set-skip-threshold))
+
+;; (with-eval-after-load 'compilation
+  (setq compilation-auto-jump-to-first-error 1)
+(setq compile-commands
+      '("cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f MakeIBST_kinetis \""
+        "cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f MakeIBST_kinetis -B \""
+        "test2"
+        "neato"))
+(defun my/ivy/compile ()
+  (interactive)
+  (ivy-read "compile-command: " compile-commands
+            :action (lambda (x)
+                      (compile x))))
+  ;; (compile "cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f MakeIBST_kinetis \""))
+
+(setq helm-source-bookmarks '(~/kinetis))
