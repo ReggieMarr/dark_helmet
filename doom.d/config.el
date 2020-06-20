@@ -374,6 +374,11 @@
    ("C-M-k". windmove-up)
    ("C-M-j". windmove-down)))
 
+;;#########################
+;; FILE/FOLDER NAVIGATION #
+;;#########################
+;; Nothing here yet
+
 ;; Compilation mode
 ;;
 (map! :leader
