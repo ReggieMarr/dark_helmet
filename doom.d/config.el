@@ -150,10 +150,23 @@
 
 ;; DOXYGEN
 
-
-
+;;###########################
 ;;#          MAGIT          #
 ;;###########################
+;; (unmap! :leader
+  ;; (:prefix "g"
+    ;; ))
+(map! :leader
+      (:prefix "g"
+        :desc "blame" "b" #'magit-blame
+        :desc "log" "l" #'magit-log
+        "L" nil ;; unmap default L mapping
+        (:prefix ("L" . "log")
+          :desc "file" "f" #'magit-log-buffer-file
+          :desc "head" "h" #'magit-log-head
+          :desc "log" "i" #'magit-log
+          :desc "refresh" "r" #'magit-log-refresh-buffer)))
+
 (define-suffix-command reset-upstream ()
   (interactive)
   (if (magit-confirm t (format "**WARNING** this will hard reset to upstream branch. Continue?"))
