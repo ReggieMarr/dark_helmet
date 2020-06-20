@@ -250,6 +250,19 @@
 (define-key magit-mode-map [remap evil-scroll-down] 'my/evil-scroll-down)
 (define-key magit-mode-map [remap evil-scroll-up]   'my/evil-scroll-up)
 
+;;########
+;; View ##
+;;########
+
+(use-package symbol-overlay)
+(setf (cdr symbol-overlay-map) nil) ;; Remove default symbol-overlay-map (we don't want most of these bindings to clobber our evil bindings)
+(define-key symbol-overlay-map (kbd "n") #'symbol-overlay-jump-next)
+(define-key symbol-overlay-map (kbd "N") #'symbol-overlay-jump-prev)
+(map! :leader
+      (:prefix ("m" . "mark")
+        :desc "mark symbol" "m" #'symbol-overlay-put
+        :desc "mark single symbol" "M" #'symbol-overlay-put-one
+        :desc "replace symbol" "r" #'symbol-overlay))
 ;; Fun useless plugins
 
 ;; Weather Forcast
