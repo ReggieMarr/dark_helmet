@@ -339,7 +339,14 @@
 ;; (defmacro hydra-move-macro ()
   ;; '(("h" evil-window-left "left")
   ;; ("l" evil-window-right "right")))
-
+;;###############
+;; PROJECTILE ##
+;;###############
+(map! :leader
+      (:prefix "p"
+        :desc "find-other-file" "o" #'projectile-find-other-file
+        :desc "find-other-file-other-window" "O" #'projectile-find-other-file-other-window
+      ))
 ;; Window Navigation (faster using hydras)
 ;; (defhydra hydra-move (:body-pre (evil-window-left 1))
 (defhydra hydra-move ()
