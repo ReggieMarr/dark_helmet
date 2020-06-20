@@ -109,18 +109,25 @@
 (map! :leader
   ;; (:prefix "w"
     ;; :desc "Open vterm" "t"    #'vterm)
-  (:prefix "b"
-    :desc "Switch to buffer" "b" #'switch-to-buffer)
   (:prefix "f"
-    :desc "Find file in projects" "f" #'projectile-find-file-in-known-projects
-    :desc "Find file" "d" #'counsel-find-file)
-  :desc "Switchhh" "a" #'switch-to-buffer)
+    :desc "find-file-in-known-projects" "f" #'projectile-find-file-in-known-projects
+    :desc "counsel-find-file" "d" #'counsel-find-file)
+   :desc "switch-to-buffer" "a" #'switch-to-buffer)
 
 ;; NAVIGATION
 
+;; Evil Snipe
+(require 'evil-snipe)
+(evil-snipe-mode)
+(evil-snipe-override-mode)
+
 (map! :leader
       (:desc "next buffer" "D" #'switch-to-next-buffer
-        :desc "prev buffer" "d" #'switch-to-prev-buffer))
+        :desc "prev buffer" "d" #'switch-to-prev-buffer
+        )
+      (:prefix "s"
+        :desc "swiper-isearch-thing-at-point" "s" #'swiper-isearch-thing-at-point)
+      (:desc "repeat last command" "." #'repeat))
 
 (setq evil-scroll-count 5) ;; I like the scroll to be a bit more granular
 (defun my/evil-scroll-down ()
