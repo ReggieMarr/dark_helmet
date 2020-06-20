@@ -101,7 +101,6 @@
         :desc "Open std term"    "T"  #'open-std-terminal
         :desc "Go to std term"   "t"  #'find-std-terminal))
 
-(use-package symbol-overlay)
 
 (use-package nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
