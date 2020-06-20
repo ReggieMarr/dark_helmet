@@ -2,6 +2,8 @@
 - How to easily go to end of line
 - How to make a new file in DIRED
 
+- Turn semantic highlighting on & off
+
 - more granular undo?
 - C-DEL is trash..
 
