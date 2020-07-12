@@ -1,16 +1,5 @@
-- Tab seems wrong..
-- How to easily go to end of line
-- How to make a new file in DIRED
+* use lf instead of dired
 
-- more granular undo?
-- C-DEL is trash..
+* add org-jira mode
 
-- switch between 2 buffers
-  - change key
-    - Make it switch between 3 buffers?
-
-- rm should send to recycle bin instead of permanently deleting
-
-
-- alt j/k is up/down arrow in vterm
-- SCROLLLLLLLLLLLLLL
+* Windows for dap debugger
