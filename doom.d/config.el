@@ -24,7 +24,8 @@
 (require 'use-package)
 (setq use-package-always-ensure t) ;;Globally ensure that a package will be automatically installed
 
-(use-package! vterm)
+(use-package vterm
+  :load-path "/home/rmarr/Downloads/gitDownloads/emacs-libvterm/")
 
 ;; (require 'doom-modeline-core)
 ;; (require 'doom-modeline-segments)
@@ -51,7 +52,7 @@
 ;;   (define-key vterm-mode-map [tab]   '(lambda () (interactive) (vterm-send-key "<tab>")))
 ;;   (define-key vterm-mode-map (kbd "DEL") '(lambda () (interactive) (vterm-send-key "<backspace>")))
 ;;   (define-key vterm-mode-map (kbd "RET") '(lambda () (interactive) (vterm-send-key "<return>"))))
-(define-key vterm-mode-map (kbd "RET") '(lambda () (interactive) (vterm-send-key "<return>")))
+;; (define-key vterm-mode-map (kbd "RET") '(lambda () (interactive) (vterm-send-key "<return>")))
 
 (use-package "fzf" :init(setenv "FZF_DEFAULT_COMMAND" "--type file"))
 
@@ -140,7 +141,7 @@
         ("L<U"      3 magit-repolist-column-unpulled-from-upstream ((:right-align t)))
         ("L>U"      3 magit-repolist-column-unpushed-to-upstream   ((:right-align t)))
         ("Path"    99 magit-repolist-column-path                   ())))
-;; 
+;;
 ;; PDF-Tools
 ;; o - outline
 (with-eval-after-load 'pdf-tools
@@ -270,8 +271,8 @@
 ;; (with-eval-after-load 'compilation
   (setq compilation-auto-jump-to-first-error 1)
 (setq compile-commands
-      '("docker exec -it happy_swartz /bin/bash -c \"cd /shared/kinetis && make -f Make213371\" && scp 213371-01X.axf pyrite:/home/bdi3000/rmarr/"
-        "docker exec -it happy_swartz /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp 213371-01X.axf pyrite:/home/bdi3000/rmarr/"
+      '("docker exec -it recursing_boyd /bin/bash -c \"cd /shared/kinetis && make -f Make213371\" && scp 213371-01X.axf pyrite:/home/bdi3000/rmarr/"
+        "docker exec -it recursing_boyd /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp 213371-01X.axf pyrite:/home/bdi3000/rmarr/"
         "ssh blade && cd kinetis && make -f Make213371 -B"
         "cd ~/kinetis && docker exec -it clever_bose /bin/bash -c \"cd /root/kinetis && make -f Make213371 -Bwnk > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt"))
 (defun my/ivy/compile ()

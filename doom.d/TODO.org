@@ -1,0 +1,25 @@
+* TODO Emacs config
+** snipe
+** helm vs ivy
+** switch to skim for all fuzzy searches
+
+* Missing vim features in emacs
+** Missing Plugins
+*** autocomplete directories
+*** fast scroll 
+*** fast lsp
+** Missing features
+*** asynchronous (neomake, async lsp)
+
+* Emacs config issues
+** Crash on undo
+** vterm doesn't handle return key
+** Lsp is slow and leads to crash
+* Missing emacs features in vim
+** Missing Plugins
+*** Magit
+*** OrgMode
+*** compilation mode
+** Missing features
+*** plugin co-operation
+

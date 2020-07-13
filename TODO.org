@@ -1,5 +1,0 @@
-* use lf instead of dired
-
-* add org-jira mode
-
-* Windows for dap debugger
