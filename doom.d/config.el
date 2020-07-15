@@ -398,7 +398,7 @@
 
   ;; (define-key pdf-outline-buffer-mode-map (kbd "M-h") 'outline-toggle-children)
   ;; (define-key outline-mode-map (kbd "a") 'outline-show-all)
-  (message "nice")
+  ;; (message "nice")
   ;; (define-key pdf-outline-buffer-mode-map (kbd "M-o") 'outline-toggle-children)
 )
 
