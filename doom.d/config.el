@@ -192,7 +192,8 @@
 ;; Evil Snipe
 (require 'evil-snipe)
 (evil-snipe-mode)
-(evil-snipe-override-mode)
+(evil-snipe-override-mode 1)
+(setq evil-snipe-scope 'whole-visible)
 
 (map! :leader
       (:desc "next buffer" "D" #'switch-to-next-buffer
