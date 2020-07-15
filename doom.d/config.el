@@ -478,8 +478,9 @@
 ;;#########################
 ;; Nothing here yet
 
-;; Compilation mode
-;;
+;;###################
+;; Compilation mode #
+;;###################
 (map! :leader
       (:prefix "c"
         :desc "ivy/compile"  "C"  #'compile
@@ -489,11 +490,16 @@
         :desc "compilation set skip threshold" "t" #'compilation-set-skip-threshold))
 
 ;; (with-eval-after-load 'compilation
-  (setq compilation-auto-jump-to-first-error 1)
+  ;; (setq compilation-auto-jump-to-first-error 1)
 (setq compile-commands
-      '("cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f MakeIBST_kinetis \""
-        "cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f MakeIBST_kinetis -B \""
-        "test2"
+      '("cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f MakeIBST_kinetis \" && scp 1857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
+        "cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f MakeIBST_kinetis -B > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt && scp 1857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
+        "cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f Make213371 -B \" && scp 213371-01X.axf edyer@pyrite:/home/bdi3000/edyer"
+
+        ;; Mx20Di
+        "cd ~/release && compiledb make -f MakePldMx2XZn_Gen2 SW_PN=313365 SW_VER=02 SW_REV=X -j TOOLCHAIN=xilinx"
+        "cd ~/release && compiledb make -f MakeGblMx2XZn_Gen2 SW_PN=313367 SW_VER=02 SW_REV=X -j TOOLCHAIN=xilinx"
+        ;; "cd ~/general_atomics make -f MakeMcuXZnHDi_Gen2 SW_PN=313366 SW_VER=02 SW_REV=X -j TOOLCHAIN=xilinx"
         "neato"))
 (defun my/ivy/compile ()
   (interactive)
