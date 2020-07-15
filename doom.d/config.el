@@ -229,6 +229,13 @@
 (with-eval-after-load 'evil-motion-state-map
   (define-key evil-motion-state-map (kbd "C-o") nil))
 
+;; Modes
+
+(map! :leader
+      (:prefix ("F" . "format")
+        :desc "auto-fill-mode" "a" #'auto-fill-mode
+        :desc "fill-region" "r" #'fill-region))
+
 ;; DOXYGEN
 
 ;;###########################
