@@ -200,7 +200,8 @@
         :desc "prev buffer" "d" #'switch-to-prev-buffer
         )
       (:prefix "s"
-        :desc "swiper-isearch-thing-at-point" "s" #'swiper-isearch-thing-at-point)
+        :desc "swiper-isearch-thing-at-point" "t" #'swiper-isearch-thing-at-point
+        :desc "helm-projectile-rg" "p" #'helm-projectile-rg)
       (:desc "repeat last command" "." #'repeat))
 
 (setq evil-scroll-count 5) ;; I like the scroll to be a bit more granular
