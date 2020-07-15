@@ -112,7 +112,7 @@
   ;; (define-key vterm-mode-map (kbd "C-k") 'vterm-send-up)
   (evil-define-key '(normal insert) vterm-mode-map
     (kbd "M-k") 'vterm-send-up
-    (kbd "M-j") 'vterm-send-down)
+    (kbd "M-j") 'vterm-send-down))
 
   ;; (setq frame-title-format '(:eval (if (buffer-file-name) (abbreviate-file-name (buffer-file-name)) "%b")))
   ;; (setq frame-title-format "NEATO")
@@ -120,7 +120,7 @@
   ;; (doom-modeline-set-modeline 'my-vterm-mode-line)
   ;; (setq mode-line-format '("" "%b @ Emacs " default-directory))
   ;; (doom-modeline-set-project-modeline) ;; Display current working directory on modeline
-  (message "vterm-new-keybindings"))
+  ;; (message "vterm-new-keybindings"))
 
 (defun show-current-working-dir-in-mode-line ()
   "Shows current working directory in the modeline."
