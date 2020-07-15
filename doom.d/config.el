@@ -455,6 +455,7 @@
 ;;###############
 ;; PROJECTILE ##
 ;;###############
+(setq projectile-switch-project-action nil)
 (map! :leader
       (:prefix "p"
         :desc "find-other-file" "o" #'projectile-find-other-file
