@@ -87,6 +87,14 @@
         :desc "org-agenda"     "a"  #'org-agenda
         :desc "org-capture"    "T"  #'org-capture))
 
+;; TEXT MANIPULATION
+(use-package! expand-region)
+(with-eval-after-load 'expand-region
+  (evil-global-set-key 'normal (kbd "J") #'er/contract-region)
+  (evil-global-set-key 'visual (kbd "J") #'er/contract-region)
+  (evil-global-set-key 'normal (kbd "K") #'er/expand-region)
+  (evil-global-set-key 'visual (kbd "K") #'er/expand-region))
+
 ;; VTERM
 (use-package vterm
   :load-path  "/home/edyer/Desktop/emacs-libvterm")
