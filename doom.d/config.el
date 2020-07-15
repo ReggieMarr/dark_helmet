@@ -401,6 +401,23 @@
   ;; (define-key pdf-outline-buffer-mode-map (kbd "M-o") 'outline-toggle-children)
 )
 
+
+;; Outline Mode
+;;
+(map! :localleader
+      :map outline-mode-map
+      "c" #'outline-hide-entry
+      "e" #'outline-show-entry
+      "d" #'outline-hide-subtree
+      "s" #'outline-show-subtree
+      "l" #'outline-hide-leaves
+      "k" #'outline-show-branches
+      "i" #'outline-show-children
+      "t" #'outline-hide-body
+      "a" #'outline-show-all
+      "q" #'outline-hide-sublevels
+      "o" #'outline-hide-other)
+
 ;; LSP
 (setq ccls-executable "/snap/bin/ccls")
 (map!
