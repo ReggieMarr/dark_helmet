@@ -26,6 +26,8 @@
 (require 'use-package)
 (setq use-package-always-ensure t) ;;Globally ensure that a package will be automatically installed
 
+(setq doom-localleader-key ";")
+
 ;; VTERM
 (use-package vterm
   :load-path  "/home/edyer/Desktop/emacs-libvterm")
