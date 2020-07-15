@@ -182,6 +182,11 @@
     :desc "counsel-find-file" "d" #'counsel-find-file)
    :desc "switch-to-buffer" "a" #'switch-to-buffer)
 
+;; ATOMIC-CHROME
+(use-package atomic-chrome)
+(atomic-chrome-start-server)
+(setq atomic-chrome-buffer-open-style 'window)
+
 ;; NAVIGATION
 
 ;; Evil Snipe
