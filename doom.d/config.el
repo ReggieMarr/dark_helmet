@@ -401,6 +401,20 @@
   ;; (define-key pdf-outline-buffer-mode-map (kbd "M-o") 'outline-toggle-children)
 )
 
+(use-package! pdf-tools
+  :config
+  (evil-define-key 'normal pdf-view-mode-map (kbd ":") 'pdf-view-goto-page)
+  (map! :localleader
+        :map pdf-view-mode-map
+
+          "f" #'pdf-occur
+
+          ;; History
+          "c" #'pdf-history-clear
+          "j" #'pdf-history-backward
+          "k" #'pdf-history-forward
+
+          "o" #'pdf-outline))
 
 ;; Outline Mode
 ;;
