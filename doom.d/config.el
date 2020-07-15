@@ -28,6 +28,65 @@
 
 (setq doom-localleader-key ";")
 
+;; ORG MODE
+(add-hook! 'evil-org-mode-hook 'my/evil-org-mode-keybinds)
+
+(defun my/evil-org-mode-keybinds ()
+  (evil-define-key 'motion evil-org-mode-map
+    (kbd "^") 'evil-org-beginning-of-line)
+  (message "new evil org keybinds"))
+;; (use-package! org
+;;   :config
+;; (map! :localleader
+;;       :map org-mode-map
+
+;;       ;;Motion
+;;       "j" #'org-next-visible-heading
+;;       "k" #'org-previous-visible-heading
+;;       "J" #'org-forward-heading-same-level
+;;       "K" #'org-backward-heading-same-level
+;;       "u" #'outline-up-heading
+
+;;       ;;Narrowing
+;;       "n" nil ;; unmap default o mapping
+;;       (:prefix ("n" . "narrow")
+;;       :desc "subtree" "s" #'org-narrow-to-subtree
+;;       :desc "widen"   "w" #'widen)
+
+;;       ;; Sparse tree
+;;       "s" :nil
+;;       (:prefix ("s" . "sparse tree")
+;;         :desc "regex" "r" #'org-regex
+;;         :desc "todo" "t" #'org-tags-sparse-tree)
+;;       "/" #'org-sparse-tree
+
+;;       ;; Format
+;;       "f" :nil
+;;       (:prefix ("f" . "format")
+;;         :desc "bullet" "b" #'org-cycle-list-bullet)
+
+;;       ;; Linking
+;;       "l" :nil
+;;       (:prefix ("l" . "link")
+;;         :desc "insert" "i" #'org-insert-link
+;;         :desc "store" "s" #'org-store-link)
+
+;;       ;; Insert
+;;       :desc "insert-heading-respect-content" "h" #'org-insert-heading-respect-content
+     
+;;       "o" #'org-open-at-point
+;;       ))
+
+      ;; (:prefix ("d". "testing")
+        ;; "t" #'org-toggle-checkbox))
+
+(map! :leader
+        "o" nil ;; unmap default o mapping
+      (:prefix ("o" . "org")
+        :desc "org-store-link" "l"  #'org-store-link
+        :desc "org-agenda"     "a"  #'org-agenda
+        :desc "org-capture"    "T"  #'org-capture))
+
 ;; VTERM
 (use-package vterm
   :load-path  "/home/edyer/Desktop/emacs-libvterm")
