@@ -18,7 +18,7 @@
 
 ;; Add directory & descendant directories to load path
 ;; (let ((default-directory "~/dark_helmet/privatePlugins"))
-(normal-top-level-add-subdirs-to-load-path))
+;; (normal-top-level-add-subdirs-to-load-path))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
