@@ -538,6 +538,11 @@
       '("cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f MakeIBST_kinetis \" && scp 1857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
         "cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f MakeIBST_kinetis -B > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt && scp 1857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
         "cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f Make213371 -B \" && scp 213371-01X.axf edyer@pyrite:/home/bdi3000/edyer"
+        "cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f Make213371 \" && scp 213371-01X.axf edyer@pyrite:/home/bdi3000/edyer"
+
+
+        "cd ~/tasys && make -f MakeMcuTasys MAKE_SUBMODULE=mx/MakeMcuMx10Zn SW_PN=76981 SW_VER=02 SW_REV=X -j TOOLCHAIN=xilinx"
+        "cd ~/tasys && make -f MakeMcuTasys MAKE_SUBMODULE=mx/MakeMcuMx10Zn SW_PN=76981 SW_VER=02 SW_REV=X -j TOOLCHAIN=xilinx -B"
 
         ;; Mx20Di
         "cd ~/release && compiledb make -f MakePldMx2XZn_Gen2 SW_PN=313365 SW_VER=02 SW_REV=X -j TOOLCHAIN=xilinx"
