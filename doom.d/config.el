@@ -249,13 +249,16 @@
 (map! :leader
       (:prefix "g"
         :desc "blame" "b" #'magit-blame
-        :desc "log" "l" #'magit-log
+        :desc "buffer-lock" "T" #'magit-toggle-buffer-lock
 
         ;; Git gutter
-        :desc "next-hunk" "j" #'git-gutter:next-diff
-        :desc "prev-hunk" "k" #'git-gutter:previous-diff
+        :desc "next-hunk" "j" #'git-gutter:next-hunk
+        :desc "prev-hunk" "k" #'git-gutter:previous-hunk
         :desc "popup-diff" "d" #'git-gutter:popup-diff
         :desc "file-statistics" "S" #'git-gutter:statistic
+
+        ;; Log
+        :desc "log" "l" #'magit-log
         "L" nil ;; unmap default L mapping
         (:prefix ("L" . "log")
           :desc "file" "f" #'magit-log-buffer-file
