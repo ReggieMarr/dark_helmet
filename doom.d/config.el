@@ -249,6 +249,12 @@
       (:prefix "g"
         :desc "blame" "b" #'magit-blame
         :desc "log" "l" #'magit-log
+
+        ;; Git gutter
+        :desc "next-hunk" "j" #'git-gutter:next-diff
+        :desc "prev-hunk" "k" #'git-gutter:previous-diff
+        :desc "popup-diff" "d" #'git-gutter:popup-diff
+        :desc "file-statistics" "S" #'git-gutter:statistic
         "L" nil ;; unmap default L mapping
         (:prefix ("L" . "log")
           :desc "file" "f" #'magit-log-buffer-file
