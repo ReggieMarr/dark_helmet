@@ -455,6 +455,11 @@
  :desc "lsp-find-references" "r" #'lsp-find-references
  :desc "lsp-ui-imenu"        "i" #'lsp-ui-imenu
  :desc "lsp-rename"          "n" #'lsp-rename
+
+ ;;navigation
+ :desc "next-func" "j" #'my/next-func
+ :desc "prev-func" "k" #'my/prev-func
+
  :desc "find-related-file"   "o" #'ff-find-related-file
  :desc "find-related-file-other-window" "O" #'projectile-find-other-file-other-window)
       ;; (:prefix "l")
@@ -489,6 +494,17 @@
         ((string= dir "k") (evil-window-up 1))
         ((string= dir "j") (evil-window-down 1)))
   (hydra-move/body))
+
+(defun my/next-func ()
+  (interactive)
+  (c-beginning-of-defun -1)
+  (reposition-window))
+
+
+(defun my/prev-func ()
+  (interactive)
+  (c-beginning-of-defun)
+  (reposition-window))
 
 ;; (define-key doom-leader-map (kbd "w h") (lambda () (interactive) (movement "h")))
 ;; (define-key doom-leader-map (kbd "w l") (lambda () (interactive) (movement "l")))
