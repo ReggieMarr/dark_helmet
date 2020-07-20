@@ -3,6 +3,7 @@
 
       doom-scratch-initial-major-mode 'lisp-interaction-mode
       doom-theme 'doom-monokai-classic
+      ;; doom-font (font-spec :family "Emilbus Mono" :size 18)
       ;;treemacs-width 32 ;;TODO
 
       ;; Improve performance & disable line #'s by defausdlt
