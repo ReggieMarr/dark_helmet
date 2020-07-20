@@ -354,7 +354,8 @@
       (:prefix ("m" . "mark")
         :desc "mark symbol" "m" #'symbol-overlay-put
         :desc "mark single symbol" "M" #'symbol-overlay-put-one
-        :desc "query-replace" "r" #'symbol-overlay-query-replace))
+        :desc "query-replace" "r" #'symbol-overlay-query-replace
+        :desc "remove-all" "R" #'symbol-overlay-remove-all))
 ;; Fun useless plugins
 
 ;; Weather Forcast
