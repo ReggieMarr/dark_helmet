@@ -3,18 +3,21 @@
 ** helm vs ivy
 ** switch to skim for all fuzzy searches
 
-* Missing vim features in emacs
+* Missing features in emacs
 ** Missing Plugins
 *** autocomplete directories
 *** fast scroll 
 *** fast lsp
 ** Missing features
 *** asynchronous (neomake, async lsp)
+*** autocomplete paranthesis
 
 * Emacs config issues
 ** Crash on undo
 ** vterm doesn't handle return key
+*** the C-m character doesn't do anything but C-o works
 ** Lsp is slow and leads to crash
+
 * Missing emacs features in vim
 ** Missing Plugins
 *** Magit
@@ -22,4 +25,6 @@
 *** compilation mode
 ** Missing features
 *** plugin co-operation
+*** Spc-C-Spc dwim comment
+*** C-o dwim go back
 

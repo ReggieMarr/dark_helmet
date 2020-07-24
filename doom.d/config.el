@@ -61,6 +61,10 @@
 (use-package nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 
+;; (map! :leader
+;;       (:prefix "c"
+;;        :desc "dwim Comment" "Spc" #'comment-dwim))
+
 (map! :leader
   (:prefix "w"
     :desc "Open vterm" "t"    #'vterm)
@@ -271,10 +275,10 @@
 ;; (with-eval-after-load 'compilation
   (setq compilation-auto-jump-to-first-error 1)
 (setq compile-commands
-      '("docker exec -it recursing_boyd /bin/bash -c \"cd /shared/kinetis && make -f Make213371\" && scp 213371-01X.axf pyrite:/home/bdi3000/rmarr/"
-        "docker exec -it recursing_boyd /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp 213371-01X.axf pyrite:/home/bdi3000/rmarr/"
+      '("docker exec -it mystifying_bell /bin/bash -c \"cd /shared/kinetis && make -f Make213371\" && scp /home/rmarr/kinetis/213371-01X.axf pyrite:/home/bdi3000/rmarr/"
+        "docker exec -it mystifying_bell /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp /home/rmarr/kinetis/213371-01X.axf pyrite:/home/bdi3000/rmarr/"
         "ssh blade && cd kinetis && make -f Make213371 -B"
-        "cd ~/kinetis && docker exec -it clever_bose /bin/bash -c \"cd /root/kinetis && make -f Make213371 -Bwnk > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt"))
+        "cd ~/kinetis && docker exec -it agitated_borg /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -Bwnk > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt"))
 (defun my/ivy/compile ()
   (interactive)
   (ivy-read "compile-command: " compile-commands
@@ -283,9 +287,44 @@
 ;Puts the function name in the status bar
 ;Auto complete
 (which-function-mode 1)
+(smartparens-mode 1)
 (require 'company)
 (setq company-idle-delay 0.2
       company-minimum-prefix-length 3)
 (add-hook 'after-init-hook 'global-company-mode)
 ;;LSP stuff but pertains to company-mode
 (setq company-transformers nil company-lsp-async t company-lsp-cache-candidates nil)
+
+;Org mode code capture
+;
+;; (setq org-capture-templates
+;;   '(("c" "Code" entry (file "~/org/captured.org")
+;;              "* Code snippet %U\n%(format \"%s\" my-captured-snippet)")))
+
+(setq my-major-mode-to-org-src
+      '(("c++-mode" . "C++")
+        ("python-mode" . "python")))
+
+  (setq my-captured-snippet "")
+
+  (defun capture-code-snippet ()
+    "Copy the current region and put it the org source code block."
+    (interactive)
+    (let ((code-snippet (buffer-substring-no-properties (mark) (point)))
+          (func-name (which-function))
+          (file-name (buffer-file-name))
+          (line-number (line-number-at-pos (region-beginning)))
+          (org-src-mode (cdr (assoc (format "%s" major-mode) my-major-mode-to-org-src))))
+      (setq my-captured-snippet
+            (format
+"file:%s::%s
+In ~%s~:
+#+BEGIN_SRC %s
+%s
+#+END_SRC"
+                    file-name
+                    line-number
+                    func-name
+                    org-src-mode
+                    code-snippet)))
+    (org-capture nil "c"))
