@@ -275,8 +275,8 @@
 ;; (with-eval-after-load 'compilation
   (setq compilation-auto-jump-to-first-error 1)
 (setq compile-commands
-      '("docker exec -it mystifying_bell /bin/bash -c \"cd /shared/kinetis && make -f Make213371\" && scp /home/rmarr/kinetis/213371-01X.axf pyrite:/home/bdi3000/rmarr/"
-        "docker exec -it mystifying_bell /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp /home/rmarr/kinetis/213371-01X.axf pyrite:/home/bdi3000/rmarr/"
+      '("docker exec -it dreamy_vaughan /bin/bash -c \"cd /shared/kinetis && make -f Make213371\" && scp /home/rmarr/kinetis/213371-01X.axf pyrite:/home/bdi3000/rmarr/"
+        "docker exec -it dreamy_vaughan /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp /home/rmarr/kinetis/213371-01X.axf pyrite:/home/bdi3000/rmarr/"
         "ssh blade && cd kinetis && make -f Make213371 -B"
         "cd ~/kinetis && docker exec -it agitated_borg /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -Bwnk > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt"))
 (defun my/ivy/compile ()
@@ -287,7 +287,7 @@
 ;Puts the function name in the status bar
 ;Auto complete
 (which-function-mode 1)
-(smartparens-mode 1)
+(smartparens-global-mode 1)
 (require 'company)
 (setq company-idle-delay 0.2
       company-minimum-prefix-length 3)
@@ -297,10 +297,6 @@
 
 ;Org mode code capture
 ;
-;; (setq org-capture-templates
-;;   '(("c" "Code" entry (file "~/org/captured.org")
-;;              "* Code snippet %U\n%(format \"%s\" my-captured-snippet)")))
-
 (setq my-major-mode-to-org-src
       '(("c++-mode" . "C++")
         ("python-mode" . "python")))
@@ -317,14 +313,25 @@
           (org-src-mode (cdr (assoc (format "%s" major-mode) my-major-mode-to-org-src))))
       (setq my-captured-snippet
             (format
-"file:%s::%s
-In ~%s~:
-#+BEGIN_SRC %s
-%s
-#+END_SRC"
-                    file-name
-                    line-number
-                    func-name
-                    org-src-mode
-                    code-snippet)))
+            "file:%f::%f
+            In ~%s~:
+            #+BEGIN_SRC %s
+            %a
+            #+END_SRC"
+            file-name
+            line-number
+            func-name
+            org-src-mode
+            code-snippet)))
     (org-capture nil "c"))
+
+(add-to-list 'org-capture-templates
+            '("c" ;Key used to select this template
+              ;template description
+            "Code" 
+              ;template type which is a node targeting an org file
+              entry 
+              ;template target
+              (file "~/org/captured.org")
+              ;The template for creating the capture item
+              "* Code snippet %U\n%(format \"%s\" my-captured-snippet)"))
