@@ -24,37 +24,256 @@
 (require 'use-package)
 (setq use-package-always-ensure t) ;;Globally ensure that a package will be automatically installed
 
+(setq doom-localleader-key ";")
+
+;; ORG MODE
+(add-hook! 'evil-org-mode-hook 'my/evil-org-mode-keybinds)
+
+(defun my/evil-org-mode-keybinds ()
+  (evil-define-key 'motion evil-org-mode-map
+    (kbd "^") 'evil-org-beginning-of-line)
+  (message "new evil org keybinds"))
+;; (use-package! org
+;;   :config
+;; (map! :localleader
+;;       :map org-mode-map
+
+;;       ;;Motion
+;;       "j" #'org-next-visible-heading
+;;       "k" #'org-previous-visible-heading
+;;       "J" #'org-forward-heading-same-level
+;;       "K" #'org-backward-heading-same-level
+;;       "u" #'outline-up-heading
+
+;;       ;;Narrowing
+;;       "n" nil ;; unmap default o mapping
+;;       (:prefix ("n" . "narrow")
+;;       :desc "subtree" "s" #'org-narrow-to-subtree
+;;       :desc "widen"   "w" #'widen)
+
+;;       ;; Sparse tree
+;;       "s" :nil
+;;       (:prefix ("s" . "sparse tree")
+;;         :desc "regex" "r" #'org-regex
+;;         :desc "todo" "t" #'org-tags-sparse-tree)
+;;       "/" #'org-sparse-tree
+
+;;       ;; Format
+;;       "f" :nil
+;;       (:prefix ("f" . "format")
+;;         :desc "bullet" "b" #'org-cycle-list-bullet)
+
+;;       ;; Linking
+;;       "l" :nil
+;;       (:prefix ("l" . "link")
+;;         :desc "insert" "i" #'org-insert-link
+;;         :desc "store" "s" #'org-store-link)
+
+;;       ;; Insert
+;;       :desc "insert-heading-respect-content" "h" #'org-insert-heading-respect-content
+     
+;;       "o" #'org-open-at-point
+;;       ))
+
+      ;; (:prefix ("d". "testing")
+        ;; "t" #'org-toggle-checkbox))
+
+(map! :leader
+        "o" nil ;; unmap default o mapping
+      (:prefix ("o" . "org")
+        :desc "org-store-link" "l"  #'org-store-link
+        :desc "org-agenda"     "a"  #'org-agenda
+        :desc "org-capture"    "T"  #'org-capture))
+;Org mode code capture
+;
+(setq my-major-mode-to-org-src
+      '(("c++-mode" . "C++")
+        ("python-mode" . "python")))
+
+  (setq my-captured-snippet "")
+
+(defun capture-code-snippet ()
+  "Copy the current region and put it the org source code block."
+  (interactive)
+  (let ((code-snippet (buffer-substring-no-properties (mark) (point)))
+        (func-name (which-function))
+        (file-name (buffer-file-name))
+        (line-number (line-number-at-pos (region-beginning)))
+        (org-src-mode (cdr (assoc (format "%s" major-mode) my-major-mode-to-org-src))))
+    (setq my-captured-snippet
+          (format
+          "file:%s::%s
+          In ~%s~:
+          #+BEGIN_SRC %s
+          %s
+          #+END_SRC"
+          file-name
+          line-number
+          func-name
+          org-src-mode
+          code-snippet)))
+   (org-capture nil "c"))
+;; ------------------------------------------------------------
+;;   Functions that help with capturing - from howardism
+;; ------------------------------------------------------------
+
+(require 'which-func)
+
+(defun ha/org-capture-fileref-snippet (f type headers func-name)
+  (let* ((code-snippet
+          (buffer-substring-no-properties (mark) (- (point) 1)))
+         (file-name   (buffer-file-name))
+         (file-base   (file-name-nondirectory file-name))
+         (line-number (line-number-at-pos (region-beginning)))
+         (initial-txt (if (null func-name)
+                          (format "From [[file:%s::%s][%s]]:"
+                                  file-name line-number file-base)
+                        (format "From ~%s~ (in [[file:%s::%s][%s]]):"
+                                func-name file-name line-number
+                                file-base))))
+    (format "
+   %s
+
+   #+BEGIN_%s %s
+%s
+   #+END_%s" initial-txt type headers code-snippet type)))
+
+(defun ha/org-capture-code-snippet (f)
+  "Given a file, F, this captures the currently selected text
+within an Org SRC block with a language based on the current mode
+and a backlink to the function and the file."
+  (with-current-buffer (find-buffer-visiting f)
+    (let ((org-src-mode (replace-regexp-in-string "-mode" "" (format "%s" major-mode)))
+          (func-name (which-function)))
+      (ha/org-capture-fileref-snippet f "SRC" org-src-mode func-name))))
+
+(defun ha/org-capture-clip-snippet (f)
+  "Given a file, F, this captures the currently selected text
+within an Org EXAMPLE block and a backlink to the file."
+  (with-current-buffer (find-buffer-visiting f)
+    (ha/org-capture-fileref-snippet f "EXAMPLE" "" nil)))
+
+(defun ha/code-to-clock (&optional start end)
+  "Send the currently selected code to the currently clocked-in org-mode task."
+  (interactive)
+  (org-capture nil "F"))
+
+(defun ha/code-comment-to-clock (&optional start end)
+  "Send the currently selected code (with comments) to the
+currently clocked-in org-mode task."
+  (interactive)
+  (org-capture nil "f"))
+
+
+;(add-to-list 'org-capture-templates
+;            '("c" ;Key used to select this template
+              ;template description
+            ;"Code" 
+              ;template type which is a node targeting an org file
+             ; entry 
+              ;template target
+             ; (file "~/org/captured.org")
+              ;The template for creating the capture item
+             ; "* Code Snippet %U
+             ; In ~%A~
+             ; #+BEGIN_SRC %(major-mode)
+             ; %i
+             ; #+END_SRC
+             ; %?"))
+              ;; "* Code snippet %U\n%(format \"%s\" my-captured-snippet)"))
+(setq org-capture-default-template "c")
+(add-to-list 'org-capture-templates
+              `("c" "Code Reference with Comments to Current Task"
+                "%(ha/org-capture-code-snippet \"%F\")\n\n   %?"))
+                ;:empty-lines 1))
+(add-to-list 'org-capture-templates
+              `("cl" "Link to Code Reference to Current Task"
+                "%(ha/org-capture-code-snippet \"%F\")"
+                :empty-lines 1 :immediate-finish t))
+
+;; TEXT MANIPULATION
+(use-package! expand-region)
+(with-eval-after-load 'expand-region
+  (evil-global-set-key 'normal (kbd "J") #'er/contract-region)
+  (evil-global-set-key 'visual (kbd "J") #'er/contract-region)
+  (evil-global-set-key 'normal (kbd "K") #'er/expand-region)
+  (evil-global-set-key 'visual (kbd "K") #'er/expand-region))
+
+;; VTERM
 (use-package vterm
   :load-path "/home/rmarr/Downloads/gitDownloads/emacs-libvterm/")
 
-;; (require 'doom-modeline-core)
-;; (require 'doom-modeline-segments)
-;; (doom-modeline-def-modeline 'my-vterm-mode-line
-;;   '(bar workspace-name window-number modals matches buffer-default-directory buffer-info remote-host buffer-position word-count parrot selection-info)
-;;   '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
-
-;; (add-hook! 'vterm-mode-hook (doom-modeline-set-modeline 'my-vterm-mode-line))
-
-;; (with-eval-after-load 'vterm
-;;   (evil-define-key '(normal insert) vterm-mode-map
-;;     (kbd "M-k") 'vterm-send-up
-;;     (kbd "M-j") 'vterm-send-down)
-;;   (message "vterm-new-keybindings"))
-
-;; (defun open-named-terminal (termName2)
-;;   (vterm)
-;;   (rename-buffer termName2 t)
-;;   (evil-normal-state)) ;; (unless (display-graphic-p)
-;;   (define-key vterm-mode-map [up]    '(lambda () (interactive) (vterm-send-key "<up>")))
-;;   (define-key vterm-mode-map [down]  '(lambda () (interactive) (vterm-send-key "<down>")))
-;;   (define-key vterm-mode-map [right] '(lambda () (interactive) (vterm-send-key "<right>")))
-;;   (define-key vterm-mode-map [left]  '(lambda () (interactive) (vterm-send-key "<left>")))
-;;   (define-key vterm-mode-map [tab]   '(lambda () (interactive) (vterm-send-key "<tab>")))
-;;   (define-key vterm-mode-map (kbd "DEL") '(lambda () (interactive) (vterm-send-key "<backspace>")))
-;;   (define-key vterm-mode-map (kbd "RET") '(lambda () (interactive) (vterm-send-key "<return>"))))
-;; (define-key vterm-mode-map (kbd "RET") '(lambda () (interactive) (vterm-send-key "<return>")))
-
 (use-package "fzf" :init(setenv "FZF_DEFAULT_COMMAND" "--type file"))
+(require 'doom-modeline-core)
+(require 'doom-modeline-segments)
+(doom-modeline-def-modeline 'my-vterm-mode-line
+  '(bar workspace-name window-number modals matches buffer-default-directory buffer-info remote-host buffer-position word-count parrot selection-info)
+  '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
+
+(add-hook! 'vterm-mode-hook (doom-modeline-set-modeline 'my-vterm-mode-line))
+
+(with-eval-after-load 'vterm
+  ;; (define-key vterm-mode-map (kbd "C-j") 'vterm-send-down)
+  ;; (define-key vterm-mode-map (kbd "C-k") 'vterm-send-up)
+  (evil-define-key '(normal insert) vterm-mode-map
+    (kbd "M-k") 'vterm-send-up
+    (kbd "M-j") 'vterm-send-down))
+
+  ;; (setq frame-title-format '(:eval (if (buffer-file-name) (abbreviate-file-name (buffer-file-name)) "%b")))
+  ;; (setq frame-title-format "NEATO")
+  ;; (setq frame-title-format '("" "%b @ Emacs " emacs-version))
+  ;; (doom-modeline-set-modeline 'my-vterm-mode-line)
+  ;; (setq mode-line-format '("" "%b @ Emacs " default-directory))
+  ;; (doom-modeline-set-project-modeline) ;; Display current working directory on modeline
+  ;; (message "vterm-new-keybindings"))
+
+(defun show-current-working-dir-in-mode-line ()
+  "Shows current working directory in the modeline."
+  (interactive)
+  (setq mode-line-format '("" default-directory))
+  )
+
+(defun open-named-terminal (termName2)
+  (vterm)
+  (rename-buffer termName2 t)
+  (evil-normal-state))
+
+(defun find-named-terminal (termName)
+  (catch 'exit-find-named-terminal
+    (if
+        (string-match-p termName (buffer-name (current-buffer)))
+        (bury-buffer (buffer-name (current-buffer))))
+
+    (dolist (b (buffer-list))
+      (if (string-match-p termName (buffer-name b))
+          (progn
+           (switch-to-buffer b)
+           (throw 'exit-find-named-terminal nil))))
+
+    (open-named-terminal termName))
+  )
+(defun find-std-terminal ()
+  (interactive)
+  (find-named-terminal "std-term"))
+
+(defun open-std-terminal ()
+  (interactive)
+  (open-named-terminal "std-term"))
+
+(defun find-maint-terminal ()
+  (interactive)
+  (find-named-terminal "maint-term"))
+
+(defun open-maint-terminal ()
+  (interactive)
+  (open-named-terminal "maint-term"))
+
+(map! :leader
+      (:prefix "w"
+        :desc "Open maint term"  "M"  #'open-maint-terminal
+        :desc "Go to maint term" "m"  #'find-maint-terminal
+        :desc "Open std term"    "T"  #'open-std-terminal
+        :desc "Go to std term"   "t"  #'find-std-terminal))
 
 (use-package symbol-overlay)
 
@@ -66,13 +285,22 @@
 ;;        :desc "dwim Comment" "Spc" #'comment-dwim))
 
 (map! :leader
-  (:prefix "w"
-    :desc "Open vterm" "t"    #'vterm)
-  (:prefix "b"
-    :desc "Switch to buffer" "b" #'switch-to-buffer)
-  (:prefix "f"
-    :desc "Find file in projects" "f" #'projectile-find-file-in-known-projects)
-  :desc "Switchhh" "a" #'switch-to-buffer)
+      (:desc "next buffer" "D" #'switch-to-next-buffer
+        :desc "prev buffer" "d" #'switch-to-prev-buffer
+        )
+      ;; (:prefix "s"
+      ;;   :desc "swiper-isearch-thing-at-point" "t" #'swiper-isearch-thing-at-point
+      ;;   :desc "helm-projectile-rg" "p" #'helm-projectile-rg)
+      (:desc "repeat last command" "." #'repeat))
+
+(setq evil-scroll-count 5) ;; I like the scroll to be a bit more granular
+(defun my/evil-scroll-down ()
+  (interactive)
+  (evil-scroll-down 10))
+
+(defun my/evil-scroll-up ()
+  (interactive)
+  (evil-scroll-up 10))
 
 ;; AutComplete
 
@@ -161,65 +389,27 @@
 )
 
 ;; LSP
-(require 'lsp-mode)
 (setq ccls-executable "/home/rmarr/.local/bin/ccls")
-(lsp-register-client
- (make-lsp-client :new-connection (lsp-stdio-connection "/home/rmarr/.local/bin/pyls")
-                  :major-modes '(python-mode)
-                  :server-id 'pyls))
-(setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
-(defun ccls/callee () (interactive) (lsp-ui-peek-find-custom "$ccls/call" '(:callee t)))
-(defun ccls/caller () (interactive) (lsp-ui-peek-find-custom "$ccls/call"))
-(defun ccls/vars (kind) (lsp-ui-peek-find-custom "$ccls/vars" `(:kind ,kind)))
-(defun ccls/base (levels) (lsp-ui-peek-find-custom "$ccls/inheritance" `(:levels ,levels)))
-(defun ccls/derived (levels) (lsp-ui-peek-find-custom "$ccls/inheritance" `(:levels ,levels :derived t)))
-(defun ccls/member (kind) (interactive) (lsp-ui-peek-find-custom "$ccls/member" `(:kind ,kind)))
+(map!
+ ;; :after lsp
+ :leader
+ :prefix "l"
+ :desc "lsp-find-definition" "d" #'lsp-find-definition
+ :desc "lsp-format"          "f" #'lsp-format-buffer
+ :desc "lsp-find-references" "r" #'lsp-find-references
+ :desc "lsp-ui-imenu"        "i" #'lsp-ui-imenu
+ :desc "lsp-rename"          "n" #'lsp-rename
 
-;; References w/ Role::Role
-(defun ccls/references-read () (interactive)
-  (lsp-ui-peek-find-custom "textDocument/references"
-    (plist-put (lsp--text-document-position-params) :role 8)))
+ ;;navigation
+ :desc "next-func" "j" #'my/next-func
+ :desc "prev-func" "k" #'my/prev-func
 
-;; References w/ Role::Write
-(defun ccls/references-write ()
-  (interactive)
-  (lsp-ui-peek-find-custom "textDocument/references"
-   (plist-put (lsp--text-document-position-params) :role 16)))
+ :desc "find-related-file"   "o" #'ff-find-related-file
+ :desc "find-related-file-other-window" "O" #'projectile-find-other-file-other-window)
+      ;; (:prefix "l")
+      ;; 'lsp
+  ;; (define-key lsp-mode-map (kbd "SPC")))
 
-;; References w/ Role::Dynamic bit (macro expansions)
-(defun ccls/references-macro () (interactive)
-  (lsp-ui-peek-find-custom "textDocument/references"
-   (plist-put (lsp--text-document-position-params) :role 64)))
-
-;; References w/o Role::Call bit (e.g. where functions are taken addresses)
-(defun ccls/references-not-call () (interactive)
-  (lsp-ui-peek-find-custom "textDocument/references"
-   (plist-put (lsp--text-document-position-params) :excludeRole 32)))
-
-;; ccls/vars ccls/base ccls/derived ccls/members have a parameter while others are interactive.
-;; (ccls/base 1) direct bases
-;; (ccls/derived 1) direct derived
-;; (ccls/member 2) => 2 (Type) => nested classes / types in a namespace
-;; (ccls/member 3) => 3 (Func) => member functions / functions in a namespace
-;; (ccls/member 0) => member variables / variables in a namespace
-;; (ccls/vars 1) => field
-;; (ccls/vars 2) => local variable
-;; (ccls/vars 3) => field or local variable. 3 = 1 | 2
-;; (ccls/vars 4) => parameter
-
-;; References whose filenames are under this project
-;; (lsp-ui-peek-find-references nil (list :folders (vector (projectile-project-root))))
-;; (define-key doom-leader-map (kbd "g h") (lambda () (interactive) (ccls/references-not-call ))) ;; (define-key doom-leader-map (kbd "x C") (lambda ()  (ccls/callee )))
-;; (define-key doom-leader-map (kbd "x c") (lambda ()  (ccls/caller )))
-;; DAP debugging
-; Requires pyenv to work properly
-(require 'dap-mode)
-(require 'dap-ui)
-(require 'dap-python)
-(dap-mode 1)
-(dap-ui-mode 1)
-(add-hook 'dap-stopped-hook
-          (lambda (arg) (call-interactively #'dap-hydra)))
 ;; (defmacro hydra-move-macro ()
   ;; '(("h" evil-window-left "left")
   ;; ("l" evil-window-right "right")))
@@ -275,8 +465,8 @@
 ;; (with-eval-after-load 'compilation
   (setq compilation-auto-jump-to-first-error 1)
 (setq compile-commands
-      '("docker exec -it dreamy_vaughan /bin/bash -c \"cd /shared/kinetis && make -f Make213371\" && scp /home/rmarr/kinetis/213371-01X.axf pyrite:/home/bdi3000/rmarr/"
-        "docker exec -it dreamy_vaughan /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp /home/rmarr/kinetis/213371-01X.axf pyrite:/home/bdi3000/rmarr/"
+      '("docker exec -it funny_dhawan /bin/bash -c \"cd /shared/kinetis && make -f Make213371\" && scp /home/rmarr/kinetis/213371-01X.axf pyrite:/home/bdi3000/rmarr/"
+        "docker exec -it funny_dhawan /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp /home/rmarr/kinetis/213371-01X.axf pyrite:/home/bdi3000/rmarr/"
         "ssh blade && cd kinetis && make -f Make213371 -B"
         "cd ~/kinetis && docker exec -it agitated_borg /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -Bwnk > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt"))
 (defun my/ivy/compile ()
