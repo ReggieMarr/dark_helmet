@@ -86,7 +86,39 @@
       (:prefix ("o" . "org")
         :desc "org-store-link" "l"  #'org-store-link
         :desc "org-agenda"     "a"  #'org-agenda
-        :desc "org-capture"    "T"  #'org-capture))
+        :desc "org-capture"    "c"  #'org-capture))
+
+(add-hook! 'org-mode-hook
+(set-face-attribute 'org-block-begin-line nil :height 0.7 :slant 'normal)
+(set-face-attribute 'org-block-end-line nil :height 0.7 :slant 'normal))
+
+(defun what-face (pos)
+  (interactive "d")
+  (let ((face (or (get-char-property (pos) 'read-face-name)
+                  (get-char-property (pos) 'face))))
+    (if face (message "Face: %s" face) (message "No face at %d" pos))))
+
+;; (add-hook! 'org-capture-mode-hook
+;; ORG Capture
+  ;; (add-to-list 'org-capture-templates
+  ;;       ;; '(("t" "Todo" entry (file+headline (concat org-directory "inbox.org") "Tasks")
+  ;;         ;; "* TODO %?\n  %U\n  %i\n  %a")
+  ;;       '("c" "Code Snippet" entry
+  ;;        ;; (file (concat org-directory "/snippets.org"))
+  ;;        (file "~/org/snippets.org")
+  ;;        ;; Prompt for tag and language
+  ;;        "* %A \n#+BEGIN_SRC c\n%i#+END_SRC"))
+         ;; ("m" "Media" entry
+          ;; (file+datetree (concat org-directory "media.org"))
+          ;; "* %?\nURL: \nEntered on %U\n")))
+
+(defun org-hide-src-block-delimiters()
+  (interactive)
+  (save-excursion (goto-char (point-max))
+      (while (re-search-backward "#\\+BEGIN_SRC\\|#\\+END_SRC" nil t)
+         (let ((ov (make-overlay (line-beginning-position)
+             (1+ (line-end-position)))))
+         (overlay-put ov 'invisible t)))))
 
 ;; TEXT MANIPULATION
 (use-package! expand-region)
@@ -107,6 +139,10 @@
   '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
 
 (add-hook! 'vterm-mode-hook (doom-modeline-set-modeline 'my-vterm-mode-line))
+
+(add-hook! 'c-mode-hook
+  (setq which-function-mode t))
+  ;; (setq which-func-mode t))
 
 (with-eval-after-load 'vterm
   ;; (define-key vterm-mode-map (kbd "C-j") 'vterm-send-down)
@@ -201,8 +237,8 @@
         :desc "prev buffer" "d" #'switch-to-prev-buffer
         )
       (:prefix "s"
-        :desc "swiper-isearch-thing-at-point" "t" #'swiper-isearch-thing-at-point
-        :desc "helm-projectile-rg" "p" #'helm-projectile-rg)
+        :desc "swiper-isearch-thing-at-point" "t" #'swiper-isearch-thing-at-point)
+        ;; :desc "helm-projectile-rg" "p" #'helm-projectile-rg)
       (:desc "repeat last command" "." #'repeat))
 
 (setq evil-scroll-count 5) ;; I like the scroll to be a bit more granular
@@ -454,6 +490,8 @@
  :desc "lsp-format"          "f" #'lsp-format-buffer
  :desc "lsp-find-references" "r" #'lsp-find-references
  :desc "lsp-ui-imenu"        "i" #'lsp-ui-imenu
+ :desc "peek definition"     "l" #'lsp-ui-peek-find-definitions
+ :desc "peek definition"     "s" #'lsp-ui-peek-find-references
  :desc "lsp-rename"          "n" #'lsp-rename
 
  ;;navigation
@@ -462,6 +500,10 @@
 
  :desc "find-related-file"   "o" #'ff-find-related-file
  :desc "find-related-file-other-window" "O" #'projectile-find-other-file-other-window)
+
+(setq lsp-ui-peek-enable t)
+(setq lsp-ui-peek-always-show t) ;; Show peek view even if only 1 cross reference
+(setq lsp-ui-peek-show-directory nil)
       ;; (:prefix "l")
       ;; 'lsp
   ;; (define-key lsp-mode-map (kbd "SPC")))
@@ -541,12 +583,15 @@
         "cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f Make213371 \" && scp 213371-01X.axf edyer@pyrite:/home/bdi3000/edyer"
 
 
-        "cd ~/tasys && make -f MakeMcuTasys MAKE_SUBMODULE=mx/MakeMcuMx10Zn SW_PN=76981 SW_VER=02 SW_REV=X -j TOOLCHAIN=xilinx"
-        "cd ~/tasys && make -f MakeMcuTasys MAKE_SUBMODULE=mx/MakeMcuMx10Zn SW_PN=76981 SW_VER=02 SW_REV=X -j TOOLCHAIN=xilinx -B"
+        "cd ~/tasys && make -f MakeMcuTasys MAKE_SUBMODULE=mx/MakeMcuMx10Zn SW_PN=76981 SW_VER=03 SW_REV=X -j TOOLCHAIN=xilinx"
+        "cd ~/tasys && make -f MakeMcuTasys MAKE_SUBMODULE=mx/MakeMcuMx10Zn SW_PN=76981 SW_VER=03 SW_REV=X -j TOOLCHAIN=xilinx -B"
 
         ;; Mx20Di
         "cd ~/release && compiledb make -f MakePldMx2XZn_Gen2 SW_PN=313365 SW_VER=02 SW_REV=X -j TOOLCHAIN=xilinx"
         "cd ~/release && compiledb make -f MakeGblMx2XZn_Gen2 SW_PN=313367 SW_VER=02 SW_REV=X -j TOOLCHAIN=xilinx"
+
+        ;; Octave
+        "cd ~/tasys/TLE_Matlab && octave matlab_srd_implementation.m"
         ;; "cd ~/general_atomics make -f MakeMcuXZnHDi_Gen2 SW_PN=313366 SW_VER=02 SW_REV=X -j TOOLCHAIN=xilinx"
         "neato"))
 (defun my/ivy/compile ()
