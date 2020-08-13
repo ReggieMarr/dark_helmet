@@ -4,7 +4,7 @@
 
       doom-scratch-initial-major-mode 'lisp-interaction-mode
       ;;treemacs-width 32 ;;TODO
-      doom-theme 'doom-acairo-light
+      doom-theme 'doom-material
 
       ;; Improve performance & disable line #'s by defausdlt
       display-line-numbers-type nil
@@ -181,15 +181,15 @@ currently clocked-in org-mode task."
              ; #+END_SRC
              ; %?"))
               ;; "* Code snippet %U\n%(format \"%s\" my-captured-snippet)"))
-(setq org-capture-default-template "c")
-(add-to-list 'org-capture-templates
-              `("c" "Code Reference with Comments to Current Task"
-                "%(ha/org-capture-code-snippet \"%F\")\n\n   %?"))
-                ;:empty-lines 1))
-(add-to-list 'org-capture-templates
-              `("cl" "Link to Code Reference to Current Task"
-                "%(ha/org-capture-code-snippet \"%F\")"
-                :empty-lines 1 :immediate-finish t))
+;; (setq org-capture-default-template "c")
+;; (add-to-list 'org-capture-templates
+;;               `("c" "Code Reference with Comments to Current Task"
+;;                 "%(ha/org-capture-code-snippet \"%F\")\n\n   %?"))
+;;                 ;:empty-lines 1))
+;; (add-to-list 'org-capture-templates
+;;               `("cl" "Link to Code Reference to Current Task"
+;;                 "%(ha/org-capture-code-snippet \"%F\")"
+;;                 :empty-lines 1 :immediate-finish t))
 
 ;; TEXT MANIPULATION
 (use-package! expand-region)
@@ -203,7 +203,7 @@ currently clocked-in org-mode task."
 (use-package vterm
   :load-path "/home/rmarr/Downloads/gitDownloads/emacs-libvterm/")
 
-(use-package "fzf" :init(setenv "FZF_DEFAULT_COMMAND" "--type file"))
+;; (use-package "fzf" :init(setenv "FZF_DEFAULT_COMMAND" "--type file"))
 (require 'doom-modeline-core)
 (require 'doom-modeline-segments)
 (doom-modeline-def-modeline 'my-vterm-mode-line
@@ -487,41 +487,132 @@ currently clocked-in org-mode task."
 
 ;Org mode code capture
 ;
-(setq my-major-mode-to-org-src
-      '(("c++-mode" . "C++")
-        ("python-mode" . "python")))
+(with-eval-after-load 'org-mode
+        (setq my-major-mode-to-org-src
+        '(("c++-mode" . "C++")
+                ("python-mode" . "python")))
 
-  (setq my-captured-snippet "")
+        (setq my-captured-snippet "")
 
-  (defun capture-code-snippet ()
-    "Copy the current region and put it the org source code block."
-    (interactive)
-    (let ((code-snippet (buffer-substring-no-properties (mark) (point)))
-          (func-name (which-function))
-          (file-name (buffer-file-name))
-          (line-number (line-number-at-pos (region-beginning)))
-          (org-src-mode (cdr (assoc (format "%s" major-mode) my-major-mode-to-org-src))))
-      (setq my-captured-snippet
-            (format
-            "file:%f::%f
-            In ~%s~:
-            #+BEGIN_SRC %s
-            %a
-            #+END_SRC"
-            file-name
-            line-number
-            func-name
-            org-src-mode
-            code-snippet)))
-    (org-capture nil "c"))
+        (defun capture-code-snippet ()
+        "Copy the current region and put it the org source code block."
+        (interactive)
+        (let ((code-snippet (buffer-substring-no-properties (mark) (point)))
+                (func-name (which-function))
+                (file-name (buffer-file-name))
+                (line-number (line-number-at-pos (region-beginning)))
+                (org-src-mode (cdr (assoc (format "%s" major-mode) my-major-mode-to-org-src))))
+        (setq my-captured-snippet
+                (format
+                "file:%f::%f
+                In ~%s~:
+                #+BEGIN_SRC %s
+                %a
+                #+END_SRC"
+                file-name
+                line-number
+                func-name
+                org-src-mode
+                code-snippet)))
+        (org-capture nil "c"))
 
+        (defun transform-square-brackets-to-round-ones(string-to-transform)
+                "Transforms [ into ( and ] into ), other chars left unchanged."
+                (concat
+                (mapcar #'(lambda (c) (if (equal c ?[) ?\( (if (equal c ?]) ?\) c))) string-to-transform))
+        )
+        ;; Kill the frame if one was created for the capture
+        (defvar kk/delete-frame-after-capture 0 "Whether to delete the last frame after the current capture")
+
+        (defun kk/delete-frame-if-neccessary (&rest r)
+                (cond
+                        ((= kk/delete-frame-after-capture 0) nil)
+                        ((> kk/delete-frame-after-capture 1)
+                        (setq kk/delete-frame-after-capture (- kk/delete-frame-after-capture 1)))
+                (t
+                (setq kk/delete-frame-after-capture 0)
+        (delete-frame))))
+
+        (advice-add 'org-capture-finalize :after 'kk/delete-frame-if-neccessary)
+        (advice-add 'org-capture-kill :after 'kk/delete-frame-if-neccessary)
+        (advice-add 'org-capture-refile :after 'kk/delete-frame-if-neccessary)
+)
+;;new org templates
+(defun org-capture-pdf-active-region ()
+"Capture the active region of the pdf-view buffer."
+        (let* ((pdf-buf-name (plist-get org-capture-plist :original-buffer))
+                (pdf-buf (get-buffer pdf-buf-name)))
+        (if (buffer-live-p pdf-buf)
+                (with-current-buffer pdf-buf
+                        (car (pdf-view-active-region-text)))
+        (user-error "Buffer %S not alive." pdf-buf-name))))
 (add-to-list 'org-capture-templates
-            '("c" ;Key used to select this template
-              ;template description
-            "Code" 
-              ;template type which is a node targeting an org file
-              entry 
-              ;template target
-              (file "~/org/captured.org")
-              ;The template for creating the capture item
-              "* Code snippet %U\n%(format \"%s\" my-captured-snippet)"))
+        ;; '("c" ;Key used to select this template
+        ;; ;template description
+        ;; "Code"
+        ;; ;template type which is a node targeting an org file
+        ;; entry
+        ;; ;template target
+        ;; (file "~/org/captured.org")
+        ;; ;The template for creating the capture item
+        ;; "* Code snippet %U\n%(format \"%s\" my-captured-snippet)")
+        '("p"
+        "Protocol"
+        entry
+        (file+headline ,(concat org-directory "notes.org") "Inbox")
+        "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+        '("L"
+        "Protocol Link"
+        entry
+        (file+headline ,(concat org-directory "notes.org") "Inbox")
+        "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n")
+        '("f"
+                "Pdf Notes"
+                entry
+                (file+olp "/temp/Notes.org" "Notes")
+                "* %?\n%(org-capture-pdf-active-region)\n")
+        )
+        ;; '("L"
+        ;; "Protocol Link"
+        ;; entry
+        ;; (file+headline ,(concat org-directory "notes.org") "Inbox")
+        ;; "* %? [[%:link][%:description]] \nCaptured On: %U")
+
+;boilerplate is for plebs
+(with-eval-after-load 'yasnippet
+        (defun maybe_notify_snip (snip_str)
+          "This function conditionally returns a string"
+                (if (string= snip_str "0")
+                     " "
+                        (
+concat (concat "\nstatic void " (concat snip_str "(int type, void *argPtr, int recordNum)"))
+"\n{
+        if (type == NOTIFY_GET) {
+        }
+        else (type == NOTIFY_SET) {
+        }
+}
+")
+                        )
+                ))
+
+;Fancy linking function defintions and implementations
+    (require 'srefactor)
+    (require 'srefactor-lisp)
+
+    ;; OPTIONAL: ADD IT ONLY IF YOU USE C/C++.
+    (semantic-mode 1) ;; -> this is optional for Lisp
+
+    (define-key c-mode-map (kbd "M-RET") 'srefactor-refactor-at-point)
+    (define-key c++-mode-map (kbd "M-RET") 'srefactor-refactor-at-point)
+    (global-set-key (kbd "M-RET o") 'srefactor-lisp-one-line)
+    (global-set-key (kbd "M-RET m") 'srefactor-lisp-format-sexp)
+    (global-set-key (kbd "M-RET d") 'srefactor-lisp-format-defun)
+    (global-set-key (kbd "M-RET b") 'srefactor-lisp-format-buffer)
+
+;org jira
+(setq jiralib-url "http://cesium/jira")
+
+;eric says i need this
+(after! company
+  (setq company-idle-delay 0.01))

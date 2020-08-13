@@ -1,0 +1,57 @@
+* [2020-08-12 Wed 14:00] grasp/org_tools.py at af24c991579986cec73695daa8318e7831049305 · karlicoss/grasp :grasp:
+https://github.com/karlicoss/grasp/blob/af24c991579986cec73695daa8318e7831049305/server/org_tools.py#L91-L109
+Comment:
+This capture
+* [2020-08-12 Wed 14:51] kzar/davemail: My email configuration, using mbsync, notmuch, msmtp, msmtpq, pgp, emacs and gnus-alias :grasp:email:notmuch:emacs:
+https://github.com/kzar/davemail
+Comment:
+example on setting up notmuch email
+* [2020-08-12 Wed 14:52] Notmuch in Emacs with mbsync and msmtp · she will never swims alone :grasp:email:emacs:
+https://www.ying-ish.com/essay/emacs-notmuch-mbsync-msmtp-email/
+Comment:
+setup emacs with email with notmuch and msmtp
+* [2020-08-12 Wed 15:11] Extracting PDF highlights and linking back to PDF in org-mode : emacs :grasp:pdf:org-mode:org-capture:emacs:
+https://www.reddit.com/r/emacs/comments/7yxg1t/extracting_pdf_highlights_and_linking_back_to_pdf/
+Comment:
+ways to capture pdfs in org notes
+* [2020-08-12 Wed 23:11] Configuring Doom emacs, mbsync, and mu4e for use with o365 • Unl0ckd :grasp:email:mbsync:mu4e:
+https://www.chrislockard.net/posts/2019-11-14-notes-on-configuring-mu4e-and-doom-emacs/
+Comment:
+doom emacs unlocked email setup
+* [2020-08-12 Wed 23:13] tuhdo/semantic-refactor: Semantic Refactor is a refactoring tool based on Semantic parser framework :grasp:emacs:function:prototype:
+https://github.com/tuhdo/semantic-refactor
+Comment:
+semantic refact
+* [2020-08-12 Wed 23:27] What is Open Collector Output? :grasp:basic:electronics:
+http://www.learningaboutelectronics.com/Articles/Open-collector-output.php
+Selection:
+An open collector output refers to an output that is connected to the collector of a transistor.
+
+Basically, just think of a transistor. A BJT transistor has a base, a collector, and an emitter.
+
+An open collector output is an output device that is attached to an open collector of a transistor.
+
+By open collector, we mean a collector that is unattached to anything. It's just open.
+
+In order for an open collector output device to work, the open collector has to receive sufficient power.
+
+In order to understand this, you have to understand NPN transistors. In order for an NPN transistor to work, the base and the collector both need sufficient power. The base turns the transistor on. And then a much greater current flows from collector to emitter, but only if the collector has sufficient positive voltage.
+
+A perfect example of an open collector output are voltage comparators. Pretty much all voltage comparator chips, such as the LM311, the LM393, and the LM339 all function as output collector outputs.
+
+Below is shown the internal diagram or makeup of the LM311 voltage comparator chip. 
+Comment:
+open collector defitions
+* [2020-08-13 Thu 10:57] Zettelkasten/Org-roam/Org-brain Is Crap : emacs :grasp:zettlekasten:emacs:org-roam:
+https://www.reddit.com/r/emacs/comments/hg2m5s/zettelkastenorgroamorgbrain_is_crap/
+Comment:
+this is interesting since it appears to give lots of tips on the shortcomings of the zettelkasten method/org-roam system. The people who comment show where to maxmize its effectiveness.
+* [2020-08-13 Thu 11:29] Using Emacs 44 - An Org mode and PDF-tools workflow - YouTube :grasp:emacs:pdf-tools:org-mode:
+https://www.youtube.com/watch?v=LFO2UbzbZhA
+Comment:
+skip the first 8 or so minutes on this but then its interesting.
+Firstly the macro he uses to turn the pdfs into org note references is interesting. Secondly it really displays the power of mixing dired, org-mode, and pdf tools
+* [2020-08-13 Thu 13:40] Org-capture in Files · The Art of Not Asking Why :grasp:emacs:org-mode:org-capture:
+https://joshrollinswrites.com/help-desk-head-desk/org-capture-in-files/
+Comment:
+capturing files templates
