@@ -55,3 +55,94 @@ Firstly the macro he uses to turn the pdfs into org note references is interesti
 https://joshrollinswrites.com/help-desk-head-desk/org-capture-in-files/
 Comment:
 capturing files templates
+* [2020-08-14 Fri 11:34] The Magical container_of() Macro (by @radekpazdera) :grasp:programming:container:of:C:
+https://radek.io/2012/11/10/magical-container_of-macro/
+Comment:
+link that sean sent wrt the container of macro
+* [2020-08-14 Fri 11:34] braindump(ag) == Magic in the container_of() linux kernel macro :grasp:programming:container:of:
+https://andrei.gherzan.ro/linux/the-magic-in-container-of/
+Comment:
+container of in the context of the linux kernel
+recent post (2019-11-22)
+* [2020-08-14 Fri 17:51] emacs - Inline PDF images in org-mode - Stack Overflow :emacs:org-mode:pdf:
+https://stackoverflow.com/questions/15407485/inline-pdf-images-in-org-mode
+Selection:
+Let me finish this question.
+
+Firstly, Org-mode does not support any pdf inline display function with itself. However, it is possible to modify org-display-inline-images to achieve what you want. First you need to refer to this answer: Configuring emacs for showing fixed width inline images, which inspired me a lot. Then I slightly modified the function, making it support pdf, bmp display in org-mode. My function is on below.
+
+#+BEGIN_SRC emacs-lisp
+(setq image-file-name-extensions
+   (quote
+    ("png" "jpeg" "jpg" "gif" "tiff" "tif" "xbm" "xpm" "pbm" "pgm" "ppm" "pnm" "svg" "pdf" "bmp")))
+
+(setq org-image-actual-width 600)
+
+(setq org-imagemagick-display-command "convert -density 600 \"%s\" -thumbnail \"%sx%s>\" \"%s\"")
+(defun org-display-inline-images (&optional include-linked refresh beg end)
+  "Display inline images.
+Normally only links without a description part are inlined, because this
+is how it will work for export.  When INCLUDE-LINKED is set, also links
+with a description part will be inlined.  This
+can be nice for a quick
+look at those images, but it does not reflect what exported files will look
+like.
+When REFRESH is set, refresh existing images between BEG and END.
+This will create new image displays only if necessary.
+BEG and END default to the buffer boundaries."
+  (interactive "P")
+  (unless refresh
+    (org-remove-inline-images)
+    (if (fboundp 'clear-image-cache) (clear-image-cache)))
+  (save-excursion
+    (save-restriction
+      (widen)
+      (setq beg (or beg (point-min)) end (or end (point-max)))
+      (goto-char beg)
+      (let ((re (concat "\\[\\[\\(\\(file:\\)\\|\\([./~]\\)\\)\\([^]\n]+?"
+                        (substring (org-image-file-name-regexp) 0 -2)
+                        "\\)\\]" (if include-linked "" "\\]")))
+            old file ov img)
+        (while (re-search-forward re end t)
+          (setq old (get-char-property-and-overlay (match-beginning 1)
+                                                   'org-image-overlay)
+        file (expand-file-name
+                      (concat (or (match-string 3) "") (match-string 4))))
+          (when (file-exists-p file)
+            (let ((file-thumb (format "%s%s_thumb.png" (file-name-directory file) (file-name-base file))))
+              (if (file-exists-p file-thumb)
+                  (let ((thumb-time (nth 5 (file-attributes file-thumb 'string)))
+                        (file-time (nth 5 (file-attributes file 'string))))
+                    (if (time-less-p thumb-time file-time)
+            (shell-command (format org-imagemagick-display-command
+                           file org-image-actual-width org-image-actual-width file-thumb) nil nil)))
+                (shell-command (format org-imagemagick-display-command
+                                         file org-image-actual-width org-image-actual-width file-thumb) nil nil))
+              (if (and (car-safe old) refresh)
+                  (image-refresh (overlay-get (cdr old) 'display))
+                (setq img (save-match-data (create-image file-thumb)))
+                (when img
+                  (setq ov (make-overlay (match-beginning 0) (match-end 0)))
+                  (overlay-put ov 'display img)
+                  (overlay-put ov 'face 'default)
+                  (overlay-put ov 'org-image-overlay t)
+                  (overlay-put ov 'modification-hooks
+                               (list 'org-display-inline-remove-overlay))
+                  (push ov org-inline-image-overlays))))))))))
+
+#+END_SRC
+The function uses convert file.pdf -thumbnail "400x400>" file_thumb.png to generate a file_thumb named thumbnail in your folder to substitute overlay of pdf, and force org-mode to display pdf with file_thumb without any modification to the org file.
+
+Moreover, because i use babel to generate image with python. It always need me to update the _thumb file, so I add a if condition to say if this thumb file existed or not, and if the pdf file changed i need to change thumb file on the same time... and so on!
+
+Hope it can help you.
+Comment:
+This shows how to create a thumbnail from a pdf and use it inline in a org file
+* [2020-08-16 Sun 23:12] fuxialexander/org-pdftools: A custom org link type for pdf-tools :grasp:emacs:org-mode:pdf:
+https://github.com/fuxialexander/org-pdftools
+Comment:
+Crazy extension to pdf tools
+* [2020-08-16 Sun 23:18] org-pdftools & org-noter demo - YouTube :grasp:org-mode:emacs:org-capture:pdf:
+https://www.youtube.com/watch?v=lCc3UoQku-E
+Comment:
+showing off how to use pdftools and org noter around halfway he shows how to create links from the current page. this could be useful for creating captures.

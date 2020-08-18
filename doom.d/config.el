@@ -556,27 +556,22 @@ currently clocked-in org-mode task."
         ;; (file "~/org/captured.org")
         ;; ;The template for creating the capture item
         ;; "* Code snippet %U\n%(format \"%s\" my-captured-snippet)")
-        '("p"
-        "Protocol"
-        entry
-        (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
-        '("L"
-        "Protocol Link"
-        entry
-        (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n")
+        ;; '("p"
+        ;; "Protocol"
+        ;; entry
+        ;; (file+headline ,(concat org-directory "notes.org") "Inbox")
+        ;; "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
         '("f"
-                "Pdf Notes"
-                entry
-                (file+olp "/temp/Notes.org" "Notes")
-                "* %?\n%(org-capture-pdf-active-region)\n")
-        )
+        "Pdf Notes"
+        entry
+        (file "~/Notes.org")
+        "* %?\n%(org-capture-pdf-active-region)\n")
         ;; '("L"
         ;; "Protocol Link"
         ;; entry
         ;; (file+headline ,(concat org-directory "notes.org") "Inbox")
-        ;; "* %? [[%:link][%:description]] \nCaptured On: %U")
+        ;; "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n")
+        )
 
 ;boilerplate is for plebs
 (with-eval-after-load 'yasnippet
@@ -616,3 +611,12 @@ concat (concat "\nstatic void " (concat snip_str "(int type, void *argPtr, int r
 ;eric says i need this
 (after! company
   (setq company-idle-delay 0.01))
+
+(use-package org-pdftools
+  :hook (org-load . org-pdftools-setup-link))
+
+(use-package org-noter-pdftools
+  :after org-noter
+  :config
+  (with-eval-after-load 'pdf-annot
+    (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))

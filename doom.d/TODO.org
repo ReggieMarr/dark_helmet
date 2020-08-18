@@ -1,23 +1,7 @@
-* TODO Emacs config
+#+TITLE: Config brain dump
+* Plugins to investigate
 ** snipe
 ** helm vs ivy
-** switch to skim for all fuzzy searches
-
-* Missing features in emacs
-** Missing Plugins
-*** autocomplete directories
-*** fast scroll 
-*** fast lsp
-** Missing features
-*** asynchronous (neomake, async lsp)
-*** autocomplete paranthesis
-
-* Emacs config issues
-** Crash on undo
-** vterm doesn't handle return key
-*** the C-m character doesn't do anything but C-o works
-** Lsp is slow and leads to crash
-
 * Missing emacs features in vim
 ** Missing Plugins
 *** Magit
@@ -28,3 +12,45 @@
 *** Spc-C-Spc dwim comment
 *** C-o dwim go back
 
+* Missing features in emacs
+** Missing Plugins
+*** TODO autocomplete directories
+*** TODO fast scroll
+*** TODO fast lsp
+** Missing features
+*** DONE autocomplete paranthesis
+*** TODO asynchronous (neomake, async lsp)
+* Emacs config issues
+** DONE Crash on undo
+fixed with migration to gccemacs
+** DONE Vterm doesn't handle return key
+*** the C-m character doesn't do anything but C-o works
+fixed with migration to gccemacs
+** DONE Lsp is slow and leads to crash
+fixed with migration to gccemacs
+
+** TODO projectile don't follow symlinks
+** TODO switch to skim for all fuzzy searches
+
+* Workflow tasks
+** TODO Org captures
+*** Motivation
+Org captures are powerful because it reduces friction when researching concepts, documenting code, and understanding technical documents.
+The idea is to promote this such that we can easily capture links to code, documents and webpages.
+*** Ideas/subtasks
++ We want two primary types of captures ::
+  + Simple Links to a specific component of a source medium (i.e. a link to a pdf page or specific text)
+  + Image Links to a component of a source medium (i.e. a pdf page show as an image)
+In both cases the capture should be clickable and link back to the source material.
+The following mediums should be capturable in this way.
+**** TODO PDF's
+**** TODO Code
+**** TODO Webpages (static media)
+**** TODO Webpages (videos)
+- [-] Code
+
+** TODO Jira integration
+** TODO Email Integration
+** TODO MDE Integration
+* Things to lookinto
+** TODO emacs macros
