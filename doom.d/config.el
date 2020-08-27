@@ -10,31 +10,46 @@
       display-line-numbers-type nil
 )
 
+(setq comp-deferred-compilation t)
+
+;; Add directory & descendant directories to load path
+;; (let ((default-directory "~/dark_helmet/privatePlugins"))
+;; (normal-top-level-add-subdirs-to-load-path))
+
+;;; # USE-PACKAGE #
 (require 'package)
 
 (package-initialize)
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
-;; Add directory & descendant directories to load path
-;; (let ((default-directory "~/dark_helmet/privatePlugins"))
-;; (normal-top-level-add-subdirs-to-load-path))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 
 (require 'use-package)
-(setq use-package-always-ensure t) ;;Globally ensure that a package will be automatically installed
+(require 'use-package-ensure)
+;; (setq use-package-always-ensure t) ;;Globally ensure that a package will be automatically installed
 
+(use-package xwwp-full
+  :load-path "~/.emacs.d/xwwp"
+  :custom
+  (xwwp-follow-link-completion-system 'helm)
+  :bind (:map xwidget-webkit-mode-map
+              ("v" . xwwp-follow-link)
+              ("t" . xwwp-ace-toggle)))
+
+;;;; # DOOM GLOBALS #
 (setq doom-localleader-key ";")
 
-;; ORG MODE
+;;;; ORG MODE
 (add-hook! 'evil-org-mode-hook 'my/evil-org-mode-keybinds)
 
 (defun my/evil-org-mode-keybinds ()
   (evil-define-key 'motion evil-org-mode-map
     (kbd "^") 'evil-org-beginning-of-line)
+  (setq ispell-local-dictionary "en_US")
   (message "new evil org keybinds"))
 ;; (use-package! org
 ;;   :config
@@ -120,8 +135,18 @@
              (1+ (line-end-position)))))
          (overlay-put ov 'invisible t)))))
 
+;; JIRA
+;; (use-package org-jira)
+(use-package! org-jira
+  :init
+  (if (file-directory-p "~/.org-jira") () (make-directory "~/.org-jira"))
+
+  :config
+  (setq jiralib-url "http://cesium:8080/jira"))
+
 ;; TEXT MANIPULATION
-(use-package! expand-region)
+(use-package! expand-region
+  :init )
 (with-eval-after-load 'expand-region
   (evil-global-set-key 'normal (kbd "J") #'er/contract-region)
   (evil-global-set-key 'visual (kbd "J") #'er/contract-region)
@@ -129,27 +154,35 @@
   (evil-global-set-key 'visual (kbd "K") #'er/expand-region))
 
 ;; VTERM
-(use-package vterm
-  :load-path  "/home/edyer/Desktop/emacs-libvterm")
+(use-package! vterm
+  :init
+  ;; Add current path to Vterm modeline
+  (require 'doom-modeline-core)
+  (require 'doom-modeline-segments)
+  (doom-modeline-def-modeline 'my-vterm-mode-line
+    '(bar workspace-name window-number modals matches buffer-default-directory buffer-info remote-host buffer-position word-count parrot selection-info)
+    '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
+  (add-hook! 'vterm-mode-hook (doom-modeline-set-modeline 'my-vterm-mode-line))
 
-(require 'doom-modeline-core)
-(require 'doom-modeline-segments)
-(doom-modeline-def-modeline 'my-vterm-mode-line
-  '(bar workspace-name window-number modals matches buffer-default-directory buffer-info remote-host buffer-position word-count parrot selection-info)
-  '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
+  (evil-define-key '(normal insert) vterm-mode-map
+    (kbd "M-k") 'vterm-send-up
+    (kbd "M-j") 'vterm-send-down)
+)
 
-(add-hook! 'vterm-mode-hook (doom-modeline-set-modeline 'my-vterm-mode-line))
+(use-package! company
+  :config
+  (setq company-idle-delay 0.01))
 
 (add-hook! 'c-mode-hook
   (setq which-function-mode t))
   ;; (setq which-func-mode t))
 
-(with-eval-after-load 'vterm
-  ;; (define-key vterm-mode-map (kbd "C-j") 'vterm-send-down)
-  ;; (define-key vterm-mode-map (kbd "C-k") 'vterm-send-up)
-  (evil-define-key '(normal insert) vterm-mode-map
-    (kbd "M-k") 'vterm-send-up
-    (kbd "M-j") 'vterm-send-down))
+;; (with-eval-after-load 'vterm
+;;   ;; (define-key vterm-mode-map (kbd "C-j") 'vterm-send-down)
+;;   ;; (define-key vterm-mode-map (kbd "C-k") 'vterm-send-up)
+;;   (evil-define-key '(normal insert) vterm-mode-map
+;;     (kbd "M-k") 'vterm-send-up
+;;     (kbd "M-j") 'vterm-send-down))
 
   ;; (setq frame-title-format '(:eval (if (buffer-file-name) (abbreviate-file-name (buffer-file-name)) "%b")))
   ;; (setq frame-title-format "NEATO")
@@ -208,8 +241,8 @@
         :desc "Go to std term"   "t"  #'find-std-terminal))
 
 
-(use-package nov)
-(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+;; (use-package nov)
+;; (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 
 (map! :leader
   ;; (:prefix "w"
@@ -220,9 +253,9 @@
    :desc "switch-to-buffer" "a" #'switch-to-buffer)
 
 ;; ATOMIC-CHROME
-(use-package atomic-chrome)
-(atomic-chrome-start-server)
-(setq atomic-chrome-buffer-open-style 'window)
+;; (use-package atomic-chrome)
+;; (atomic-chrome-start-server)
+;; (setq atomic-chrome-buffer-open-style 'window)
 
 ;; NAVIGATION
 
@@ -302,23 +335,23 @@
           :desc "log" "i" #'magit-log
           :desc "refresh" "r" #'magit-log-refresh-buffer)))
 
-(define-suffix-command reset-upstream ()
-  (interactive)
-  (if (magit-confirm t (format "**WARNING** this will hard reset to upstream branch. Continue?"))
-      (magit-run-git "reset" "--hard" "@{u}"))
-  )
-; fs
-(define-suffix-command fixup-head ()
-  "Make current commit a fixup to HEAD"
-  (interactive)
-  (magit-run-git "commit" "--fixup" "HEAD")
-  )
+;; (define-suffix-command reset-upstream ()
+  ;; (interactive)
+  ;; (if (magit-confirm t (format "**WARNING** this will hard reset to upstream branch. Continue?"))
+  ;;     (magit-run-git "reset" "--hard" "@{u}"))
+  ;; )
 
-(define-suffix-command reset-head-to-previous-commit ()
-  "Soft reset head to the previous commit"
-  (interactive)
-  (magit-run-git "reset" "HEAD~")
-  )
+;; (define-suffix-command fixup-head ()
+;;   "Make current commit a fixup to HEAD"
+;;   ;; (interactive)
+;;   (magit-run-git "commit" "--fixup" "HEAD")
+;;   )
+
+;; (define-suffix-command reset-head-to-previous-commit ()
+;;   "Soft reset head to the previous commit"
+;;   ;; (interactive)
+;;   (magit-run-git "reset" "HEAD~")
+;;   )
 
 (with-eval-after-load 'magit
   ;; Register custom keybindings
@@ -335,21 +368,22 @@
   (define-key magit-mode-map (kbd "C-o") 'magit-section-cycle)
 
   ;; Register Custom Commands
- (transient-append-suffix 'magit-commit "c"
-                         '("h" "fixup head" fixup-head))
+ ;; (transient-append-suffix 'magit-commit "c"
+ ;;                         '("h" "fixup head" fixup-head))
 
- (transient-append-suffix 'magit-reset "f"
-                         '("u" "to upstream" reset-upstream))
+ ;; (transient-append-suffix 'magit-reset "f"
+ ;;                         '("u" "to upstream" reset-upstream))
 
- (transient-append-suffix 'magit-reset "w"
-                         '("o" "previous-commit" reset-head-to-previous-commit))
+ ;; (transient-append-suffix 'magit-reset "w"
+ ;;                         '("o" "previous-commit" reset-head-to-previous-commit))
  )
 
 (with-eval-after-load 'evil
+  (with-eval-after-load 'magit
  (evil-define-key* '(normal visual) magit-mode-map
    "C-t" #'my/evil-scroll-down
    "C-v" #'my/evil-scroll-up)
-)
+))
 
 ;; Automatically refresh status buffer
 (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
@@ -375,14 +409,15 @@
         ("Path"    99 magit-repolist-column-path                   ())))
 
 ;; Consistent Navigation
-(define-key magit-mode-map [remap evil-scroll-down] 'my/evil-scroll-down)
-(define-key magit-mode-map [remap evil-scroll-up]   'my/evil-scroll-up)
+;; (define-key magit-mode-map [remap evil-scroll-down] 'my/evil-scroll-down)
+;; (define-key magit-mode-map [remap evil-scroll-up]   'my/evil-scroll-up)
 
 ;;########
 ;; View ##
 ;;########
 
 (use-package symbol-overlay)
+(with-eval-after-load 'symbol-overlay
 (setf (cdr symbol-overlay-map) nil) ;; Remove default symbol-overlay-map (we don't want most of these bindings to clobber our evil bindings)
 (define-key symbol-overlay-map (kbd "n") #'symbol-overlay-jump-next)
 (define-key symbol-overlay-map (kbd "N") #'symbol-overlay-jump-prev)
@@ -392,6 +427,7 @@
         :desc "mark single symbol" "M" #'symbol-overlay-put-one
         :desc "query-replace" "r" #'symbol-overlay-query-replace
         :desc "remove-all" "R" #'symbol-overlay-remove-all))
+)
 ;; Fun useless plugins
 
 ;; Weather Forcast
@@ -582,6 +618,10 @@
         "cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f Make213371 -B \" && scp 213371-01X.axf edyer@pyrite:/home/bdi3000/edyer"
         "cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f Make213371 \" && scp 213371-01X.axf edyer@pyrite:/home/bdi3000/edyer"
 
+        ;;IBST
+
+        "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd /root/kinetis && make -f Make1000 \" && scp 1000-01X.axf edyer@pyrite:/home/bdi3000/edyer"
+        "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd /root/kinetis && make -f Make1000 -B > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt && scp 1000-01X.axf edyer@pyrite:/home/bdi3000/edyer"
 
         "cd ~/tasys && make -f MakeMcuTasys MAKE_SUBMODULE=mx/MakeMcuMx10Zn SW_PN=76981 SW_VER=03 SW_REV=X -j TOOLCHAIN=xilinx"
         "cd ~/tasys && make -f MakeMcuTasys MAKE_SUBMODULE=mx/MakeMcuMx10Zn SW_PN=76981 SW_VER=03 SW_REV=X -j TOOLCHAIN=xilinx -B"
