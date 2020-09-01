@@ -146,3 +146,63 @@ Crazy extension to pdf tools
 https://www.youtube.com/watch?v=lCc3UoQku-E
 Comment:
 showing off how to use pdftools and org noter around halfway he shows how to create links from the current page. this could be useful for creating captures.
+* [2020-08-29 Sat 13:49] [WR-3472] Missing Reticule from FSD - Jira :grasp:
+http://cesium/jira/browse/WR-3472
+Comment:
+This some note
+* [2020-08-29 Sat 22:15] C Constant Pointers and Pointer to Constants Examples :C:programming:
+https://www.thegeekstuff.com/2012/06/c-constant-pointers/
+Comment:
+good reference for const pointers and const data
+* [2020-08-29 Sat 22:37] Struct Iteration through (Ab)use of the C Preprocessor :C:programming:macros:
+https://natecraun.net/articles/struct-iteration-through-abuse-of-the-c-preprocessor.html
+Comment:
+this might contain the key to creating a macro that copies a struct and produces another struct that contains members that are pointers to each type of member in the source struct
+* [2020-08-29 Sat 23:14] How to initialize a pointer to a struct in C? - Stack Overflow :C:programming:
+https://stackoverflow.com/questions/11709929/how-to-initialize-a-pointer-to-a-struct-in-c
+Comment:
+notes on compound literals and how we can initialize pointers to structs which contain const pointer members
+* [2020-08-30 Sun 10:18] Introducing Read on reMarkable. Read on reMarkable is now live and… | by reMarkable | Aug, 2020 | reMarkable Blog :remarkable:note:taking:
+https://blog.remarkable.com/introducing-read-on-remarkable-6981369b6399
+Selection:
+With the new extension, you can send articles in a simplified text format (EPUB) with a single click. You can adjust text settings on the device to customize your reading experience, and it goes without saying you can annotate your chosen articles.
+Comment:
+this is pretty interesting, it'd be neat to know if they are compatible with firefox
+* [2020-08-31 Mon 17:22] averest – Model-based Design of Parallel Embedded Reactive Systems :model:driven:engineering:embedded:systems:
+http://www.averest.org/#about_thesynchronouslanguagequartz
+Selection:
+The Synchronous Language Quartz
+
+Synchronous languages are well-suited for the design of reactive systems. Their common paradigm is the perfect synchrony, which means that most of the statements are executed as micro steps in zero time. Consumption of time is explicitly programmed by partitioning the micro steps using pause statements into macro steps that all take the same amount of logical time. Thus, concurrent threads run in lockstep and automatically synchronize at the end of a macro step. The introduction of micro and macro steps is not only a convenient programming model, it is also the key to generate deterministic single-threaded code from multi-threaded synchronous programs. Thus, synchronous programs can be executed on ordinary microcontrollers without complex operating systems. As another advantage, the translation of synchronous programs to circuits is straightforward. Moreover, the formal semantics of synchronous languages makes them particularly attractive for reasoning about program semantics and correctness.
+
+Key features of Quartz are generic statements to describe parameterized systems, different forms of parallel execution (synchronous, asynchronous, interleaved), nondeterministic choice, event and state variables, integers of infinite and finite bitwidth as well as multi-dimensional array types.
+Comment:
+This might be worth exploring as a means for high level embedded systems programming
+* [2020-09-01 Tue 10:16] Pensieve | Wizarding World :random:notes:org-roam:
+https://www.wizardingworld.com/writing-by-jk-rowling/pensieve
+Selection:
+The name ‘Pensieve’ is a homonym of ‘pensive’, meaning deeply, seriously thoughtful; but it also a pun, the ‘sieve’ part of the word alluding to the object’s function of sorting meanings from a mass of thoughts or memories.
+Comment:
+interesting metaphore for an exo-brain
+* [2020-09-01 Tue 10:21] nmartin84/.doom.d: This is my private DOOM emacs configuration. :emacs:doom:emacs:configuration:
+https://github.com/nmartin84/.doom.d
+Comment:
+a really good literate doom config
+* [2020-09-01 Tue 10:22] Diagrams With PlantUML and Emacs – Alvin Sim :emacs:plantuml:mde:
+http://www.alvinsim.com/diagrams-with-plantuml-and-emacs/
+Selection:
+(org-babel-do-load-languages ‘org-babel-load-languages ‘((plantuml . t)))
+Comment:
+example of getting plantuml to work
+* [2020-09-01 Tue 10:23] Getting Boxes Done :emacs:gtd:
+http://www.howardism.org/Technical/Emacs/getting-boxes-done.html
+Comment:
+getting things done with emacs
+* [2020-09-01 Tue 10:25] RicardoNiepel/C4-PlantUML: C4-PlantUML combines the benefits of PlantUML and the C4 model for providing a simple way of describing and communicate software architectures :C4:model:mde:plantuml:
+https://github.com/RicardoNiepel/C4-PlantUML
+Comment:
+Since plantuml is essentially an abstraction from dot to graphviz it'd be awesome to create dot macros that map to these plantuml macros`
+* [2020-09-01 Tue 10:26] The C4 model for visualising software architecture :model:driven:engineering:C4:model:
+https://c4model.com/
+Comment:
+The home for C4 model info

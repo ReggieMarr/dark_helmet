@@ -28,7 +28,7 @@ fixed with migration to gccemacs
 fixed with migration to gccemacs
 ** DONE Lsp is slow and leads to crash
 fixed with migration to gccemacs
-
+** TODO vterm module isn't compiling
 ** TODO projectile don't follow symlinks
 ** TODO switch to skim for all fuzzy searches
 
@@ -38,19 +38,86 @@ fixed with migration to gccemacs
 Org captures are powerful because it reduces friction when researching concepts, documenting code, and understanding technical documents.
 The idea is to promote this such that we can easily capture links to code, documents and webpages.
 *** Ideas/subtasks
-+ We want two primary types of captures ::
-  + Simple Links to a specific component of a source medium (i.e. a link to a pdf page or specific text)
-  + Image Links to a component of a source medium (i.e. a pdf page show as an image)
+ * We want two primary types of captures
+  * Simple Links to a specific component of a source medium (i.e. a link to a pdf page or specific text)
+  * Image Links to a component of a source medium (i.e. a pdf page show as an image)
+    In this case the link by be shown as some sort of hyperlink or it may be that sub-component
+    in-line in the org note.
 In both cases the capture should be clickable and link back to the source material.
 The following mediums should be capturable in this way.
-**** TODO PDF's
 **** TODO Code
+I need a good org capture here. This capture should include the following:
+ * file
+ * line
+ * function/object
+ * git hash/closest hash (if line/region is on uncommited changes)
+This should optionally either include the region captured or just a link to the current line
+Clicking on this link should take me to the file/line and checkout the githash
 **** TODO Webpages (static media)
+Pairing this with either vimium or tridactly allows for a mouse-less experience.
+Vimium is more polished while tridactly is a more hackable extension with nice features like selecting portions of text without the mouse.
+This can be done using one of two tools:
+ * Grasp
+   * This is a tool that utilizes a small local http server and has the following pros/cons:
+     + shows a notification when capturing fails/succeeds, so you won't lose your notes
+     + doesn't require always running Emacs, simply appends an org-mode text entry to a file
+     + can capture things that org-protocol can't handle (e.g. extra comment or tags)
+     + can potentially use any plaintext format as a storage.
+     + doesn't talk to Emacs, so can't benefit from Emacs capture templates
+     + doesn't open emacs, relies on firefox gui.
+   This is the one that I'm currently using. it's good and it was super easy to setup. The tags feature is nice but I'm not sure if that actually integrates with roam. Once I have i3/exwm setup I'll likely want to switch to something that opens an emacs frame.
+ * Org Capture (firefox extension)
+   This looks like a nice option if we want to use the org-protocol and take advantage of full emacs integration.
+   I tried to make it work but couldn't
+**** TODO PDF's
+Being able to create org notes that either link to a specific part of a pdf or include an inline screenshot of said pdf would be awesome.
 **** TODO Webpages (videos)
-- [-] Code
+It'd be nice to have hyperlinks with notes that link to a specific part of youtube video and being able to play these videos inside emacs would be a bonus.
+It'd also be nice to archieve these videos locally.
+**** TODO Org roam Integration
+Org roam seems like an awesome way to organize notes.
+***** TODO investigate more
+**** TODO Clipboard Integration
+Sometimes its convinient to simply copy some link and it'd be nice to be able to hit a hotkey and immediately start typing a hyperlink that is linked to the url in the copy register.
+This is not exactly a capture but sorta fits in with this kind of thing.
 
+**** TODO Spontaneous note taking
+Sometimes we want to create a note on the fly in a meeting or as a follow up to some conversation.
+For this reason it'd be nice to create a hotkey that allows for seemlessly creating an org note which can utilize ivy to name and potentially link to other org notes, jira, some email, or a tagged topic.
 ** TODO Jira integration
+*** Motivation
+Org-jira is a powerful tool that allows emacs integration with jira. This means that issues, boards, projects, etc. can be interacted with as text just text. This can be made even more powerful when linking this up with other emacs based tooling.
+Note that this will only allow updating while on the network.
+*** Ideas/subtasks
+**** TODO fix updating issues.
+Getting assigned issues is no problem however adding comments and changing assignys doesn't work too well atm.
+**** TODO fix adding new issues.
+This seems like it should work but it doesn't
+**** TODO Link with magit
+It'd be nice to be able to automatically populate the following with jira issues:
+ * Branches
+ * Commits
+**** TODO Link with dev notes
+It'd be really nice to get back to creating well organized dev notes that link to jira tickets.
 ** TODO Email Integration
+*** Motivation
+Integration with email would allow for much better organization of communications with colleagues and external people. Being able to fuzzy search, make todos, and link agendas all seem like ways to improve a getting things done workflow.
+*** Ideas/subtasks
+**** TODO Get notmuch working
+notmuch is an interface to email files. Seems to be one of the gotos amongst the emacs commmunity.
+**** TODO Determine the appropriate mail syncing client
+There are a bunch of options here. mbsync seems like one of them however it's unclear the pros and cons of each.
+Best to just get something working and evaluate then.
+**** TODO Integrate with windows vm
+theres something called vmboxmanage which is a command line utilty which allows a host linux machine to interact with applications on some vm. It'd be super cool to be able to open a vpn connection and outlook to update the emails received.
+This would allow using email on the linux host while working remotely
 ** TODO MDE Integration
+*** Motivation
+Model driven engineering integration would be fantastic. This would allow for seemless documentation and really fits in with the whole "literate programming" paradigm.
+*** Ideas/subtasks
+**** TODO plantuml org note integration
+For some reason despite being able to render plantuml buffers and regions I can't seem to get org-babel to render plantuml source code inline with org notes.
+**** TODO understand graphviz integration
+It'd be great to be able to link understand graphs inside org notes, paticularily if they can be linked via code org captures directly to code. This should be possible as org mode supposedly support inline rendering of graphviz (as well as various image formats)
 * Things to lookinto
 ** TODO emacs macros
