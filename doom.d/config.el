@@ -13,6 +13,7 @@
 
 (require 'package)
 
+
 (package-initialize)
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
@@ -33,50 +34,6 @@
   (evil-define-key 'motion evil-org-mode-map
     (kbd "^") 'evil-org-beginning-of-line)
   (message "new evil org keybinds"))
-;; (use-package! org
-;;   :config
-;; (map! :localleader
-;;       :map org-mode-map
-
-;;       ;;Motion
-;;       "j" #'org-next-visible-heading
-;;       "k" #'org-previous-visible-heading
-;;       "J" #'org-forward-heading-same-level
-;;       "K" #'org-backward-heading-same-level
-;;       "u" #'outline-up-heading
-
-;;       ;;Narrowing
-;;       "n" nil ;; unmap default o mapping
-;;       (:prefix ("n" . "narrow")
-;;       :desc "subtree" "s" #'org-narrow-to-subtree
-;;       :desc "widen"   "w" #'widen)
-
-;;       ;; Sparse tree
-;;       "s" :nil
-;;       (:prefix ("s" . "sparse tree")
-;;         :desc "regex" "r" #'org-regex
-;;         :desc "todo" "t" #'org-tags-sparse-tree)
-;;       "/" #'org-sparse-tree
-
-;;       ;; Format
-;;       "f" :nil
-;;       (:prefix ("f" . "format")
-;;         :desc "bullet" "b" #'org-cycle-list-bullet)
-
-;;       ;; Linking
-;;       "l" :nil
-;;       (:prefix ("l" . "link")
-;;         :desc "insert" "i" #'org-insert-link
-;;         :desc "store" "s" #'org-store-link)
-
-;;       ;; Insert
-;;       :desc "insert-heading-respect-content" "h" #'org-insert-heading-respect-content
-     
-;;       "o" #'org-open-at-point
-;;       ))
-
-      ;; (:prefix ("d". "testing")
-        ;; "t" #'org-toggle-checkbox))
 
 (map! :leader
         "o" nil ;; unmap default o mapping
@@ -85,7 +42,6 @@
         :desc "org-agenda"     "a"  #'org-agenda
         :desc "org-capture"    "T"  #'org-capture))
 ;Org mode code capture
-;
 (setq my-major-mode-to-org-src
       '(("c++-mode" . "C++")
         ("python-mode" . "python")))
@@ -168,9 +124,9 @@ currently clocked-in org-mode task."
 ;(add-to-list 'org-capture-templates
 ;            '("c" ;Key used to select this template
               ;template description
-            ;"Code" 
+            ;"Code"
               ;template type which is a node targeting an org file
-             ; entry 
+             ; entry
               ;template target
              ; (file "~/org/captured.org")
               ;The template for creating the capture item
@@ -199,11 +155,6 @@ currently clocked-in org-mode task."
   (evil-global-set-key 'normal (kbd "K") #'er/expand-region)
   (evil-global-set-key 'visual (kbd "K") #'er/expand-region))
 
-;; VTERM
-(use-package vterm
-  :load-path "/home/rmarr/Downloads/gitDownloads/emacs-libvterm/")
-
-;; (use-package "fzf" :init(setenv "FZF_DEFAULT_COMMAND" "--type file"))
 (require 'doom-modeline-core)
 (require 'doom-modeline-segments)
 (doom-modeline-def-modeline 'my-vterm-mode-line
@@ -389,7 +340,7 @@ currently clocked-in org-mode task."
 )
 
 ;; LSP
-(setq ccls-executable "/home/rmarr/.local/bin/ccls")
+(setq ccls-executable "/usr/bin/ccls")
 (map!
  ;; :after lsp
  :leader
@@ -465,10 +416,13 @@ currently clocked-in org-mode task."
 ;; (with-eval-after-load 'compilation
   (setq compilation-auto-jump-to-first-error 1)
 (setq compile-commands
-      '("docker exec -it funny_dhawan /bin/bash -c \"cd /shared/kinetis && make -f Make213371\" && scp /home/rmarr/kinetis/213371-01X.axf pyrite:/home/bdi3000/rmarr/"
-        "docker exec -it funny_dhawan /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp /home/rmarr/kinetis/213371-01X.axf pyrite:/home/bdi3000/rmarr/"
-        "ssh blade && cd kinetis && make -f Make213371 -B"
-        "cd ~/kinetis && docker exec -it agitated_borg /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -Bwnk > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt"))
+      '("docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp ~/kinetis/213371-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
+        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp /home/rmarr/kinetis/213371-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
+        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=Y -j -B\""
+        "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 76617-02X --expand\""
+        "docker exec -i bob /bin/bash -c \"cd /shared/release && make.py 76617-02X -B | compiledb\""
+        "cd ~/release && docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 76617-02X -B\" | compiledb"
+        ))
 (defun my/ivy/compile ()
   (interactive)
   (ivy-read "compile-command: " compile-commands
@@ -487,7 +441,15 @@ currently clocked-in org-mode task."
 
 ;Org mode code capture
 ;
-(with-eval-after-load 'org-mode
+(with-eval-after-load 'org
+  ;Org note stuff
+  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+  (org-babel-do-load-languages 'org-babel-load-languages
+ '((python . t)
+   (plantuml . t)
+   ))
+
+        ;Capture stuff
         (setq my-major-mode-to-org-src
         '(("c++-mode" . "C++")
                 ("python-mode" . "python")))
@@ -521,7 +483,7 @@ currently clocked-in org-mode task."
                 (concat
                 (mapcar #'(lambda (c) (if (equal c ?[) ?\( (if (equal c ?]) ?\) c))) string-to-transform))
         )
-        ;; Kill the frame if one was created for the capture
+        ;; Kill the frame if one was created for the capturen
         (defvar kk/delete-frame-after-capture 0 "Whether to delete the last frame after the current capture")
 
         (defun kk/delete-frame-if-neccessary (&rest r)
@@ -546,6 +508,7 @@ currently clocked-in org-mode task."
                 (with-current-buffer pdf-buf
                         (car (pdf-view-active-region-text)))
         (user-error "Buffer %S not alive." pdf-buf-name))))
+
 (add-to-list 'org-capture-templates
         ;; '("c" ;Key used to select this template
         ;; ;template description
@@ -609,6 +572,7 @@ concat (concat "\nstatic void " (concat snip_str "(int type, void *argPtr, int r
 (setq jiralib-url "http://cesium/jira")
 
 ;eric says i need this
+;he was right !
 (after! company
   (setq company-idle-delay 0.01))
 
@@ -620,3 +584,18 @@ concat (concat "\nstatic void " (concat snip_str "(int type, void *argPtr, int r
   :config
   (with-eval-after-load 'pdf-annot
     (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
+
+; PLANTUML
+;; (use-package ob-plantuml
+;;   :ensure nil
+;;   :commands
+;;   (org-babel-execute:plantuml)
+;;   :defer
+;;   :config
+;;   (setq plantuml-jar-path (expand-file-name "~/.emacs.d/.local/etc/plantuml.jar")))
+
+;; (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+;; (org-babel-do-load-languages ‘org-babel-load-languages ‘((plantuml . t)))
+(with-eval-after-load 'flycheck
+  (require 'flycheck-plantuml)
+  (flycheck-plantuml-setup))
