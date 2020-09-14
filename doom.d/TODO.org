@@ -77,6 +77,11 @@ It'd also be nice to archieve these videos locally.
 **** TODO Org roam Integration
 Org roam seems like an awesome way to organize notes.
 ***** TODO investigate more
+** TODO Org note extras
+*** Motivation
+Org captures are powerful because it reduces friction when researching concepts, documenting code, and understanding technical documents.
+The idea is to promote this such that we can easily capture links to code, documents and webpages.
+*** Ideas/subtasks
 **** TODO Clipboard Integration
 Sometimes its convinient to simply copy some link and it'd be nice to be able to hit a hotkey and immediately start typing a hyperlink that is linked to the url in the copy register.
 This is not exactly a capture but sorta fits in with this kind of thing.
@@ -84,6 +89,8 @@ This is not exactly a capture but sorta fits in with this kind of thing.
 **** TODO Spontaneous note taking
 Sometimes we want to create a note on the fly in a meeting or as a follow up to some conversation.
 For this reason it'd be nice to create a hotkey that allows for seemlessly creating an org note which can utilize ivy to name and potentially link to other org notes, jira, some email, or a tagged topic.
+**** TODO Time stamped notes
+The ability to create notes with some yassnippet that includes a time stamp would be nice and should be easy enough
 ** TODO Jira integration
 *** Motivation
 Org-jira is a powerful tool that allows emacs integration with jira. This means that issues, boards, projects, etc. can be interacted with as text just text. This can be made even more powerful when linking this up with other emacs based tooling.
@@ -115,6 +122,17 @@ This would allow using email on the linux host while working remotely
 *** Motivation
 Model driven engineering integration would be fantastic. This would allow for seemless documentation and really fits in with the whole "literate programming" paradigm.
 *** Ideas/subtasks
+**** TODO LSP full integration
+Emacs comes with a lsp mode that is more or less built in however I'm experiencing the following issues:
+***** TODO Fix docker build output issues.
+For some reason when building using the docker command line tool I'm unable
+***** TODO Fix projectile search including ccls cache
+***** TODO Fix LSP references
+In vim I used to be able to click on some symbol and get all references or optionally only retrieve call/callee references of some symbol. It'd be nice to have that again.
+***** TODO Use lsp with project/file search
+being able to search for files/strings only included with the current build is really useful.
+***** TODO Use multiple compile_command jsons
+Having the ability to rapidly switch between multiple builds with the built in understanding that these builds are connected by being targets to devices that communicate within the same system would be really useful.
 **** TODO plantuml org note integration
 For some reason despite being able to render plantuml buffers and regions I can't seem to get org-babel to render plantuml source code inline with org notes.
 **** TODO understand graphviz integration

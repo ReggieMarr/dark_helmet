@@ -206,3 +206,19 @@ Since plantuml is essentially an abstraction from dot to graphviz it'd be awesom
 https://c4model.com/
 Comment:
 The home for C4 model info
+* [2020-09-02 Wed 12:51] Capturing Content for Emacs :org-capture:org-mode:
+http://www.howardism.org/Technical/Emacs/capturing-content.html
+Comment:
+super interesting ideas for org capture templates
+* [2020-09-10 Thu 23:40] org-git-link.el – link to specific git revisions :org:mode:org:capture:
+https://orgmode.org/worg/org-contrib/org-git-link.html
+Comment:
+This shows how to create an org mode link to a file at a certain git hash. This could be useful for creating org capture templates that allow you to link to a file at a paticular revision
+* [2020-09-11 Fri 14:16] AUR (en) - emacs-native-comp-git :emacs:native:comp:
+https://aur.archlinux.org/packages/emacs-native-comp-git
+Selection:
+The libgccjit package is now up-to-date, and includes a dependency on gcc-libs so that it won't silently break next time GCC is updated. I'm now maintaining that package and will do my best to handle updates ASAP.
+
+I also recommend checking out emacs-pgtk-native-comp-git, this combines native compilation with a new rendering engine for an even faster Emacs.
+Comment:
+This slightly different emacs package is worth checking out espcially if its even faster 

@@ -418,7 +418,8 @@ currently clocked-in org-mode task."
 (setq compile-commands
       '("docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp ~/kinetis/213371-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
         "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp /home/rmarr/kinetis/213371-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
-        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=Y -j -B\""
+        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\""
+        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make75177 SW_REV=Y -j -B\""
         "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 76617-02X --expand\""
         "docker exec -i bob /bin/bash -c \"cd /shared/release && make.py 76617-02X -B | compiledb\""
         "cd ~/release && docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 76617-02X -B\" | compiledb"
@@ -510,31 +511,41 @@ currently clocked-in org-mode task."
         (user-error "Buffer %S not alive." pdf-buf-name))))
 
 (add-to-list 'org-capture-templates
-        ;; '("c" ;Key used to select this template
-        ;; ;template description
-        ;; "Code"
-        ;; ;template type which is a node targeting an org file
-        ;; entry
-        ;; ;template target
-        ;; (file "~/org/captured.org")
-        ;; ;The template for creating the capture item
+        '("c" ;Key used to select this template
+        ;template description
+        "Code"
+        ;template type which is a node targeting an org file
+        entry
+        ;template target
+        (file "~/org/captured.org")
+        ;The template for creating the capture item
+        "* Code Snippet %U
+        In ~ [[%F][%f]] ~
+        #+BEGIN_SRC c
+        %i
+        #+END_SRC
+        %?"
+        ;; (line-number-at-pos (region-beginning))
+        )
         ;; "* Code snippet %U\n%(format \"%s\" my-captured-snippet)")
         ;; '("p"
         ;; "Protocol"
         ;; entry
         ;; (file+headline ,(concat org-directory "notes.org") "Inbox")
         ;; "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
-        '("f"
-        "Pdf Notes"
+        '("L"
+        "Protocol Link"
         entry
-        (file "~/Notes.org")
-        "* %?\n%(org-capture-pdf-active-region)\n")
-        ;; '("L"
-        ;; "Protocol Link"
-        ;; entry
-        ;; (file+headline ,(concat org-directory "notes.org") "Inbox")
-        ;; "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n")
+        (file+headline ,(concat org-directory "notes.org") "Inbox")
+        "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n")
         )
+;; (add-to-list 'org-capture-templates
+;;         '("f"
+;;         "Pdf Notes"
+;;         entry
+;;         (file "~/Notes.org")
+;;         "* %?\n%(org-capture-pdf-active-region)\n")
+;;         )
 
 ;boilerplate is for plebs
 (with-eval-after-load 'yasnippet
