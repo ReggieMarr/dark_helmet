@@ -222,3 +222,39 @@ The libgccjit package is now up-to-date, and includes a dependency on gcc-libs s
 I also recommend checking out emacs-pgtk-native-comp-git, this combines native compilation with a new rendering engine for an even faster Emacs.
 Comment:
 This slightly different emacs package is worth checking out espcially if its even faster 
+* [2020-09-16 Wed 09:39] Rust-style futures in C | Axel Forsman :c:programming:rust:
+https://axelforsman.tk/2020/08/24/rust-style-futures-in-c.html
+Comment:
+this could be a cool way of setting up pthreads
+* [2020-09-16 Wed 15:54] C Programming For Beginners: Tip #2 Abstract Interfaces In C Done Right - YouTube :c:programming:
+https://www.youtube.com/watch?v=K6sDQi-WFW0
+Comment:
+a brief video example with source code of the container_of macro
+* [2020-09-17 Thu 21:56] Introduction to strong and weak symbols in C language :c:programming:weak:symbols:
+https://ofstack.com/C++/9908/introduction-to-strong-and-weak-symbols-in-c-language.html
+Comment:
+Interesting article on how to use weak attributes
+* [2020-09-21 Mon 19:50] gcc - Hiding symbol names in library - Stack Overflow :c:programming:
+https://stackoverflow.com/questions/22244428/hiding-symbol-names-in-library
+Comment:
+This provides insight into how to hide symbols within libraries
+* [2020-09-23 Wed 11:11] Tangle Templates :emacs:programming:
+https://lepisma.xyz/2018/08/26/tangle-templates.html
+Comment:
+generate boilerplate for new projects
+* [2020-09-24 Thu 10:58] GNU Make - An Introduction to Makefiles :c:programming:
+http://web.mit.edu/gnu/doc/html/make_2.html
+Comment:
+A good refresher on making makefiles
+* [2020-09-24 Thu 12:05] c - How to hide a global variable, which is visible across multiple files? - Stack Overflow :c:programming:
+https://stackoverflow.com/questions/15434971/how-to-hide-a-global-variable-which-is-visible-across-multiple-files
+Comment:
+good example on using visibility attribute to hide global variables inside of a library
+* [2020-09-25 Fri 18:21] Basics of the I2C Communication Protocol :i2c:hardware:
+https://www.circuitbasics.com/basics-of-the-i2c-communication-protocol/
+Comment:
+Good refresher on how i2c works
+* [2020-09-26 Sat 09:42] Save countless hours reviewing code — Metabob :software:architecture:programming:python:mda:
+https://www.metabob.com/?utm_source=Reddit%20Post&utm_medium=Social%20Media&utm_campaign=Reddit%20Post%2009-24
+Comment:
+This might be interesting to investigate for static analysis of python code

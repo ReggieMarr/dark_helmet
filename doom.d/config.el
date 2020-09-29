@@ -10,7 +10,7 @@
       display-line-numbers-type nil
 
 )
-
+(add-to-list 'custom-theme-load-path "~/Downloads/gitDownloads/solo-jazz-emacs-theme/")
 (require 'package)
 
 
@@ -416,13 +416,15 @@ currently clocked-in org-mode task."
 ;; (with-eval-after-load 'compilation
   (setq compilation-auto-jump-to-first-error 1)
 (setq compile-commands
-      '("docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp ~/kinetis/213371-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
-        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make213371 -B\" && scp /home/rmarr/kinetis/213371-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
+      '("docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
         "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\""
-        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make75177 SW_REV=Y -j -B\""
-        "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 76617-02X --expand\""
+        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeLibraryModule SW_REV=X -j -B\""
+        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeTowerK60F SW_REV=X -j -B\""
+        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make75177 SW_REV=Y -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
+        "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 77619-01X\""
         "docker exec -i bob /bin/bash -c \"cd /shared/release && make.py 76617-02X -B | compiledb\""
-        "cd ~/release && docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 76617-02X -B\" | compiledb"
+        "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 227269-01X -B\""
+        "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 77340-01X -B\""
         ))
 (defun my/ivy/compile ()
   (interactive)
@@ -610,3 +612,31 @@ concat (concat "\nstatic void " (concat snip_str "(int type, void *argPtr, int r
 (with-eval-after-load 'flycheck
   (require 'flycheck-plantuml)
   (flycheck-plantuml-setup))
+
+(defun toggle-maximize-buffer () "Maximize buffer"
+  (interactive)
+  (if (= 1 (length (window-list)))
+      (jump-to-register '_)
+    (progn
+      (window-configuration-to-register '_)
+      (delete-other-windows))))
+
+(map! :leader
+      (:prefix "w"
+        :desc "Toggle full screen buffer" "F" #'toggle-maximize-buffer))
+
+(map! :leader
+      (:prefix "l"
+       :desc "Use the power of thesaurus" "t" #'powerthesaurus-lookup-word-dwim
+       :desc "I'm an engineer not a writer" "s" #'ispell))
+
+;I wanna go fast
+
+(add-to-list 'load-path "~/src/elisp/fast-scroll") ; Or wherever you cloned it
+(require 'fast-scroll)
+;; If you would like to turn on/off other modes, like flycheck, add
+;; your own hooks.
+(fast-scroll-config)
+(fast-scroll-mode 1)
+(setq fast-scroll-throttle 0.5)
+(shell-command "xset r rate 250 60")
