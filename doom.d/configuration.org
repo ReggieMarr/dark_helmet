@@ -659,8 +659,9 @@ Default starting place is the home directory."
   ;; )
 ;; (advice-add 'wttrin-exit :after #'bjm/wttrin-restore-frame)
 
-;; PDF-Tools
-;; o - outline
+* PDF Tools
+** Keymap
+#+BEGIN_SRC emacs-lisp
 (with-eval-after-load 'pdf-tools
 (define-key pdf-view-mode-map (kbd "C-c C-h") 'outline-hide-other)
 ;; (define-key pdf-view-mode-map (kbd "C-c C-a") 'outline-toggle-children)
@@ -678,15 +679,22 @@ Default starting place is the home directory."
   (evil-define-key 'normal pdf-view-mode-map (kbd ":") 'pdf-view-goto-page)
   (map! :localleader
         :map pdf-view-mode-map
-
           "f" #'pdf-occur
-
           ;; History
           "c" #'pdf-history-clear
           "j" #'pdf-history-backward
           "k" #'pdf-history-forward
 
           "o" #'pdf-outline))
+#+END_SRC
+** Continuous Scrolling
+Not going to use for now.. pretty buggy
+#+BEGIN_SRC emacs-lisp
+;; (setq pdf-view-display-size 'fit-width)
+;; (with-eval-after-load 'pdf-view
+;;   (require 'pdf-continuous-scroll-mode))
+;; (add-hook 'pdf-view-mode-hook 'pdf-continuous-scroll-mode)
+#+END_SRC
 
 ;; Outline Mode
 ;;
