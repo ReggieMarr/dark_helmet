@@ -328,6 +328,59 @@ Default starting place is the home directory."
   )
 #+END_SRC
 
+* Yas-Snippet
+#+BEGIN_SRC emacs-lisp
+;; Add directory of personal snippets to path
+(use-package! yasnippet
+  :config
+  ;; (setq yas-snippet-dirs '("~/dark_helmet/snippets"))
+(setq yas-snippet-dirs (append yas-snippet-dirs
+                               '("~/dark_helmet/snippets")))
+  ;; (yas-reload-all)
+  (map! :map evil-motion-state-map )
+  (map! :map yas-minor-mode-map
+        "C-y" #'yas-expand)
+        ;; "C-y" #'company-yasnippet)
+
+  (dolist (map '(evil-motion-state-map
+                 evil-insert-state-map
+                 evil-emacs-state-map))
+    (define-key (eval map) "\C-y" nil))
+  )
+
+  ;; (defun check-expansion ()
+  ;;   (save-excursion
+  ;;     (if (looking-at "\\_>") t
+  ;;       (backward-char 1)
+  ;;       (if (looking-at "\\.") t
+  ;;         (backward-char 1)
+  ;;         (if (looking-at "->") t nil)))))
+
+  ;; (defun do-yas-expand ()
+  ;;   (let ((yas/fallback-behavior 'return-nil))
+  ;;     (yas/expand)))
+
+  ;; (defun tab-indent-or-complete ()
+  ;;   (interactive)
+  ;;   (if (minibufferp)
+  ;;       (minibuffer-complete)
+  ;;     (if (or (not yas/minor-mode)
+  ;;             (null (do-yas-expand)))
+  ;;         (if (check-expansion)
+  ;;             (company-complete-common)
+  ;;           (indent-for-tab-command)))))
+
+  ;; (global-set-key [tab] 'tab-indent-or-complete)
+
+;; (defvar company-mode/enable-yas t
+;;   "Enable yasnippet for all backends.")
+
+;; (defun company-mode/backend-with-yas (backend)
+;;   (if (and (listp backend) (member 'company-yasnippet backend))
+;;       backend
+;;     (append (if (consp backend) backend (list backend))
+;;             '(:with company-yasnippet))))
+;; (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 * Vterm
 #+BEGIN_SRC emacs-lisp
 (use-package! vterm
