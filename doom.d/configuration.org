@@ -175,6 +175,15 @@ Default starting place is the home directory."
 
 #+RESULTS:
 : ((~ . 1))
+
+* Navigation
+#+BEGIN_SRC emacs-lisp
+(use-package! ivy
+ :config
+ (map! :leader
+     "A" #'ivy-switch-buffer))
+#+END_SRC
+
 * Code
 ** ELISP
 #+BEGIN_SRC emacs-lisp
