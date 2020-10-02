@@ -468,6 +468,11 @@ Default starting place is the home directory."
 ;;               ("v" . xwwp-follow-link)
 ;;               ("t" . xwwp-ace-toggle)))
 #+END_SRC
+* null a
+#+BEGIN_SRC emacs-lisp
+(map! :leader
+      "a" nil)
+#+END_SRC
 * To organize
 #+BEGIN_SRC emacs-lisp
 (defun what-face (pos)
