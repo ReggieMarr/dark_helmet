@@ -564,17 +564,20 @@ Default starting place is the home directory."
         ;; :desc "helm-projectile-rg" "p" #'helm-projectile-rg)
       (:desc "repeat last command" "." #'repeat))
 
-(setq evil-scroll-count 5) ;; I like the scroll to be a bit more granular
-(defun my/evil-scroll-down ()
-  (interactive)
-  (evil-scroll-down 10))
+;; I like the scroll to be a bit more granular
+(setq-default evil-scroll-count 10)
+;;(add-hook 'evil-local-mode-hook (setq evil-scroll-count 5) (message "noice %d" evil-scroll-count))
+;; (add-hook 'evil-local-mode-hook (message "noice"))
+;; (defun my/evil-scroll-down ()
+;;   (interactive)
+;;   (evil-scroll-down 10))
 
-(defun my/evil-scroll-up ()
-  (interactive)
-  (evil-scroll-up 10))
+;; (defun my/evil-scroll-up ()
+;;   (interactive)
+;;   (evil-scroll-up 10))
 
-(define-key evil-normal-state-map (kbd "C-d") #'my/evil-scroll-down)
-(define-key evil-normal-state-map (kbd "C-u") #'my/evil-scroll-up)
+(define-key evil-normal-state-map (kbd "M-d") #'my/evil-scroll-down)
+(define-key evil-normal-state-map (kbd "M-u") #'my/evil-scroll-up)
 
 ;; LATEX
 (setq +latex-viewrs '(pdf-tools))
