@@ -20,6 +20,11 @@
 ;
 (package! use-package)
 (package! org-jira)
+(package! calfw)
+
+;; Not using for now.. pretty buggy
+;; (package! pdf-continuous-scroll-mode
+;;   :recipe (:host github :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
 
 ;; To install a package directly from a particular repo, you'll need to specify
 ;; a `:recipe'. You'll find documentation on what `:recipe' accepts here:
