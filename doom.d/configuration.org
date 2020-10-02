@@ -658,6 +658,10 @@ Default starting place is the home directory."
 ;;   (jump-to-register :pre-wttrin)
   ;; )
 ;; (advice-add 'wttrin-exit :after #'bjm/wttrin-restore-frame)
+#+END_SRC
+
+#+RESULTS:
+: symbol-overlay-remove-all
 
 * PDF Tools
 ** Keymap
@@ -695,6 +699,10 @@ Not going to use for now.. pretty buggy
 ;;   (require 'pdf-continuous-scroll-mode))
 ;; (add-hook 'pdf-view-mode-hook 'pdf-continuous-scroll-mode)
 #+END_SRC
+
+* Other
+#+BEGIN_SRC emacs-lisp
+
 
 ;; Outline Mode
 ;;
@@ -838,7 +846,18 @@ Not going to use for now.. pretty buggy
   ;; (compile "cd ~/kinetis && docker exec -it build_container /bin/bash -c \"cd /root/kinetis && make -f MakeIBST_kinetis \""))
 
 (setq helm-source-bookmarks '(~/kinetis))
+
 #+END_SRC
 
-#+RESULTS:
-: org-hide-src-block-delimiters
+* TODO's
+this
+is
+some stuff
+
+why am I
+
+ok
+** Keybind to go to org file associate with directory or create one if it doesn't exist
+*** yes
+** Better way to go up by bullet points
+** TODO reduce delay for continuous movment holding down arrow keys
