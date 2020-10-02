@@ -381,6 +381,13 @@ Default starting place is the home directory."
 ;;     (append (if (consp backend) backend (list backend))
 ;;             '(:with company-yasnippet))))
 ;; (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+
+  ;; (map! :localleader
+  ;;       :map org-mode-map
+
+  ;;       (:prefix ("s" . "snippet")
+  ;;        :desc "subtree" "s" #'org-narrow-to-subtree
+  ;;        :desc "widen"   "w" #'widen))
 * Vterm
 #+BEGIN_SRC emacs-lisp
 (use-package! vterm
