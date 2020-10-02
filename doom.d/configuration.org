@@ -189,6 +189,8 @@ Default starting place is the home directory."
 #+BEGIN_SRC emacs-lisp
 (setq doom-scratch-initial-major-mode 'lisp-interaction-mode)
 #+END_SRC
+
+* Dired
 * Org
 ** General
 #+BEGIN_SRC emacs-lisp
