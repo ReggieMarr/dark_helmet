@@ -204,60 +204,106 @@ Default starting place is the home directory."
 
 (use-package! org
   :config
-(map! :localleader
-      :map org-mode-map
 
-      ;;Motion
-      "j" #'org-next-visible-heading
-      "k" #'org-previous-visible-heading
-      "J" #'org-forward-heading-same-level
-      "K" #'org-backward-heading-same-level
-      "u" #'outline-up-heading
+  (map! :leader
+        "a" nil
+        (:prefix ("a" . "switch buffer")
+         :desc "org" "o" #'org-switchb))
 
-      ;;Narrowing
-      "n" nil ;; unmap default o mapping
-      (:prefix ("n" . "narrow")
-      :desc "subtree" "s" #'org-narrow-to-subtree
-      :desc "widen"   "w" #'widen)
+ (evil-define-key* '(normal visual insert) org-mode-map
+   (kbd "C-j") #'org-forward-element
+   (kbd "C-k") #'org-backward-element)
 
-      ;; Sparse tree
-      "s" :nil
-      (:prefix ("s" . "sparse tree")
-        :desc "regex" "r" #'org-regex
-        :desc "todo" "t" #'org-tags-sparse-tree)
-      "/" #'org-sparse-tree
+  (map! :localleader
+        :map org-mode-map
 
-      ;; Format
-      "f" :nil
-      (:prefix ("f" . "format")
-        :desc "bullet" "b" #'org-cycle-list-bullet)
+        ;;Motion
+        ;; "j" #'org-next-visible-heading
+        "j" #'org-down-element
+        "k" #'org-previous-visible-heading
+        "u" #'outline-up-heading
 
-      ;; Linking
-      "l" :nil
-      (:prefix ("l" . "link")
-        :desc "insert" "i" #'org-insert-link
-        :desc "store" "s" #'org-store-link)
+        ";" #'org-edit-special
 
-      ;; Insert
-      :desc "insert-heading-respect-content" "h" #'org-insert-heading-respect-content
+        ;;Narrowing
+        "n" nil ;; unmap default o mapping
+        (:prefix ("n" . "narrow")
+         :desc "subtree" "s" #'org-narrow-to-subtree
+         :desc "block" "b" #'org-narrow-to-block
+         :desc "widen"   "w" #'widen)
 
-      "o" #'org-open-at-point
-      ))
+        ;; Sparse tree
+        "s" :nil
+        (:prefix ("s" . "sparse tree")
+         :desc "regex" "r" #'org-regex
+         :desc "todo" "t" #'org-tags-sparse-tree)
+        "/" #'org-sparse-tree
+
+        ;; Format
+        "f" :nil
+        (:prefix ("f" . "format")
+         :desc "bullet" "b" #'org-cycle-list-bullet)
+
+        ;; Linking
+        "l" :nil
+        (:prefix ("l" . "link")
+         :desc "insert" "i" #'org-insert-link
+         :desc "store" "s" #'org-store-link)
+
+        "i" :nil
+        (:prefix ("i" . "insert")
+         :desc "link" "l" #'org-insert-link
+         :desc "item" "i" #'org-insert-item
+         :desc "insert-heading" "h" #'org-insert-heading
+         :desc "insert-heading-respect-content" "H" #'org-insert-heading-respect-content)
+
+        "t" :nil
+        (:prefix ("t" . "toggle")
+         :desc "heading" "h" #'org-toggle-heading
+         :desc "item" "i" #'org-toggle-item)
+
+
+        "m" :nil
+        (:prefix ("r" . "refile")
+         :desc "refile" "r" #'org-refile)
+        ;; insert
+
+        "o" #'org-open-at-point
+        )
+
+  ;; Open org-edit-special in current window
+  (setq org-src-window-setup 'current-window)
+  )
 
       ;; (:prefix ("d". "testing")
         ;; "t" #'org-toggle-checkbox))
 
 (map! :leader
-        "o" nil ;; unmap default o mapping
+      "o" nil ;; unmap default o mapping
       (:prefix ("o" . "org")
-        :desc "org-store-link" "l"  #'org-store-link
-        :desc "org-agenda"     "a"  #'org-agenda
-        :desc "org-capture"    "c"  #'org-capture))
+       :desc "org-store-link" "l"  #'org-store-link
+       :desc "org-agenda"     "a"  #'org-agenda
+       :desc "org-capture"    "c"  #'org-capture))
 
 ;; (add-hook! 'org-mode-hook
 ;; (set-face-attribute 'org-block-begin-line nil :height 0.7 :slant 'normal)
 ;; (set-face-attribute 'org-block-end-line nil :height 0.7 :slant 'normal))
 #+END_SRC
+** Org-Agenda
+#+BEGIN_SRC emacs-lisp
+(use-package! org
+  :config
+
+  (map! :localleader
+        ;; :map org-mode-map
+
+        ;; ;;Motion
+        ;; "j" #'org-next-visible-heading
+        ;; "k" #'org-previous-visible-heading
+        ;; "J" #'org-forward-heading-same-level
+  ))
+#+END_SRC
+
 ** Org-Jira
 #+BEGIN_SRC emacs-lisp
 (use-package! org-jira
