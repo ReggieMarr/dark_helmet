@@ -388,6 +388,7 @@ Default starting place is the home directory."
   ;;       (:prefix ("s" . "snippet")
   ;;        :desc "subtree" "s" #'org-narrow-to-subtree
   ;;        :desc "widen"   "w" #'widen))
+#+END_SRC
 * Vterm
 #+BEGIN_SRC emacs-lisp
 (use-package! vterm
