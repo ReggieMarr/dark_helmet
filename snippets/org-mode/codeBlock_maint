@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: codeBLock_maint
+# key: cm
+# uuid:codeBlock_maint
+# --
+#+BEGIN_SRC maint-script
+$0
+#+END_SRC

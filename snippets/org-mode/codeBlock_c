@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: codeBlock_c
+# key: cc
+# uuid:codeBlock_c
+# --
+#+BEGIN_SRC c
+$0
+#+END_SRC

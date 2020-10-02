@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: timestamp
+# key: ts       
+# binding C-a
+# --
+`(format-time-string "%k:%M:%S")` - $0
