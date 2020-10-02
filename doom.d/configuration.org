@@ -7,6 +7,25 @@ Configuration that needs to be exectuted as close to the beginning as possible
 (setq comp-deferred-compilation t)
 #+END_SRC
 
+* Config Development
+Convenience tools to help with configuration development
+
+#+BEGIN_SRC emacs-lisp
+(map! :leader
+      (:prefix ("e" . "emacs")
+       :desc "reload-config" "r" #'my/reload-config
+       :desc "open-config" "c" #'my/open-config)
+      )
+
+(defun my/reload-config ()
+  (interactive)
+  (load "~/dark_helmet/doom.d/config.el"))
+
+(defun my/open-config ()
+  (interactive)
+  (find-file "~/dark_helmet/doom.d/configuration.org"))
+#+END_SRC
+
 * Global Variables
 ** General Globals
 #+BEGIN_SRC emacs-lisp
