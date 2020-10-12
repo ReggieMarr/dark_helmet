@@ -341,6 +341,40 @@ currently clocked-in org-mode task."
 
 ;; LSP
 (setq ccls-executable "/usr/bin/ccls")
+(setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
+(setq ccls-sem-highlight-method 'font-lock)
+;; alternatively, (setq ccls-sem-highlight-method 'overlay)
+
+;; For rainbow semantic highlighting
+;;(ccls-use-default-rainbow-sem-highlight)
+(defun ccls/callee () (interactive) (lsp-ui-peek-find-custom "$ccls/call" '(:callee t)))
+(defun ccls/caller () (interactive) (lsp-ui-peek-find-custom "$ccls/call"))
+(defun ccls/vars (kind) (lsp-ui-peek-find-custom "$ccls/vars" `(:kind ,kind)))
+(defun ccls/base (levels) (lsp-ui-peek-find-custom "$ccls/inheritance" `(:levels ,levels)))
+(defun ccls/derived (levels) (lsp-ui-peek-find-custom "$ccls/inheritance" `(:levels ,levels :derived t)))
+(defun ccls/member (kind) (interactive) (lsp-ui-peek-find-custom "$ccls/member" `(:kind ,kind)))
+
+;; References w/ Role::Role
+(defun ccls/references-read () (interactive)
+  (lsp-ui-peek-find-custom "textDocument/references"
+    (plist-put (lsp--text-document-position-params) :role 8)))
+
+;; References w/ Role::Write
+(defun ccls/references-write ()
+  (interactive)
+  (lsp-ui-peek-find-custom "textDocument/references"
+   (plist-put (lsp--text-document-position-params) :role 16)))
+
+;; References w/ Role::Dynamic bit (macro expansions)
+(defun ccls/references-macro () (interactive)
+  (lsp-ui-peek-find-custom "textDocument/references"
+   (plist-put (lsp--text-document-position-params) :role 64)))
+
+;; References w/o Role::Call bit (e.g. where functions are taken addresses)
+(defun ccls/references-not-call () (interactive)
+  (lsp-ui-peek-find-custom "textDocument/references"
+   (plist-put (lsp--text-document-position-params) :excludeRole 32)))
+;lsp mapping
 (map!
  ;; :after lsp
  :leader
@@ -357,13 +391,6 @@ currently clocked-in org-mode task."
 
  :desc "find-related-file"   "o" #'ff-find-related-file
  :desc "find-related-file-other-window" "O" #'projectile-find-other-file-other-window)
-      ;; (:prefix "l")
-      ;; 'lsp
-  ;; (define-key lsp-mode-map (kbd "SPC")))
-
-;; (defmacro hydra-move-macro ()
-  ;; '(("h" evil-window-left "left")
-  ;; ("l" evil-window-right "right")))
 
 ;; Window Navigation (faster using hydras)
 ;; (defhydra hydra-move (:body-pre (evil-window-left 1))
@@ -417,7 +444,9 @@ currently clocked-in org-mode task."
   (setq compilation-auto-jump-to-first-error 1)
 (setq compile-commands
       '("docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
+        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\" | compiledb"
         "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\""
+        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j\""
         "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeLibraryModule SW_REV=X -j -B\""
         "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeTowerK60F SW_REV=X -j -B\""
         "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make75177 SW_REV=Y -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
@@ -623,7 +652,7 @@ concat (concat "\nstatic void " (concat snip_str "(int type, void *argPtr, int r
 
 (map! :leader
       (:prefix "w"
-        :desc "Toggle full screen buffer" "F" #'toggle-maximize-buffer))
+        :desc "Toggle full screen buffer" "f" #'toggle-maximize-buffer))
 
 (map! :leader
       (:prefix "l"
@@ -640,3 +669,9 @@ concat (concat "\nstatic void " (concat snip_str "(int type, void *argPtr, int r
 (fast-scroll-mode 1)
 (setq fast-scroll-throttle 0.5)
 (shell-command "xset r rate 250 60")
+(use-package! org
+  :config
+  (require 'color)
+  (set-face-attribute 'org-block nil :background
+                      (color-darken-name
+                       (face-attribute 'default :background)  1)))

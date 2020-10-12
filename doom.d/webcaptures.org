@@ -258,3 +258,32 @@ Good refresher on how i2c works
 https://www.metabob.com/?utm_source=Reddit%20Post&utm_medium=Social%20Media&utm_campaign=Reddit%20Post%2009-24
 Comment:
 This might be interesting to investigate for static analysis of python code
+* [2020-09-30 Wed 11:34] Emacs: scroll PDF in other buffer | Wenshan's Blog :emacs:pdf:
+http://wenshanren.org/?p=723
+Comment:
+this could be interesting if integrated with existing pdf annotation tools
+* [2020-10-01 Thu 11:51] Emacs org-mode examples and cookbook :emacs:
+http://ehneilsen.net/notebook/orgExamples/org-examples.html#sec-18
+Comment:
+An excellent source of org mode examples.
+* [2020-10-07 Wed 10:58] overview of the execution of a C code block :C:emacs:org-babel:
+https://www.cs.unm.edu/~eschulte/data/babel-c-execution.html
+Comment:
+good walkthrough on how the org-babel-C-execute function works
+* [2020-10-07 Wed 11:00] An Interactive Way To C :C:programming:emacs:
+https://alhassy.github.io/InteractiveWayToC
+Comment:
+interesting example for how to work with C more specifically
+* [2020-10-07 Wed 11:01] Reading and sending mails from within Emacs: a tutorial for mu4e :email:emacs:mu4e:
+https://f-santos.gitlab.io/2020-04-24-mu4e.html
+Comment:
+tutorial on how to setup email in emacs
+* [2020-10-07 Wed 11:02] zngguvnf.org :emacs:org:static-site-generator:
+https://zngguvnf.org/
+Comment:
+cool template that could be used when generating static sites
+* [2020-10-10 Sat 14:14] tuhdo/semantic-refactor: Semantic Refactor is a refactoring tool based on Semantic parser framework :C:programming:emacs:
+https://github.com/tuhdo/semantic-refactor
+Comment:
+semantic refactoring tool,
+awesome for generating function pointers to functions
