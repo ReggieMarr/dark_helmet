@@ -74,6 +74,16 @@ Convenience tools to help with configuration development
     "l" 'dired-find-file)
   (setq dired-recursive-deletes "top"))
 #+END_SRC
+
+* Email
+** Notmuch
+#+BEGIN_SRC emacs-lisp
+(use-package! notmuch
+  :config
+  (setq +notmuch-sync-backend 'mbsync)
+  (setq message-kill-buffer-on-exit t) ;; Kills buffer after sending an email (otherwise sent message buffers would accumulate)
+  )
+#+END_SRC
 * Magit
 #+BEGIN_SRC emacs-lisp
 ;; (unmap! :leader
