@@ -21,6 +21,17 @@
 (package! use-package)
 (package! org-jira)
 (package! calfw)
+(package! ob-async) ;asynchonous evaluation of org code blocks
+(package! multiple-cursors)
+
+(package! tab-jump-out)
+
+;; Telega
+;; (package! visual-fill-column)
+;; (package! rainbow-identifiers)
+;; (package! telega)
+
+(package! flx-ido)
 
 ;; Not using for now.. pretty buggy
 ;; (package! pdf-continuous-scroll-mode
