@@ -295,7 +295,7 @@ Default starting place is the home directory."
         "u" #'outline-up-heading
 
         ";" #'org-edit-special
-
+        
         ;;Narrowing
         "n" nil ;; unmap default o mapping
         (:prefix ("n" . "narrow")
@@ -313,7 +313,8 @@ Default starting place is the home directory."
         ;; Format
         "f" :nil
         (:prefix ("f" . "format")
-         :desc "bullet" "b" #'org-cycle-list-bullet)
+         :desc "bullet" "b" #'org-cycle-list-bullet
+         :desc "table"  "t" #'org-table-create-or-convert-from-region)
 
         ;; Linking
         "l" :nil
@@ -325,6 +326,7 @@ Default starting place is the home directory."
         (:prefix ("i" . "insert")
          :desc "link" "l" #'org-insert-link
          :desc "item" "i" #'org-insert-item
+         :desc "todo heading" "t" #'org-insert-todo-heading
          :desc "insert-heading" "h" #'org-insert-heading
          :desc "insert-heading-respect-content" "H" #'org-insert-heading-respect-content)
 
@@ -338,7 +340,6 @@ Default starting place is the home directory."
         (:prefix ("r" . "refile")
          :desc "refile" "r" #'org-refile)
         ;; insert
-
         "o" #'org-open-at-point
         )
 
@@ -360,6 +361,23 @@ Default starting place is the home directory."
 ;; (set-face-attribute 'org-block-begin-line nil :height 0.7 :slant 'normal)
 ;; (set-face-attribute 'org-block-end-line nil :height 0.7 :slant 'normal))
 #+END_SRC
+
+#+RESULTS:
+: org-capture
+
+** Code
+#+BEGIN_SRC emacs-lisp
+(use-package! org
+  :config
+  (require 'color)
+  (custom-set-faces! `(org-block :background
+                                 ,(color-darken-name
+                                   (face-attribute 'default :background) 2))))
+;;   (custom-set-faces! `(org-block :background ,(doom-darken 'bg 0.4))))
+;;https://github.com/hlissner/emacs-doom-themes/blob/master/themes/doom-one-theme.el#L36
+;; (custom-set-faces! '(org-block :background "#FF0000"))
+#+END_SRC
+
 ** Org-Agenda
 #+BEGIN_SRC emacs-lisp
 (use-package! org
