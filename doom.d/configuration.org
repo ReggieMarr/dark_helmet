@@ -994,6 +994,14 @@ Not going to use for now.. pretty buggy
 ;; (setq ido-enable-flex-matching t)
 ;; (setq ido-use-faces nil)
 #+END_SRC
+
+* Telega
+#+BEGIN_SRC emacs-lisp
+(use-package telega
+  :load-path  "~/telega.el"
+  :commands (telega)
+  :defer t)
+#+END_SRC
 * TODO's
 this
 is
