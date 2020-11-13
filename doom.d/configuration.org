@@ -417,6 +417,42 @@ Default starting place is the home directory."
   )
 #+END_SRC
 
+* PDF Tools
+** Keymap
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'pdf-tools
+(define-key pdf-view-mode-map (kbd "C-c C-h") 'outline-hide-other)
+;; (define-key pdf-view-mode-map (kbd "C-c C-a") 'outline-toggle-children)
+  ;; (define-key pdf-view-mode-map (kbd "M-h") 'pdf-outline)
+  ;; (define-key pdf-outline-minor-mode-map (kbd "i") 'pdf-outline)
+
+  ;; (define-key pdf-outline-buffer-mode-map (kbd "M-h") 'outline-toggle-children)
+  ;; (define-key outline-mode-map (kbd "a") 'outline-show-all)
+  ;; (message "nice")
+  ;; (define-key pdf-outline-buffer-mode-map (kbd "M-o") 'outline-toggle-children)
+)
+
+(use-package! pdf-tools
+  :config
+  (evil-define-key 'normal pdf-view-mode-map (kbd ":") 'pdf-view-goto-page)
+  (map! :localleader
+        :map pdf-view-mode-map
+          "f" #'pdf-occur
+          ;; History
+          "c" #'pdf-history-clear
+          "j" #'pdf-history-backward
+          "k" #'pdf-history-forward
+
+          "o" #'pdf-outline))
+#+END_SRC
+** Continuous Scrolling
+Not going to use for now.. pretty buggy
+#+BEGIN_SRC emacs-lisp
+;; (setq pdf-view-display-size 'fit-width)
+;; (with-eval-after-load 'pdf-view
+;;   (require 'pdf-continuous-scroll-mode))
+;; (add-hook 'pdf-view-mode-hook 'pdf-continuous-scroll-mode)
+#+END_SRC
 * Yas-Snippet
 #+BEGIN_SRC emacs-lisp
 ;; Add directory of personal snippets to path
@@ -751,43 +787,6 @@ Default starting place is the home directory."
 
 #+RESULTS:
 : symbol-overlay-remove-all
-
-* PDF Tools
-** Keymap
-#+BEGIN_SRC emacs-lisp
-(with-eval-after-load 'pdf-tools
-(define-key pdf-view-mode-map (kbd "C-c C-h") 'outline-hide-other)
-;; (define-key pdf-view-mode-map (kbd "C-c C-a") 'outline-toggle-children)
-  ;; (define-key pdf-view-mode-map (kbd "M-h") 'pdf-outline)
-  ;; (define-key pdf-outline-minor-mode-map (kbd "i") 'pdf-outline)
-
-  ;; (define-key pdf-outline-buffer-mode-map (kbd "M-h") 'outline-toggle-children)
-  ;; (define-key outline-mode-map (kbd "a") 'outline-show-all)
-  ;; (message "nice")
-  ;; (define-key pdf-outline-buffer-mode-map (kbd "M-o") 'outline-toggle-children)
-)
-
-(use-package! pdf-tools
-  :config
-  (evil-define-key 'normal pdf-view-mode-map (kbd ":") 'pdf-view-goto-page)
-  (map! :localleader
-        :map pdf-view-mode-map
-          "f" #'pdf-occur
-          ;; History
-          "c" #'pdf-history-clear
-          "j" #'pdf-history-backward
-          "k" #'pdf-history-forward
-
-          "o" #'pdf-outline))
-#+END_SRC
-** Continuous Scrolling
-Not going to use for now.. pretty buggy
-#+BEGIN_SRC emacs-lisp
-;; (setq pdf-view-display-size 'fit-width)
-;; (with-eval-after-load 'pdf-view
-;;   (require 'pdf-continuous-scroll-mode))
-;; (add-hook 'pdf-view-mode-hook 'pdf-continuous-scroll-mode)
-#+END_SRC
 
 * Other
 #+BEGIN_SRC emacs-lisp
