@@ -250,6 +250,10 @@ Default starting place is the home directory."
       (:prefix "w"
        :desc "open in explorer" "x"  #'my/open-buffer-path-in-explorer))
 #+END_SRC
+* Mail
+#+BEGIN_SRC emacs-lisp
+(require 'notmuch)
+#+END_SRC
 * Navigation
 #+BEGIN_SRC emacs-lisp
 (use-package! ivy
