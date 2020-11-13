@@ -236,7 +236,20 @@ Default starting place is the home directory."
 ** TODO
 - [ ] SPC g g fails when run in ~/projects.. gotta find out why
 - Use 'q' instead of 'ESC' to go back on/delete magit buffers?
+* Misc
+** Open current buffer path in file explorer
+#+BEGIN_SRC emacs-lisp
+(defun my/open-buffer-path-in-explorer ()
+  "Run explorer on the directory of the current buffer."
+  (interactive)
+  (shell-command (concat
+                  "xdg-open "
+                  default-directory)))
 
+(map! :leader
+      (:prefix "w"
+       :desc "open in explorer" "x"  #'my/open-buffer-path-in-explorer))
+#+END_SRC
 * Navigation
 #+BEGIN_SRC emacs-lisp
 (use-package! ivy
