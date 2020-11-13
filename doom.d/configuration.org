@@ -84,6 +84,20 @@ Convenience tools to help with configuration development
   (setq message-kill-buffer-on-exit t) ;; Kills buffer after sending an email (otherwise sent message buffers would accumulate)
   )
 #+END_SRC
+
+* Evil
+#+BEGIN_SRC emacs-lisp
+(evil-global-set-key 'normal (kbd "C-j") #'universal-argument)
+
+(map! :leader
+      :desc "universal arg" "j" #'universal-argument
+      :desc "universal 2arg" "k" #'(lambda () (interactive) (universal-argument) (universal-argument-more)))
+
+(map! :map universal-argument-map
+      :prefix doom-leader-key     "j" #'universal-argument-more
+      :prefix doom-leader-alt-key "j" #'universal-argument-more)
+#+END_SRC
+
 * Magit
 #+BEGIN_SRC emacs-lisp
 ;; (unmap! :leader
