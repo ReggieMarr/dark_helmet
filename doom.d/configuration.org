@@ -834,6 +834,21 @@ Not going to use for now.. pretty buggy
 (setq lsp-ui-peek-enable t)
 (setq lsp-ui-peek-always-show t) ;; Show peek view even if only 1 cross reference
 (setq lsp-ui-peek-show-directory nil)
+
+(defun my-c-mode-keymap ()
+  (map! :localleader
+        :map c-mode-base-map
+
+        (:prefix ("c" . "code")
+         :desc "clang format diff" "f" #'my/clang-format-diff)))
+
+(add-hook 'c-initialization-hook 'my-c-mode-keymap)
+
+(defun my/clang-format-diff ()
+  (interactive)
+  (shell-command (concat "cd " (projectile-project-root) " && git diff -U0 --no-color HEAD | clang-format-diff.py -p1 -i -v"))
+  (revert-buffer :ignore-auto :noconfirm)
+  )
       ;; (:prefix "l")
       ;; 'lsp
   ;; (define-key lsp-mode-map (kbd "SPC")))
