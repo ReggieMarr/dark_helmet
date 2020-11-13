@@ -103,47 +103,54 @@ Convenience tools to help with configuration development
 ;; (unmap! :leader
   ;; (:prefix "g"
     ;; ))
-(map! :leader
-      (:prefix "g"
-        :desc "blame" "b" #'magit-blame
-        :desc "status dwim" "g" #'magit-status
-        :desc "status" "G" #'my/magit-status
-        :desc "buffer-lock" "T" #'magit-toggle-buffer-lock
+(use-package! magit
+  :config
+  (map! :leader
+        (:prefix "g"
+         :desc "blame" "b" #'magit-blame
+         ;; :desc "status dwim" "g" #'magit-status
+         :desc "status" "G" #'my/magit-status
+         :desc "buffer-lock" "T" #'magit-toggle-buffer-lock
 
-        ;; Git gutter
-        :desc "next-hunk" "j" #'git-gutter:next-hunk
-        :desc "prev-hunk" "k" #'git-gutter:previous-hunk
-        :desc "popup-diff" "d" #'git-gutter:popup-diff
-        :desc "file-statistics" "S" #'git-gutter:statistic
+         ;; Git gutter
+         :desc "next-hunk" "j" #'git-gutter:next-hunk
+         :desc "prev-hunk" "k" #'git-gutter:previous-hunk
+         :desc "popup-diff" "d" #'git-gutter:popup-diff
+         :desc "file-statistics" "S" #'git-gutter:statistic
 
-        ;; Log
-        :desc "log" "l" #'magit-log
-        "L" nil ;; unmap default L mapping
-        (:prefix ("L" . "log")
+         "s" nil
+         (:prefix ("s" . "status")
+          :desc "find"       "s" #'my/magit-status
+          :desc "cfgdb"      "c" #'(lambda () (interactive) (magit-status "~/cfgdb"))
+          :desc "kinetis"    "k" #'(lambda () (interactive) (magit-status "~/kinetis"))
+          :desc "release"    "r" #'(lambda () (interactive) (magit-status "~/release"))
+          :desc "ga"         "g" #'(lambda () (interactive) (magit-status "~/general-atomics"))
+          :desc "ga/release" "R" #'(lambda () (interactive) (magit-status "~/general-atomics/release")))
+
+         ;; Log
+         :desc "log" "l" #'magit-log
+         "L" nil ;; unmap default L mapping
+         (:prefix ("L" . "log")
           :desc "file" "f" #'magit-log-buffer-file
           :desc "head" "h" #'magit-log-head
           :desc "log" "i" #'magit-log
           :desc "refresh" "r" #'magit-log-refresh-buffer)))
 
-;; (define-suffix-command reset-upstream ()
-  ;; (interactive)
-  ;; (if (magit-confirm t (format "**WARNING** this will hard reset to upstream branch. Continue?"))
-  ;;     (magit-run-git "reset" "--hard" "@{u}"))
-  ;; )
+  (define-suffix-command reset-upstream ()
+    (interactive)
+    (if (magit-confirm t (format "**WARNING** this will hard reset to upstream branch. Continue?"))
+        (magit-run-git "reset" "--hard" "@{u}")))
 
-;; (define-suffix-command fixup-head ()
-;;   "Make current commit a fixup to HEAD"
-;;   ;; (interactive)
-;;   (magit-run-git "commit" "--fixup" "HEAD")
-;;   )
+  (define-suffix-command fixup-head ()
+  "Make current commit a fixup to HEAD"
+  (interactive)
+  (magit-run-git "commit" "--fixup" "HEAD"))
 
-;; (define-suffix-command reset-head-to-previous-commit ()
-;;   "Soft reset head to the previous commit"
-;;   ;; (interactive)
-;;   (magit-run-git "reset" "HEAD~")
-;;   )
+  (define-suffix-command reset-head-to-previous-commit ()
+    "Soft reset head to the previous commit"
+    (interactive)
+    (magit-run-git "reset" "HEAD~"))
 
-(with-eval-after-load 'magit
   ;; Navigation
   (define-key magit-mode-map (kbd "M-j") 'magit-section-forward)
   (define-key magit-mode-map (kbd "M-k") 'magit-section-backward)
@@ -156,15 +163,15 @@ Convenience tools to help with configuration development
   (define-key magit-mode-map (kbd "C-o") 'magit-section-cycle)
 
   ;; Register Custom Commands
- ;; (transient-append-suffix 'magit-commit "c"
- ;;                         '("h" "fixup head" fixup-head))
+  (transient-append-suffix 'magit-commit "c"
+    '("h" "fixup head" fixup-head))
 
- ;; (transient-append-suffix 'magit-reset "f"
- ;;                         '("u" "to upstream" reset-upstream))
+  (transient-append-suffix 'magit-reset "f"
+    '("u" "to upstream" reset-upstream))
 
- ;; (transient-append-suffix 'magit-reset "w"
- ;;                         '("o" "previous-commit" reset-head-to-previous-commit))
- )
+  (transient-append-suffix 'magit-reset "w"
+    '("o" "previous-commit" reset-head-to-previous-commit))
+  )
 
 (with-eval-after-load 'evil
   (with-eval-after-load 'magit
@@ -226,8 +233,9 @@ Default starting place is the home directory."
 ;; ;; (define-key magit-mode-map [remap evil-scroll-up]   'my/evil-scroll-up)
 #+END_SRC
 
-#+RESULTS:
-: ((~ . 1))
+** TODO
+- [ ] SPC g g fails when run in ~/projects.. gotta find out why
+- Use 'q' instead of 'ESC' to go back on/delete magit buffers?
 
 * Navigation
 #+BEGIN_SRC emacs-lisp
