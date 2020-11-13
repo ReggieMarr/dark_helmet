@@ -1,5 +1,7 @@
 #+TITLE: Erks Literate Config
 
+# #+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-bigblow.setup
+
 * Initialization
 Configuration that needs to be exectuted as close to the beginning as possible
 
