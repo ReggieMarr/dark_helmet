@@ -1028,4 +1028,26 @@ ok
 ** Keybind to go to org file associate with directory or create one if it doesn't exist
 *** yes
 ** Better way to go up by bullet points
-** TODO reduce delay for continuous movment holding down arrow keys
+** TODO
+- reduce delay for continuous movment holding down arrow keys
+- add keybindings for narrow and widening of functions
+- Show all marks in killring buffer
+  + Show all jumps in killring buffer
+- Get more detailed data (like modeline) form a single keypress
+  + Show all the stuff that mdoulein shows you but doesn't need to be in a compressed fashion
+- Get original SPC f f back
+- lsp-enable-semantic-highlighting
+- Checkout hyperbole
+- Make spelling faster
+- Dired+ [[https://www.reddit.com/r/emacs/comments/2lzssf/dired_vs_diredx_vs_dired_vs_diredaux/][link]]  [[http://ergoemacs.org/emacs/emacs_diredplus_mode.html][short tutorial]]
+- [[https://github.com/orgapp/gatsby-orga][gatsby-orga]]
+- recursively fuzzy find file even if it is not in a project directory
+- shortcut to go to the compilation buffer
+- be able to insert new heading before or after content of current heading
+- Councel autocompletion select should be tab instead of enter
+- Press TAB to get out of brackets
+- Replace searching with a better fuzzy finder
+- Don't have completion on numbers
+- Don't go to first commit when opening the magit log
+- Look into [[https://github.com/emacs-lsp/lsp-treemacs][lsp treemacs]] & [[https://github.com/emacs-lsp/lsp-ivy][ lsp-ivy]]
+- Universal Arguement
