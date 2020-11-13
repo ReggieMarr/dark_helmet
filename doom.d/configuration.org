@@ -459,8 +459,8 @@ Not going to use for now.. pretty buggy
 (use-package! yasnippet
   :config
   ;; (setq yas-snippet-dirs '("~/dark_helmet/snippets"))
-(setq yas-snippet-dirs (append yas-snippet-dirs
-                               '("~/dark_helmet/snippets")))
+  (setq yas-snippet-dirs (append yas-snippet-dirs
+                                 '("~/dark_helmet/snippets")))
   ;; (yas-reload-all)
   (map! :map evil-motion-state-map )
   (map! :map yas-minor-mode-map
@@ -471,6 +471,7 @@ Not going to use for now.. pretty buggy
                  evil-insert-state-map
                  evil-emacs-state-map))
     (define-key (eval map) "\C-y" nil))
+  (setq yas-fallback-behavior '(apply tab-jump-out 1))
   )
 
   ;; (defun check-expansion ()
@@ -640,7 +641,8 @@ Not going to use for now.. pretty buggy
 
 (use-package! company
   :config
-  (setq company-idle-delay 0.01))
+  (setq company-idle-delay 0.01
+        company-minimum-prefix-length 1))
 
 (add-hook! 'c-mode-hook
   (setq which-function-mode t))
