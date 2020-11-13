@@ -47,6 +47,11 @@ Convenience tools to help with configuration development
       ;; doom-font (font-spec :family "Emilbus Mono" :size 18)
 #+END_SRC
 
+* Code
+** ELISP
+#+BEGIN_SRC emacs-lisp
+(setq doom-scratch-initial-major-mode 'lisp-interaction-mode)
+#+END_SRC
 * Magit
 #+BEGIN_SRC emacs-lisp
 ;; (unmap! :leader
@@ -186,13 +191,6 @@ Default starting place is the home directory."
      "A" #'ivy-switch-buffer))
 #+END_SRC
 
-* Code
-** ELISP
-#+BEGIN_SRC emacs-lisp
-(setq doom-scratch-initial-major-mode 'lisp-interaction-mode)
-#+END_SRC
-
-* Dired
 * Org
 ** General
 #+BEGIN_SRC emacs-lisp
