@@ -18,20 +18,21 @@
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
 ;
-(package! use-package)
-(package! org-jira)
-(package! calfw)
 (package! ob-async) ;asynchonous evaluation of org code blocks
+(package! calfw)
+(package! org-jira)
+(package! flx-ido)
 (package! multiple-cursors)
-
+(package! symbol-overlay)
 (package! tab-jump-out)
+(package! use-package)
+
 
 ;; Telega
 ;; (package! visual-fill-column)
 ;; (package! rainbow-identifiers)
 ;; (package! telega)
 
-(package! flx-ido)
 
 ;; Not using for now.. pretty buggy
 ;; (package! pdf-continuous-scroll-mode

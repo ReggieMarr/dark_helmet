@@ -47,6 +47,20 @@ Convenience tools to help with configuration development
       ;; doom-font (font-spec :family "Emilbus Mono" :size 18)
 #+END_SRC
 
+** Buffer Narrowing
+#+BEGIN_SRC emacs-lisp
+(map! :leader
+      "n" nil
+      (:prefix ("n" . "narrow")
+       :desc "page"    "p" #'narrow-to-page
+       :desc "defun"   "d" #'narrow-to-defun
+       :desc "region"  "r" #'narrow-to-region
+       :desc "subtree" "s" #'narrow-to-subtree
+       :desc "widen"   "w" #'widen
+       ))
+#+END_SRC
+
+
 * Code
 ** ELISP
 #+BEGIN_SRC emacs-lisp
@@ -420,30 +434,30 @@ Default starting place is the home directory."
 * PDF Tools
 ** Keymap
 #+BEGIN_SRC emacs-lisp
-(with-eval-after-load 'pdf-tools
-(define-key pdf-view-mode-map (kbd "C-c C-h") 'outline-hide-other)
-;; (define-key pdf-view-mode-map (kbd "C-c C-a") 'outline-toggle-children)
-  ;; (define-key pdf-view-mode-map (kbd "M-h") 'pdf-outline)
-  ;; (define-key pdf-outline-minor-mode-map (kbd "i") 'pdf-outline)
+;; (with-eval-after-load 'pdf-tools
+;; (define-key pdf-view-mode-map (kbd "C-c C-h") 'outline-hide-other)
+;; ;; (define-key pdf-view-mode-map (kbd "C-c C-a") 'outline-toggle-children)
+;;   ;; (define-key pdf-view-mode-map (kbd "M-h") 'pdf-outline)
+;;   ;; (define-key pdf-outline-minor-mode-map (kbd "i") 'pdf-outline)
 
-  ;; (define-key pdf-outline-buffer-mode-map (kbd "M-h") 'outline-toggle-children)
-  ;; (define-key outline-mode-map (kbd "a") 'outline-show-all)
-  ;; (message "nice")
-  ;; (define-key pdf-outline-buffer-mode-map (kbd "M-o") 'outline-toggle-children)
-)
+;;   ;; (define-key pdf-outline-buffer-mode-map (kbd "M-h") 'outline-toggle-children)
+;;   ;; (define-key outline-mode-map (kbd "a") 'outline-show-all)
+;;   ;; (message "nice")
+;;   ;; (define-key pdf-outline-buffer-mode-map (kbd "M-o") 'outline-toggle-children)
+;; )
 
-(use-package! pdf-tools
-  :config
-  (evil-define-key 'normal pdf-view-mode-map (kbd ":") 'pdf-view-goto-page)
-  (map! :localleader
-        :map pdf-view-mode-map
-          "f" #'pdf-occur
-          ;; History
-          "c" #'pdf-history-clear
-          "j" #'pdf-history-backward
-          "k" #'pdf-history-forward
+;; (use-package! pdf-tools
+;;   :config
+;;   (evil-define-key 'normal pdf-view-mode-map (kbd ":") 'pdf-view-goto-page)
+;;   (map! :localleader
+;;         :map pdf-view-mode-map
+;;           "f" #'pdf-occur
+;;           ;; History
+;;           "c" #'pdf-history-clear
+;;           "j" #'pdf-history-backward
+;;           "k" #'pdf-history-forward
 
-          "o" #'pdf-outline))
+;;           "o" #'pdf-outline))
 #+END_SRC
 ** Continuous Scrolling
 Not going to use for now.. pretty buggy
@@ -517,68 +531,69 @@ Not going to use for now.. pretty buggy
 #+END_SRC
 * Vterm
 #+BEGIN_SRC emacs-lisp
-(use-package! vterm
-  :init
-  ;; Add current path to Vterm modeline
-  (require 'doom-modeline-core)
-  (require 'doom-modeline-segments)
-  (doom-modeline-def-modeline 'my-vterm-mode-line
-    '(bar workspace-name window-number modals matches buffer-default-directory buffer-info remote-host buffer-position word-count parrot selection-info)
-    '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
-  (add-hook! 'vterm-mode-hook (doom-modeline-set-modeline 'my-vterm-mode-line))
+;; (use-package! vterm
+;;   :init
+;;   ;; Add current path to Vterm modeline
+;;   (require 'doom-modeline-core)
+;;   (require 'doom-modeline-segments)
+;;   (doom-modeline-def-modeline 'my-vterm-mode-line
+;;     '(bar workspace-name window-number modals matches buffer-default-directory buffer-info remote-host buffer-position word-count parrot selection-info)
+;;     '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
+;;   (add-hook! 'vterm-mode-hook (doom-modeline-set-modeline 'my-vterm-mode-line))
 
-  (evil-define-key '(normal insert) vterm-mode-map
-    (kbd "M-k") 'vterm-send-up
-    (kbd "M-j") 'vterm-send-down)
-)
+;;   (evil-define-key '(normal insert) vterm-mode-map
+;;     (kbd "M-k") 'vterm-send-up
+;;     (kbd "M-j") 'vterm-send-down)
+;; )
 
-(defun show-current-working-dir-in-mode-line ()
-  "Shows current working directory in the modeline."
-  (interactive)
-  (setq mode-line-format '("" default-directory))
-  )
+;; (defun show-current-working-dir-in-mode-line ()
+;;   "Shows current working directory in the modeline."
+;;   (interactive)
+;;   (setq mode-line-format '("" default-directory))
+;;   )
 
-(defun open-named-terminal (termName2)
-  (vterm)
-  (rename-buffer termName2 t)
-  (evil-normal-state))
+;; (defun open-named-terminal (termName2)
+;;   (vterm)
+;;   (rename-buffer termName2 t)
+;;   (evil-normal-state))
 
-(defun find-named-terminal (termName)
-  (catch 'exit-find-named-terminal
-    (if
-        (string-match-p termName (buffer-name (current-buffer)))
-        (bury-buffer (buffer-name (current-buffer))))
+;; (defun find-named-terminal (termName)
+;;   (catch 'exit-find-named-terminal
+;;     (if
+;;         (string-match-p termName (buffer-name (current-buffer)))
+;;         (bury-buffer (buffer-name (current-buffer))))
 
-    (dolist (b (buffer-list))
-      (if (string-match-p termName (buffer-name b))
-          (progn
-           (switch-to-buffer b)
-           (throw 'exit-find-named-terminal nil))))
+;;     (dolist (b (buffer-list))
+;;       (if (string-match-p termName (buffer-name b))
+;;           (progn
+;;            (switch-to-buffer b)
+;;            (throw 'exit-find-named-terminal nil))))
 
-    (open-named-terminal termName))
-  )
-(defun find-std-terminal ()
-  (interactive)
-  (find-named-terminal "std-term"))
+;;     (open-named-terminal termName))
+;;   )
 
-(defun open-std-terminal ()
-  (interactive)
-  (open-named-terminal "std-term"))
+;; (defun find-std-terminal ()
+;;   (interactive)
+;;   (find-named-terminal "std-term"))
 
-(defun find-maint-terminal ()
-  (interactive)
-  (find-named-terminal "maint-term"))
+;; (defun open-std-terminal ()
+;;   (interactive)
+;;   (open-named-terminal "std-term"))
 
-(defun open-maint-terminal ()
-  (interactive)
-  (open-named-terminal "maint-term"))
+;; (defun find-maint-terminal ()
+;;   (interactive)
+;;   (find-named-terminal "maint-term"))
 
-(map! :leader
-      (:prefix "w"
-        :desc "Open maint term"  "M"  #'open-maint-terminal
-        :desc "Go to maint term" "m"  #'find-maint-terminal
-        :desc "Open std term"    "T"  #'open-std-terminal
-        :desc "Go to std term"   "t"  #'find-std-terminal))
+;; (defun open-maint-terminal ()
+;;   (interactive)
+;;   (open-named-terminal "maint-term"))
+
+;; (map! :leader
+;;       (:prefix "w"
+;;         :desc "Open maint term"  "M"  #'open-maint-terminal
+;;         :desc "Go to maint term" "m"  #'find-maint-terminal
+;;         :desc "Open std term"    "T"  #'open-std-terminal
+;;         :desc "Go to std term"   "t"  #'find-std-terminal))
 #+END_SRC
 * Unused
 #+BEGIN_SRC emacs-lisp
@@ -665,7 +680,7 @@ Not going to use for now.. pretty buggy
   ;; (:prefix "w"
     ;; :desc "Open vterm" "t"    #'vterm)
   (:prefix "f"
-    :desc "find-file-in-known-projects" "f" #'projectile-find-file-in-known-projects
+    ;; :desc "find-file-in-known-projects" "f" #'projectile-find-file-in-known-projects
     :desc "counsel-find-file" "d" #'counsel-find-file)
    :desc "switch-to-buffer" "a" #'switch-to-buffer)
 
@@ -731,18 +746,18 @@ Not going to use for now.. pretty buggy
 ;; ;; View ##
 ;; ;;########
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package symbol-overlay)
-(with-eval-after-load 'symbol-overlay
-(setf (cdr symbol-overlay-map) nil) ;; Remove default symbol-overlay-map (we don't want most of these bindings to clobber our evil bindings)
-(define-key symbol-overlay-map (kbd "n") #'symbol-overlay-jump-next)
-(define-key symbol-overlay-map (kbd "N") #'symbol-overlay-jump-prev)
-(map! :leader
-      (:prefix ("m" . "mark")
-        :desc "mark symbol" "m" #'symbol-overlay-put
-        :desc "mark single symbol" "M" #'symbol-overlay-put-one
-        :desc "query-replace" "r" #'symbol-overlay-query-replace
-        :desc "remove-all" "R" #'symbol-overlay-remove-all))
-)
+;; (use-package symbol-overlay)
+;; (with-eval-after-load 'symbol-overlay
+;; (setf (cdr symbol-overlay-map) nil) ;; Remove default symbol-overlay-map (we don't want most of these bindings to clobber our evil bindings)
+;; (define-key symbol-overlay-map (kbd "n") #'symbol-overlay-jump-next)
+;; (define-key symbol-overlay-map (kbd "N") #'symbol-overlay-jump-prev)
+;; (map! :leader
+;;       (:prefix ("m" . "mark")
+;;         :desc "mark symbol" "m" #'symbol-overlay-put
+;;         :desc "mark single symbol" "M" #'symbol-overlay-put-one
+;;         :desc "query-replace" "r" #'symbol-overlay-query-replace
+;;         :desc "remove-all" "R" #'symbol-overlay-remove-all))
+;; )
 ;; Fun useless plugins
 
 ;; Weather Forcast
@@ -787,9 +802,6 @@ Not going to use for now.. pretty buggy
 ;; (advice-add 'wttrin-exit :after #'bjm/wttrin-restore-frame)
 #+END_SRC
 
-#+RESULTS:
-: symbol-overlay-remove-all
-
 * Other
 #+BEGIN_SRC emacs-lisp
 
@@ -811,7 +823,13 @@ Not going to use for now.. pretty buggy
       "o" #'outline-hide-other)
 
 ;; LSP
-(setq ccls-executable "/snap/bin/ccls")
+;; (setq ccls-executable "/snap/bin/ccls")
+(setq lsp-clients-clangd-args '("-j=3"
+                                "--background-index"
+                                "--clang-tidy"
+                                "--completion-style=detailed"
+                                "--header-insertion=never"))
+(after! lsp-clangd (set-lsp-priority! 'clangd 2))
 (map!
  ;; :after lsp
  :leader
@@ -917,10 +935,29 @@ Not going to use for now.. pretty buggy
         :desc "my/ivy/compile"  "d"  #'my/ivy/compile
         :desc "recompile"  "c"  #'recompile
         :desc "kill compilation" "k" #'kill-compilation
-        :desc "compilation set skip threshold" "t" #'compilation-set-skip-threshold))
+        :desc "compilation set skip threshold" "t" #'compilation-set-skip-threshold)
+      (:prefix "w"
+       :desc "compilation" "c" #'(lambda () (interactive) (switch-to-buffer "*compilation*"))))
 
 ;; (with-eval-after-load 'compilation
   ;; (setq compilation-auto-jump-to-first-error 1)
+
+
+(defun switch-to-buffer (termName)
+  (catch 'exit-find-named-terminal
+    (if
+        (string-match-p termName (buffer-name (current-buffer)))
+        (bury-buffer (buffer-name (current-buffer))))
+
+    (dolist (b (buffer-list))
+      (if (string-match-p termName (buffer-name b))
+          (progn
+           (switch-to-buffer b)
+           (throw 'exit-find-named-terminal nil))))
+
+    (open-named-terminal termName))
+  )
+
 (setq compile-commands
       '("cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f MakeIBST_kinetis \" && scp 1857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
         "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f MakeIBST_kinetis -B > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt && scp 1857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
@@ -1016,33 +1053,21 @@ Not going to use for now.. pretty buggy
 ;;                 'eide-smart-tab-jump-out-or-indent)
 #+END_SRC
 
-
 * TODO's
-this
-is
-some stuff
-
-why am I
-
-ok
 ** Keybind to go to org file associate with directory or create one if it doesn't exist
 *** yes
 ** Better way to go up by bullet points
 ** TODO
 - reduce delay for continuous movment holding down arrow keys
-- add keybindings for narrow and widening of functions
 - Show all marks in killring buffer
   + Show all jumps in killring buffer
 - Get more detailed data (like modeline) form a single keypress
   + Show all the stuff that mdoulein shows you but doesn't need to be in a compressed fashion
-- Get original SPC f f back
 - lsp-enable-semantic-highlighting
 - Checkout hyperbole
 - Make spelling faster
 - Dired+ [[https://www.reddit.com/r/emacs/comments/2lzssf/dired_vs_diredx_vs_dired_vs_diredaux/][link]]  [[http://ergoemacs.org/emacs/emacs_diredplus_mode.html][short tutorial]]
 - [[https://github.com/orgapp/gatsby-orga][gatsby-orga]]
-- recursively fuzzy find file even if it is not in a project directory
-- shortcut to go to the compilation buffer
 - be able to insert new heading before or after content of current heading
 - Councel autocompletion select should be tab instead of enter
 - Press TAB to get out of brackets
