@@ -1094,3 +1094,4 @@ Not going to use for now.. pretty buggy
 - Don't go to first commit when opening the magit log
 - Look into [[https://github.com/emacs-lsp/lsp-treemacs][lsp treemacs]] & [[https://github.com/emacs-lsp/lsp-ivy][ lsp-ivy]]
 - Universal Arguement
+- [[https://github.com/daviwil/emacs-from-scratch/blob/master/Emacs.org][emacs from scratch config]]
