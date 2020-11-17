@@ -531,69 +531,88 @@ Not going to use for now.. pretty buggy
 #+END_SRC
 * Vterm
 #+BEGIN_SRC emacs-lisp
-;; (use-package! vterm
-;;   :init
-;;   ;; Add current path to Vterm modeline
-;;   (require 'doom-modeline-core)
-;;   (require 'doom-modeline-segments)
-;;   (doom-modeline-def-modeline 'my-vterm-mode-line
-;;     '(bar workspace-name window-number modals matches buffer-default-directory buffer-info remote-host buffer-position word-count parrot selection-info)
-;;     '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
-;;   (add-hook! 'vterm-mode-hook (doom-modeline-set-modeline 'my-vterm-mode-line))
+(use-package! vterm
+  :commands vterm vterm-mode
+  ;; :hook (vterm-mode . doom-mark-buffer-as-real-h)
+  :init
+  ;; Add current path to Vterm modeline
+  (require 'doom-modeline-core)
+  (require 'doom-modeline-segments)
+  (doom-modeline-def-modeline 'my-vterm-mode-line
+    '(bar workspace-name window-number modals matches buffer-default-directory buffer-info remote-host buffer-position word-count parrot selection-info)
+    '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
+  (add-hook! 'vterm-mode-hook (doom-modeline-set-modeline 'my-vterm-mode-line))
 
-;;   (evil-define-key '(normal insert) vterm-mode-map
-;;     (kbd "M-k") 'vterm-send-up
-;;     (kbd "M-j") 'vterm-send-down)
-;; )
+  (evil-define-key '(normal insert) vterm-mode-map
+    (kbd "M-k") 'vterm-send-up
+    (kbd "M-j") 'vterm-send-down)
 
-;; (defun show-current-working-dir-in-mode-line ()
-;;   "Shows current working directory in the modeline."
-;;   (interactive)
-;;   (setq mode-line-format '("" default-directory))
-;;   )
+  :config
+  ;; Once vterm is dead, the vterm buffer is useless. Why keep it around? We can
+  ;; spawn another if want one.
+  (setq vterm-kill-buffer-on-exit t)
+  (setq vterm-max-scrollback 5000)
+  (setq confirm-kill-processes nil)
+  (setq-hook! 'vterm-mode-hook
+    ;; Don't prompt about dying processes when killing vterm
+    confirm-kill-processes nil
+    ;; Prevent premature horizontal scrolling
+    hscroll-margin 0)
+  ;; Restore the point's location when leaving and re-entering insert mode.
+  ;; (add-hook! 'vterm-mode-hook
+  ;;   (defun +vterm-init-remember-point-h ()
+  ;;     (add-hook 'evil-insert-state-exit-hook #'+vterm-remember-insert-point-h nil t)
+  ;;     (add-hook 'evil-insert-state-entry-hook #'+vterm-goto-insert-point-h nil t)))
+)
 
-;; (defun open-named-terminal (termName2)
-;;   (vterm)
-;;   (rename-buffer termName2 t)
-;;   (evil-normal-state))
+(defun show-current-working-dir-in-mode-line ()
+  "Shows current working directory in the modeline."
+  (interactive)
+  (setq mode-line-format '("" default-directory))
+  )
 
-;; (defun find-named-terminal (termName)
-;;   (catch 'exit-find-named-terminal
-;;     (if
-;;         (string-match-p termName (buffer-name (current-buffer)))
-;;         (bury-buffer (buffer-name (current-buffer))))
+(defun open-named-terminal (termName2)
+  (vterm)
+  (rename-buffer termName2 t)
+  (evil-normal-state))
 
-;;     (dolist (b (buffer-list))
-;;       (if (string-match-p termName (buffer-name b))
-;;           (progn
-;;            (switch-to-buffer b)
-;;            (throw 'exit-find-named-terminal nil))))
+(defun find-named-terminal (termName)
+  (catch 'exit-find-named-terminal
+    (if
+        (string-match-p termName (buffer-name (current-buffer)))
+        (bury-buffer (buffer-name (current-buffer))))
 
-;;     (open-named-terminal termName))
-;;   )
+    (dolist (b (buffer-list))
+      (if (string-match-p termName (buffer-name b))
+          (progn
+           (switch-to-buffer b)
+           (throw 'exit-find-named-terminal nil))))
 
-;; (defun find-std-terminal ()
-;;   (interactive)
-;;   (find-named-terminal "std-term"))
+    (open-named-terminal termName))
+  )
 
-;; (defun open-std-terminal ()
-;;   (interactive)
-;;   (open-named-terminal "std-term"))
+(defun find-std-terminal ()
+  (interactive)
+  (find-named-terminal "std-term"))
 
-;; (defun find-maint-terminal ()
-;;   (interactive)
-;;   (find-named-terminal "maint-term"))
+(defun open-std-terminal ()
+  (interactive)
+  (open-named-terminal "std-term"))
 
-;; (defun open-maint-terminal ()
-;;   (interactive)
-;;   (open-named-terminal "maint-term"))
+(defun find-maint-terminal ()
+  (interactive)
+  (find-named-terminal "maint-term"))
 
-;; (map! :leader
-;;       (:prefix "w"
-;;         :desc "Open maint term"  "M"  #'open-maint-terminal
-;;         :desc "Go to maint term" "m"  #'find-maint-terminal
-;;         :desc "Open std term"    "T"  #'open-std-terminal
-;;         :desc "Go to std term"   "t"  #'find-std-terminal))
+(defun open-maint-terminal ()
+  (interactive)
+  (open-named-terminal "maint-term"))
+
+(map! :leader
+      (:prefix "w"
+        :desc "Open maint term"  "M"  #'open-maint-terminal
+        :desc "Go to maint term" "m"  #'find-maint-terminal
+        :desc "Open std term"    "T"  #'open-std-terminal
+        :desc "Go to std term"   "t"  #'find-std-terminal))
 #+END_SRC
 * Unused
 #+BEGIN_SRC emacs-lisp

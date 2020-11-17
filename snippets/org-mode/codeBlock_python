@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: codeBLock_python
+# key: cp
+# uuid:codeBlock_python
+# --
+#+BEGIN_SRC python$0
+#+END_SRC
