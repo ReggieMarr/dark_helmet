@@ -26,6 +26,7 @@
 (package! symbol-overlay)
 (package! tab-jump-out)
 (package! use-package)
+(package! vterm)
 
 
 ;; Telega
