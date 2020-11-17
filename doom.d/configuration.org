@@ -765,18 +765,17 @@ Not going to use for now.. pretty buggy
 ;; ;; View ##
 ;; ;;########
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package symbol-overlay)
-;; (with-eval-after-load 'symbol-overlay
-;; (setf (cdr symbol-overlay-map) nil) ;; Remove default symbol-overlay-map (we don't want most of these bindings to clobber our evil bindings)
-;; (define-key symbol-overlay-map (kbd "n") #'symbol-overlay-jump-next)
-;; (define-key symbol-overlay-map (kbd "N") #'symbol-overlay-jump-prev)
-;; (map! :leader
-;;       (:prefix ("m" . "mark")
-;;         :desc "mark symbol" "m" #'symbol-overlay-put
-;;         :desc "mark single symbol" "M" #'symbol-overlay-put-one
-;;         :desc "query-replace" "r" #'symbol-overlay-query-replace
-;;         :desc "remove-all" "R" #'symbol-overlay-remove-all))
-;; )
+(use-package! symbol-overlay
+  :config
+  (setf (cdr symbol-overlay-map) nil) ;; Remove default symbol-overlay-map (we don't want most of these bindings to clobber our evil bindings)
+  (define-key symbol-overlay-map (kbd "n") #'symbol-overlay-jump-next)
+  (define-key symbol-overlay-map (kbd "N") #'symbol-overlay-jump-prev)
+  (map! :leader
+        (:prefix ("m" . "mark")
+         :desc "mark symbol" "m" #'symbol-overlay-put
+         :desc "mark single symbol" "M" #'symbol-overlay-put-one
+         :desc "query-replace" "r" #'symbol-overlay-query-replace
+         :desc "remove-all" "R" #'symbol-overlay-remove-all)))
 ;; Fun useless plugins
 
 ;; Weather Forcast
