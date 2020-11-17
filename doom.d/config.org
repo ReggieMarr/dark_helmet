@@ -25,7 +25,7 @@ Convenience tools to help with configuration development
 
 (defun my/open-config ()
   (interactive)
-  (find-file "~/dark_helmet/doom.d/configuration.org"))
+  (find-file "~/dark_helmet/doom.d/config.org"))
 #+END_SRC
 
 * Global Variables
@@ -892,6 +892,7 @@ Not going to use for now.. pretty buggy
 ;; (defmacro hydra-move-macro ()
   ;; '(("h" evil-window-left "left")
   ;; ("l" evil-window-right "right")))
+
 ;;###############
 ;; PROJECTILE ##
 ;;###############
@@ -1095,3 +1096,4 @@ Not going to use for now.. pretty buggy
 - Look into [[https://github.com/emacs-lsp/lsp-treemacs][lsp treemacs]] & [[https://github.com/emacs-lsp/lsp-ivy][ lsp-ivy]]
 - Universal Arguement
 - [[https://github.com/daviwil/emacs-from-scratch/blob/master/Emacs.org][emacs from scratch config]]
+- Understand how to easily revert a hunk and move between hunks
