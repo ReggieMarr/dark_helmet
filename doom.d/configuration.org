@@ -955,13 +955,13 @@ Not going to use for now.. pretty buggy
         :desc "kill compilation" "k" #'kill-compilation
         :desc "compilation set skip threshold" "t" #'compilation-set-skip-threshold)
       (:prefix "w"
-       :desc "compilation" "c" #'(lambda () (interactive) (switch-to-buffer "*compilation*"))))
+       :desc "compilation" "c" #'(lambda () (interactive) (my/switch-to-buffer "*compilation*"))))
 
 ;; (with-eval-after-load 'compilation
   ;; (setq compilation-auto-jump-to-first-error 1)
 
 
-(defun switch-to-buffer (termName)
+(defun my/switch-to-buffer (termName)
   (catch 'exit-find-named-terminal
     (if
         (string-match-p termName (buffer-name (current-buffer)))
