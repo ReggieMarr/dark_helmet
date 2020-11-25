@@ -4,7 +4,7 @@
 
       doom-scratch-initial-major-mode 'lisp-interaction-mode
       ;;treemacs-width 32 ;;TODO
-      doom-theme 'doom-material
+      doom-theme 'doom-spacegrey
 
       ;; Improve performance & disable line #'s by defausdlt
       display-line-numbers-type nil
@@ -23,7 +23,7 @@
   (package-install 'use-package))
 
 (require 'use-package)
-(setq use-package-always-ensure t) ;;Globally ensure that a package will be automatically installed
+;(setq use-package-always-ensure t) ;;Globally ensure that a package will be automatically installed
 
 (setq doom-localleader-key ";")
 
@@ -442,19 +442,22 @@ currently clocked-in org-mode task."
         :desc "compilation set skip threshold" "t" #'compilation-set-skip-threshold))
 ;; (with-eval-after-load 'compilation
   (setq compilation-auto-jump-to-first-error 1)
-(setq compile-commands
-      '("docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
-        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\" | compiledb"
-        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\""
-        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j\""
-        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeLibraryModule SW_REV=X -j -B\""
-        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeTowerK60F SW_REV=X -j -B\""
-        "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make75177 SW_REV=Y -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
-        "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 77619-01X\""
-        "docker exec -i bob /bin/bash -c \"cd /shared/release && make.py 76617-02X -B | compiledb\""
-        "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 227269-01X -B\""
-        "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 77340-01X -B\""
-        ))
+        (setq compile-commands
+        '("docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=- -j -B\" && scp /home/reggiemarr/kinetis/231857-01-.axf rmarr@pyrite:/home/bdi3000/rmarr/"
+                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
+                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=Y -j -B\""
+                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\""
+                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make217750 SW_REV=Y -j -B\""
+                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\" | compiledb"
+                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=Y -j -B\" | compiledb"
+                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeLibraryModule SW_REV=X -j -B\""
+                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeTowerK60F SW_REV=X -j -B\""
+                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make75177 SW_REV=Y -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
+                "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 77619-01X\""
+                "docker exec -i bob /bin/bash -c \"cd /shared/release && make.py 76617-02X -B | compiledb\""
+                "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 227269-01X -B\""
+                "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 77340-01X -B\""
+                ))
 (defun my/ivy/compile ()
   (interactive)
   (ivy-read "compile-command: " compile-commands
@@ -541,43 +544,28 @@ currently clocked-in org-mode task."
                         (car (pdf-view-active-region-text)))
         (user-error "Buffer %S not alive." pdf-buf-name))))
 
-(add-to-list 'org-capture-templates
-        '("c" ;Key used to select this template
-        ;template description
-        "Code"
-        ;template type which is a node targeting an org file
-        entry
-        ;template target
-        (file "~/org/captured.org")
-        ;The template for creating the capture item
-        "* Code Snippet %U
-        In ~ [[%F][%f]] ~
-        #+BEGIN_SRC c
-        %i
-        #+END_SRC
-        %?"
-        ;; (line-number-at-pos (region-beginning))
-        )
-        ;; "* Code snippet %U\n%(format \"%s\" my-captured-snippet)")
-        ;; '("p"
-        ;; "Protocol"
-        ;; entry
-        ;; (file+headline ,(concat org-directory "notes.org") "Inbox")
-        ;; "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
-        '("L"
-        "Protocol Link"
-        entry
-        (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n")
-        )
-;; (add-to-list 'org-capture-templates
-;;         '("f"
-;;         "Pdf Notes"
-;;         entry
-;;         (file "~/Notes.org")
-;;         "* %?\n%(org-capture-pdf-active-region)\n")
-;;         )
-
+;(add-to-list 'org-capture-templates
+;        '("c" ;Key used to select this template
+;        ;template description
+;        "Code"
+;        ;template type which is a node targeting an org file
+;        entry
+;        ;template target
+;        (file "~/org/captured.org")
+;        ;The template for creating the capture item
+;        "* Code Snippet %U
+;        In ~ [[%F][%f]] ~
+;        #+BEGIN_SRC c
+;        %i
+;        #+END_SRC
+;        %?"
+;        )
+;        '("L"
+;        "Protocol Link"
+;        entry
+;        (file+headline ,(concat org-directory "notes.org") "Inbox")
+;        "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n")
+;        )
 ;boilerplate is for plebs
 (with-eval-after-load 'yasnippet
         (defun maybe_notify_snip (snip_str)
@@ -595,6 +583,17 @@ concat (concat "\nstatic void " (concat snip_str "(int type, void *argPtr, int r
 ")
                         )
                 ))
+
+(use-package! org
+  :init
+  (setq org-export-creator-string "Reginald Marr"
+        org-odt-preferred-output-format "docx"
+        org-export-default-language "en"
+        org-export-preserve-breaks t
+        org-export-headline-levels 3
+        org-export-with-toc 3
+        )
+  )
 
 ;Fancy linking function defintions and implementations
     (require 'srefactor)
@@ -655,6 +654,10 @@ concat (concat "\nstatic void " (concat snip_str "(int type, void *argPtr, int r
         :desc "Toggle full screen buffer" "f" #'toggle-maximize-buffer))
 
 (map! :leader
+      (:prefix "C-t"
+        :desc "Open treemacs symbol" "C-t" #'lsp-treemacs-symbols))
+
+(map! :leader
       (:prefix "l"
        :desc "Use the power of thesaurus" "t" #'powerthesaurus-lookup-word-dwim
        :desc "I'm an engineer not a writer" "s" #'ispell))
@@ -669,9 +672,12 @@ concat (concat "\nstatic void " (concat snip_str "(int type, void *argPtr, int r
 (fast-scroll-mode 1)
 (setq fast-scroll-throttle 0.5)
 (shell-command "xset r rate 250 60")
-(use-package! org
-  :config
-  (require 'color)
-  (set-face-attribute 'org-block nil :background
-                      (color-darken-name
-                       (face-attribute 'default :background)  1)))
+;(use-package! org
+;  :config
+;  (require 'color)
+;  (set-face-attribute 'org-block nil :background
+;                      (color-darken-name
+;                       (face-attribute 'default :background)  1)))
+
+(load "~/.doom.d/my_email.el")
+(setq dired-dwim-target t)

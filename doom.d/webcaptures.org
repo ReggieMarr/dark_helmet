@@ -287,3 +287,39 @@ https://github.com/tuhdo/semantic-refactor
 Comment:
 semantic refactoring tool,
 awesome for generating function pointers to functions
+* [2020-10-13 Tue 18:18] Very impressed by emacs-ludicrous-speed (GNU/Linux) : emacs :emacs:
+https://www.reddit.com/r/emacs/comments/j7iasv/very_impressed_by_emacsludicrousspeed_gnulinux/
+Comment:
+check this out and see if it could be used to support mulitiple instances of emacs to perform pseudoasync tasks
+* [2020-10-13 Tue 21:45] Microsoft (Teams) notifications in your Org Agenda (through Emacs Slack) - Where parallels cross :grasp:
+https://ag91.github.io/blog/2020/10/09/microsoft-(teams)-notifications-in-your-org-agenda-(through-emacs-slack)/
+Comment:
+useful note that may be used for getting email to work with emacs + windows vm
+* [2020-10-14 Wed 10:31] Camelot: PDF Table Extraction for Humans — Camelot 0.8.2 documentation :emacs:literate_tdd:
+https://camelot-py.readthedocs.io/en/master/
+Comment:
+this looks like a great option which, when combined with driver truth tables may yield interesting results
+* [2020-10-14 Wed 10:33] Literate programming part 4: Closing thoughts – niksilver.com :literate:programming:tdd:
+https://niksilver.com/2019/11/05/literate-programming-part-4-closing-thoughts/
+Comment:
+really interesting post about literate tdd
+* [2020-10-14 Wed 20:23] Manage o365 mail with emacs, mbsync, and mu4e | Unl0ckd :emacs:email:
+https://www.chrislockard.net/posts/o365-mail-emacs-mbsync-mu4e/
+Comment:
+very useful for configuring mu4e
+* [2020-10-21 Wed 10:23] Get more value out of notes by refactoring them — Moby Diction :note:taking:workflow:
+https://mobydiction.ca/blog/refactoring-notes
+Comment:
+interesting guide on creating programtic notes
+* [2020-10-23 Fri 09:04] One year with Notmuch :: EINVAL: Valid solutions for invalid problems :email:emacs:notmuch:msmtp:
+https://blog.einval.eu/2019/06/one-year-with-notmuch/
+Comment:
+this is a good example of using notmuch for sending AND receiving
+* [2020-10-23 Fri 14:13] Advanced Usage of Dependencies Between Tasks Using Org-mode - EMACS-DOCUMENT :emacs:org-capture:
+http://blog.lujun9972.win/emacs-document/blog/2018/03/02/advanced-usage-of-dependencies-between-tasks-using-org-mode/
+Comment:
+good tips for mixing yassnippets and other
+* [2020-11-09 Mon 14:27] Tv Stand Legs Credenza Legs Shoe Storege Legs Record | Etsy :projects:
+https://www.etsy.com/ca/listing/860881167/tv-stand-legs-credenza-legs-shoe-storege?ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=record+drawers&ref=sr_gallery-1-3&frs=1
+Comment:
+This could be a cool idea for something I could make

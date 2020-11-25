@@ -169,7 +169,8 @@
 
        :email
        ;;(mu4e +gmail)
-       notmuch
+       ;; notmuch
+       mu4e
        ;;(wanderlust +gmail)
 
        :app
