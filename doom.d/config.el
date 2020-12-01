@@ -163,12 +163,43 @@ currently clocked-in org-mode task."
 
 (add-hook! 'vterm-mode-hook (doom-modeline-set-modeline 'my-vterm-mode-line))
 
-(with-eval-after-load 'vterm
-  ;; (define-key vterm-mode-map (kbd "C-j") 'vterm-send-down)
-  ;; (define-key vterm-mode-map (kbd "C-k") 'vterm-send-up)
+;; (with-eval-after-load 'vterm
+  ;; (evil-define-key '(normal insert) vterm-mode-map
+  ;;   (kbd "M-k") 'vterm-send-up
+  ;;   (kbd "M-j") 'vterm-send-down))
+(use-package! vterm
+  :commands vterm vterm-mode
+  ;; :hook (vterm-mode . doom-mark-buffer-as-real-h)
+  :init
+  ;; Add current path to Vterm modeline
+  (require 'doom-modeline-core)
+  (require 'doom-modeline-segments)
+  (doom-modeline-def-modeline 'my-vterm-mode-line
+    '(bar workspace-name window-number modals matches buffer-default-directory buffer-info remote-host buffer-position word-count parrot selection-info)
+    '(objed-state misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
+  (add-hook! 'vterm-mode-hook (doom-modeline-set-modeline 'my-vterm-mode-line))
+
   (evil-define-key '(normal insert) vterm-mode-map
     (kbd "M-k") 'vterm-send-up
-    (kbd "M-j") 'vterm-send-down))
+    (kbd "M-j") 'vterm-send-down)
+
+  :config
+  ;; Once vterm is dead, the vterm buffer is useless. Why keep it around? We can
+  ;; spawn another if want one.
+  (setq vterm-kill-buffer-on-exit t)
+  (setq vterm-max-scrollback 5000)
+  (setq confirm-kill-processes nil)
+  (setq-hook! 'vterm-mode-hook
+    ;; Don't prompt about dying processes when killing vterm
+    confirm-kill-processes nil
+    ;; Prevent premature horizontal scrolling
+    hscroll-margin 0)
+  ;; Restore the point's location when leaving and re-entering insert mode.
+  ;; (add-hook! 'vterm-mode-hook
+  ;;   (defun +vterm-init-remember-point-h ()
+  ;;     (add-hook 'evil-insert-state-exit-hook #'+vterm-remember-insert-point-h nil t)
+  ;;     (add-hook 'evil-insert-state-entry-hook #'+vterm-goto-insert-point-h nil t)))
+)
 
   ;; (setq frame-title-format '(:eval (if (buffer-file-name) (abbreviate-file-name (buffer-file-name)) "%b")))
   ;; (setq frame-title-format "NEATO")
@@ -209,7 +240,8 @@ currently clocked-in org-mode task."
 
 (defun open-std-terminal ()
   (interactive)
-  (open-named-terminal "std-term"))
+  (open-named-terminal "std-term")
+  (emojify-mode))
 
 (defun find-maint-terminal ()
   (interactive)
@@ -681,3 +713,105 @@ concat (concat "\nstatic void " (concat snip_str "(int type, void *argPtr, int r
 
 (load "~/.doom.d/my_email.el")
 (setq dired-dwim-target t)
+
+(use-package! magit
+  :config
+  (map! :leader
+        (:prefix "g"
+         :desc "blame" "b" #'magit-blame
+         ;; :desc "status dwim" "g" #'magit-status
+         :desc "status" "G" #'my/magit-status
+         :desc "buffer-lock" "T" #'magit-toggle-buffer-lock
+
+         ;; Git gutter
+         :desc "next-hunk" "j" #'git-gutter:next-hunk
+         :desc "prev-hunk" "k" #'git-gutter:previous-hunk
+         :desc "popup-diff" "d" #'git-gutter:popup-diff
+         :desc "file-statistics" "S" #'git-gutter:statistic
+
+         "s" nil
+         (:prefix ("s" . "status")
+          :desc "find"       "s" #'my/magit-status
+          :desc "cfgdb"      "c" #'(lambda () (interactive) (magit-status "~/cfgdb"))
+          :desc "kinetis"    "k" #'(lambda () (interactive) (magit-status "~/kinetis"))
+          :desc "release"    "r" #'(lambda () (interactive) (magit-status "~/release"))
+          :desc "ga"         "g" #'(lambda () (interactive) (magit-status "~/general-atomics"))
+          :desc "ga/release" "R" #'(lambda () (interactive) (magit-status "~/general-atomics/release")))
+
+         ;; Log
+         :desc "log" "l" #'magit-log
+         "L" nil ;; unmap default L mapping
+         (:prefix ("L" . "log")
+          :desc "file" "f" #'magit-log-buffer-file
+          :desc "head" "h" #'magit-log-head
+          :desc "log" "i" #'magit-log
+          :desc "refresh" "r" #'magit-log-refresh-buffer)))
+
+  (define-suffix-command reset-upstream ()
+    (interactive)
+    (if (magit-confirm t (format "**WARNING** this will hard reset to upstream branch. Continue?"))
+        (magit-run-git "reset" "--hard" "@{u}")))
+
+  (define-suffix-command fixup-head ()
+  "Make current commit a fixup to HEAD"
+  (interactive)
+  (magit-run-git "commit" "--fixup" "HEAD"))
+
+  (define-suffix-command reset-head-to-previous-commit ()
+    "Soft reset head to the previous commit"
+    (interactive)
+    (magit-run-git "reset" "HEAD~"))
+
+  ;; Navigation
+  (define-key magit-mode-map (kbd "M-j") 'magit-section-forward)
+  (define-key magit-mode-map (kbd "M-k") 'magit-section-backward)
+  (define-key magit-mode-map (kbd "C-M-j") 'magit-section-forward-sibling)
+  (define-key magit-mode-map (kbd "C-M-k") 'magit-section-backward-sibling)
+  (define-key magit-mode-map (kbd "C-K") 'magit-section-up)
+
+  ;; Section folding/expansion
+  (define-key magit-mode-map (kbd "M-o") 'magit-section-toggle)
+  (define-key magit-mode-map (kbd "C-o") 'magit-section-cycle)
+
+  ;; Register Custom Commands
+  (transient-append-suffix 'magit-commit "c"
+    '("h" "fixup head" fixup-head))
+
+  (transient-append-suffix 'magit-reset "f"
+    '("u" "to upstream" reset-upstream))
+
+  (transient-append-suffix 'magit-reset "w"
+    '("o" "previous-commit" reset-head-to-previous-commit))
+  )
+
+(with-eval-after-load 'evil
+  (with-eval-after-load 'magit
+ (evil-define-key* '(normal visual) magit-mode-map
+   "C-t" #'my/evil-scroll-down
+   "C-v" #'my/evil-scroll-up)
+))
+;; Automatically refresh status buffer
+(add-hook 'after-save-hook 'magit-after-save-refresh-status t)
+
+;; Prevent long refnames from hiding commit messages in the log
+(setq magit-log-show-refname-after-summary t)
+(setq magit-log-margin '(t age-abbreviated 15 t 10))
+
+(defun my/magit-status ()
+  "Use ivy to specify directory from which to open a magit status buffer.
+Default starting place is the home directory."
+  (interactive)
+  (let ((default-directory "~/"))
+    (ivy-read "git status: " #'read-file-name-internal
+              :matcher #'counsel--find-file-matcher
+              :action #'(lambda (x)
+                          (magit-status x))
+              :preselect (counsel--preselect-file)
+              :require-match 'confirm-after-completion
+              :history 'file-name-history
+              :keymap counsel-find-file-map
+              :caller 'my/magit-status)))
+
+(defun my/magit-status-2 ()
+  (interactive)
+  (execute-extended-command 16 "magit-status"))
