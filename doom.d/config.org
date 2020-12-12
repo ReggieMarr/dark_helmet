@@ -863,11 +863,10 @@ Not going to use for now.. pretty buggy
 * LSP
 #+BEGIN_SRC emacs-lisp
 
-(after! ccls
-  (setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
-  (set-lsp-priority! 'ccls 2) ; optional as ccls is the default in Doom
-  (setq ccls-executable "/snap/bin/ccls")
-  (setq ccls-sem-highlight-method 'font-lock))
+(setq ccls-executable "/usr/bin/ccls")
+(setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
+(setq ccls-sem-highlight-method 'font-lock)
+;; (set-lsp-priority! 'ccls 2) ; optional as ccls is the default in Doom
 
 (defun ccls/callee () (interactive) (lsp-ui-peek-find-custom "$ccls/call" '(:callee t)))
 (defun ccls/caller () (interactive) (lsp-ui-peek-find-custom "$ccls/call"))
