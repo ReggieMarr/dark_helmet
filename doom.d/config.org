@@ -64,6 +64,22 @@ Convenience tools to help with configuration development
 #+END_SRC
 
 
+** Window
+#+BEGIN_SRC emacs-lisp
+(map! :leader
+      (:prefix "w"
+       :desc "maximize window" "f"  #'my/toggle-maximize-buffer))
+
+(defun my/toggle-maximize-buffer () "Maximize buffer"
+  (interactive)
+  (if (= 1 (length (window-list)))
+      (jump-to-register '_)
+    (progn
+      (window-configuration-to-register '_)
+      (delete-other-windows))))
+#+END_SRC
+
+
 * Code
 ** ELISP
 #+BEGIN_SRC emacs-lisp
