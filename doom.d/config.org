@@ -1115,23 +1115,74 @@ Not going to use for now.. pretty buggy
 *** yes
 ** Better way to go up by bullet points
 ** TODO
-- reduce delay for continuous movment holding down arrow keys
-- Show all marks in killring buffer
+- [ ] reduce delay for continuous movment holding down arrow keys
+- [ ] Show all marks in killring buffer
   + Show all jumps in killring buffer
-- Get more detailed data (like modeline) form a single keypress
+- [ ] Get more detailed data (like modeline) form a single keypress
   + Show all the stuff that mdoulein shows you but doesn't need to be in a compressed fashion
-- lsp-enable-semantic-highlighting
-- Checkout hyperbole
-- Make spelling faster
-- Dired+ [[https://www.reddit.com/r/emacs/comments/2lzssf/dired_vs_diredx_vs_dired_vs_diredaux/][link]]  [[http://ergoemacs.org/emacs/emacs_diredplus_mode.html][short tutorial]]
-- [[https://github.com/orgapp/gatsby-orga][gatsby-orga]]
-- be able to insert new heading before or after content of current heading
-- Councel autocompletion select should be tab instead of enter
-- Press TAB to get out of brackets
-- Replace searching with a better fuzzy finder
-- Don't have completion on numbers
-- Don't go to first commit when opening the magit log
-- Look into [[https://github.com/emacs-lsp/lsp-treemacs][lsp treemacs]] & [[https://github.com/emacs-lsp/lsp-ivy][ lsp-ivy]]
-- Universal Arguement
-- [[https://github.com/daviwil/emacs-from-scratch/blob/master/Emacs.org][emacs from scratch config]]
-- Understand how to easily revert a hunk and move between hunks
+- [ ] lsp-enable-semantic-highlighting
+- [ ] Checkout hyperbole
+- [ ] Learn how to change permissions in dired
+- [ ] Make spelling faster
+- [ ] Dired+ [[https://www.reddit.com/r/emacs/comments/2lzssf/dired_vs_diredx_vs_dired_vs_diredaux/][link]]  [[http://ergoemacs.org/emacs/emacs_diredplus_mode.html][short tutorial]]
+- [ ] SPC G f f - ask for project before selecting branch/file
+- [ ] [[https://github.com/orgapp/gatsby-orga][gatsby-orga]]
+- [ ] be able to insert new heading before or after content of current heading
+- [ ] Councel autocompletion select should be tab instead of enter
+- [ ] Press TAB to get out of brackets
+- [ ] Replace searching with a better fuzzy finder
+- [ ] Don't have completion on numbers
+- [ ] Don't go to first commit when opening the magit log
+- [ ] Look into [[https://github.com/emacs-lsp/lsp-treemacs][lsp treemacs]] & [[https://github.com/emacs-lsp/lsp-ivy][ lsp-ivy]]
+- [ ] Universal Arguement
+- [ ] [[https://github.com/daviwil/emacs-from-scratch/blob/master/Emacs.org][emacs from scratch config]]
+- [ ] Understand how to easily revert a hunk and move between hunks
+- [ ] Change scroll speed for a given j/k in pdf view
+- [ ] Have PDF find result pop up in a temporary buffer (at bottom) and switch focus to it
+- [ ] hook for emojify in terminal & orgmode?
+- [ ] Get better with
+- [ ] Investigate [[https://github.com/jart/disaster][disaster.el]]
+- [ ] [[https://emacs-lsp.github.io/lsp-mode/page/performance/][Performance tune lsp]]
+- [ ] [[https://github.com/dgutov/diff-hl][df-highlight]] vs [[https://github.com/emacsorphanage/git-gutter][git-gutter]]
+- [ ] read [[https://github.com/hlissner/doom-emacs/blob/471028ce94424ded969e959195007080442424bd/modules/editor/evil/README.org][doom evil readme]]
+- [ ] Cursor go to bottom of selection instead of top after a yank?
+- [X] Get 'customize evil undo system for redo functionality'
+- [ ] dconf not always applying xbc options?
+- [ ] Computer makes a nasty bios sound instead of nice beeps
+- [ ] Change highlignting colour of evil-multi-edit to sth different than the cursor
+- [ ] Magit reset a single file in status buffer?
+- [ ] dired buffer changes size a bit when going into editing mode..
+- [ ] Engage follow mode for magit log
+- [ ] Get org links working smoothly
+- [ ] Have a diff style in emacs like bitbucket has for code reviews
+- [ ] Don't offer completion for strings starting with a # in org-mode
+- [ ] Notice that I need to do something with cursor before org calculateion refreshes..
+- [ ] obsync is broken?
+- [ ] learn how to yank without blasting prev clipboard?
+- [ ] Get org pretty table working
+- [ ] Change file fuzzy search colour scheme to grey/white
+- [ ] hook for makefile mode on files that start with make and have no extension
+- [ ] visual mode highlighting needs to be more obvious
+- [ ] doom multiedt needs to be different than curosr color
+- [ ] move to the terminal if it is already present on the screen (instead of bringing it up in the current buffer)
+- [ ] when pressing 'enter' in a swiper result in a terminal it just goes back to the bottom of the terminal instead of going to the result
+- [ ] SPC n s should do org-narrow-to-subtree in org mode and just narrow-to-subtree otherwise
+- [ ] Follow mode in search project
+- [ ] C-u in find file will go back to home directory if no text has been entered?
+- [ ] Line wrap mode should be enabled by default for the compilation buffer
+- [ ] c mode base map (clang format on diff) keybindings not working
+- [ ] in general allways have counsel/ivy in follow mode?
+- [ ] make imenu symbols look nice?
+- [ ] show pdf search results in temporary buffer @bottom? can also be in follow mode?
+- [ ] key to go to next picture in directory (kill current buffer tho)
+- [ ] way to enlarge pictures?
+- [ ] ; f -> fill region in COMMIT_EDITMSG mode
+- [ ] figure out how to swithc quickly between editing and terminal mode in vterm
+- [ ] Learn avy jump (or whatever its called) to jump between windows
+- [ ] investigate org-edit-special (especially for tables)
+- [ ] Compiledb shouldn't actually compile the stuff.. y'know..
+- [ ] Different org views of the same file?
+- [ ] ONly turn on emojify mode for certain buffers
+
+** Other TODO
+- [[https://github.com/zsh-users/zsh-autosuggestions][zsh autocompletion]]
