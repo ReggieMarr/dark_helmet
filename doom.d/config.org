@@ -1076,6 +1076,22 @@ Not going to use for now.. pretty buggy
 ;;                 'eide-smart-tab-jump-out-or-indent)
 #+END_SRC
 
+* Emojify
+#+BEGIN_SRC emacs-lisp
+(use-package emojify
+  :hook (after-init . global-emojify-mode))
+;; (setq emojify-inhibit-major-modes
+;;         (cl-union emojify-inhibit-major-modes
+;;                   '(cider-mode
+;;                     cider-repl-mode
+;;                     cider-test-report-mode
+;;                     sql-mode
+;;                     term-mode
+;;                     web-mode
+;;                     yaml-mode))
+;;         emojify-prog-contexts "comments"))
+#+END_SRC
+
 * TODO's
 ** Keybind to go to org file associate with directory or create one if it doesn't exist
 *** yes
