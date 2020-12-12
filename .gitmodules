@@ -1,0 +1,6 @@
+[submodule "packages/org-pretty-table"]
+	path = packages/org-pretty-table
+	url = https://github.com/Fuco1/org-pretty-table.git
+[submodule "packages/emacs-application-framework"]
+	path = packages/emacs-application-framework
+	url = https://github.com/manateelazycat/emacs-application-framework.git
