@@ -11,6 +11,7 @@
 
 )
 (add-to-list 'custom-theme-load-path "~/Downloads/gitDownloads/solo-jazz-emacs-theme/")
+(add-to-list 'custom-theme-load-path "~/Downloads/gitDownloads/nano-emacs/")
 (require 'package)
 
 
