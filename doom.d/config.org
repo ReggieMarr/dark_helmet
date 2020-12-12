@@ -1024,12 +1024,14 @@ Not going to use for now.. pretty buggy
 * Matrix
 #+BEGIN_SRC emacs-lisp
 ;; Bootstrap Quelpa
-(unless (package-installed-p 'quelpa)
-  (with-temp-buffer
-    (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
-    (eval-buffer)
-    (quelpa-self-upgrade)))
-
+;; (unless (package-installed-p 'quelpa)
+;;   (with-temp-buffer
+;;     (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
+;;     (eval-buffer)
+;;     (quelpa-self-upgrade)))
+;; (quelpa-use-package matrix-client
+;;   :quelpa (matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
+;;                          :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
 ;; TODO figure out why this makes emacs mad
 ;; (quelpa
 ;;  '(quelpa-use-package
