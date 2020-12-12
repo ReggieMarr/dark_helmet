@@ -877,7 +877,7 @@ Not going to use for now.. pretty buggy
 (defun my-c-mode-keymap ()
   (map! :localleader
         :map c-mode-base-map
-
+        "c" nil
         (:prefix ("c" . "code")
          :desc "clang format diff" "f" #'my/clang-format-diff)))
 
