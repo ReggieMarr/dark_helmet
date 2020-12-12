@@ -6,7 +6,7 @@
 Configuration that needs to be exectuted as close to the beginning as possible
 
 #+BEGIN_SRC emacs-lisp
-(setq comp-deferred-compilation t)
+;; (setq comp-deferred-compilation t)
 #+END_SRC
 
 * Config Development
