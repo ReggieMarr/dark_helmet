@@ -19,8 +19,8 @@
        ;;japanese
 
        :completion
-       company           ; the ultimate code completion backend
-       (helm +fuzzy)              ; the *other* search engine for love and life
+       company             ; the ultimate code completion backend
+       (helm +fuzzy)       ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        (ivy +fuzzy +icons) ; search engine for love and life +fuzzy +childframe
 
@@ -63,6 +63,7 @@
        ;;word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
+       undo              ; Undo system
        (dired +icons)             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        ;;ibuffer         ; interactive buffer management
@@ -165,7 +166,7 @@
 
        :app
        ;;calendar
-       ;;irc               ; how neckbeards socialize
+       irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
 
