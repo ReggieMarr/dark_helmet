@@ -123,8 +123,8 @@ Convenience tools to help with configuration development
 (evil-global-set-key 'normal (kbd "C-j") #'universal-argument)
 
 (map! :leader
-      :desc "universal arg" "j" #'universal-argument
-      :desc "universal 2arg" "k" #'(lambda () (interactive) (universal-argument) (universal-argument-more)))
+      :desc "universal arg" "j" #'universal-argument)
+      ;; :desc "universal 2arg" "k" #'(lambda () (interactive) (universal-argument) (universal-argument-more)))
 
 (map! :map universal-argument-map
       :prefix doom-leader-key     "j" #'universal-argument-more
@@ -286,6 +286,11 @@ Default starting place is the home directory."
 * Mail
 #+BEGIN_SRC emacs-lisp
 (require 'notmuch)
+(use-package! ace-window
+  :config
+  (map! :leader
+        "k" nil
+        :desc "ace-window" "k" #'ace-window))
 #+END_SRC
 * Navigation
 #+BEGIN_SRC emacs-lisp
