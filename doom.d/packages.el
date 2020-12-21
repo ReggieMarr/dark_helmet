@@ -49,3 +49,16 @@
 (package! ccls)
 (package! dap-mode)
 (package! vterm)
+
+(straight-use-package
+ '(webkit :type git :host github :repo "akirakyle/emacs-webkit"
+          :branch "main"
+          :files (:defaults "*.js" "*.css" "*.so")
+          :build ("make")))
+(package! webkit :recipe
+  (:host github
+   :repo "akirakyle/emacs-webkit"
+   :branch "main"
+   :files (:defaults "*.js" "*.css" "*.so")
+   :build ("make")
+   ))

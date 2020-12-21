@@ -666,6 +666,10 @@ concat (concat "\nstatic void " (concat snip_str "(int type, void *argPtr, int r
        :desc "Use the power of thesaurus" "t" #'powerthesaurus-lookup-word-dwim
        :desc "I'm an engineer not a writer" "s" #'ispell))
 
+(map! :leader
+       :desc "ace window" "k" #'ace-window)
+
+
 ;I wanna go fast
 
 (add-to-list 'load-path "~/src/elisp/fast-scroll") ; Or wherever you cloned it
@@ -787,3 +791,8 @@ Default starting place is the home directory."
 (defun my/magit-status-2 ()
   (interactive)
   (execute-extended-command 16 "magit-status"))
+
+; web kit stuffs(use-package webkit
+(use-package! webkit)
+(use-package! webkit-ace) ;; If you want link hinting
+(use-package! webkit-dark) ;; If you want to use the simple dark mode

@@ -323,3 +323,11 @@ good tips for mixing yassnippets and other
 https://www.etsy.com/ca/listing/860881167/tv-stand-legs-credenza-legs-shoe-storege?ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=record+drawers&ref=sr_gallery-1-3&frs=1
 Comment:
 This could be a cool idea for something I could make
+* [2020-12-14 Mon 09:48] Lambdas For C — Sort Of | Hackaday :c:programming:
+https://hackaday.com/2019/09/11/lambdas-for-c-sort-of/
+Comment:
+a neat way to use lambdas in C
+* [2020-12-14 Mon 09:50] Statement Exprs (Using the GNU Compiler Collection (GCC)) :c:programming:
+https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
+Comment:
+the gcc extension that shows braced group within expressions
