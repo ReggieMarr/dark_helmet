@@ -304,6 +304,10 @@ Default starting place is the home directory."
 ** TODO
 - [ ] SPC g g fails when run in ~/projects.. gotta find out why
 - Use 'q' instead of 'ESC' to go back on/delete magit buffers?
+* Mail
+#+BEGIN_SRC emacs-lisp
+;; (require 'notmuch)
+#+END_SRC
 * Misc
 ** Open current buffer path in file explorer
 #+BEGIN_SRC emacs-lisp
@@ -318,15 +322,15 @@ Default starting place is the home directory."
       (:prefix "w"
        :desc "open in explorer" "x"  #'my/open-buffer-path-in-explorer))
 #+END_SRC
-* Mail
+* Movement
 #+BEGIN_SRC emacs-lisp
-(require 'notmuch)
 (use-package! ace-window
   :config
   (map! :leader
         "k" nil
         :desc "ace-window" "k" #'ace-window))
 #+END_SRC
+
 * Navigation
 #+BEGIN_SRC emacs-lisp
 (use-package! ivy
