@@ -31,6 +31,36 @@ Convenience tools to help with configuration development
   (find-file "~/dark_helmet/doom.d/config.org"))
 #+END_SRC
 
+* C
+#+BEGIN_SRC emacs-lisp
+(use-package! cc-mode
+  :init
+  (message "cmode is NOICE")
+
+  :config
+  (require 'dap-mode)
+  (require 'dap-lldb)
+  (require 'dap-gdb-lldb)
+  (dap-gdb-lldb-setup) ;; Automatically install debug adapters if needed
+)
+#+END_SRC
+
+
+* Debugging
+Debugging using Dap Mode
+**Note the first time you use this you will have to call `dap-gdb-lldb-setup` to install the vscode extension
+#+BEGIN_SRC emacs-lisp
+;; (use-package! dap-mode
+;;   :init
+;;   (after! lsp-mode (require 'dap-mode) (require 'dap-lldb) (require 'dap-gdb-lldb))
+
+;;   :config
+
+  ;; :require (dap-lldb dap-gdb-lldb))
+;; 'dap-lldb 'dap-gdb-lldb
+
+#+END_SRC
+
 * Global Variables
 ** General Globals
 #+BEGIN_SRC emacs-lisp

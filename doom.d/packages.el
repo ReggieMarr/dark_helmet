@@ -20,6 +20,7 @@
 ;
 (package! ob-async) ;asynchonous evaluation of org code blocks
 (package! calfw)
+(package! dap-mode)
 (package! emojify)
 (package! org-jira)
 (package! flx-ido)
