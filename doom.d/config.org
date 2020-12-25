@@ -130,6 +130,11 @@ Debugging using Dap Mode
 (use-package dired
   :custom ((dired-listing-switches "-agho --group-directories-first"))
   :config
+  
+  (map! :map dired-mode-map
+        :localleader
+        "q" #'dired-toggle-read-only)
+
   (evil-collection-define-key 'normal 'dired-mode-map
     ;; "h" 'dired-single-up-directory
     ;; "l" 'dired-single-buffer)
