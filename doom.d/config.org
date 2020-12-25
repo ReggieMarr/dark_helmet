@@ -1282,8 +1282,12 @@ Not going to use for now.. pretty buggy
 - [ ] Learn avy jump (or whatever its called) to jump between windows
 - [ ] investigate org-edit-special (especially for tables)
 - [ ] Compiledb shouldn't actually compile the stuff.. y'know..
+- [ ] When jumping to lines - jump to the center (if not on screen)
 - [ ] Different org views of the same file?
 - [ ] ONly turn on emojify mode for certain buffers
+- [ ] When in find file mode, C-u clears to home directory
+- [ ] Find even faster way to complete members in an object (will select member and put an additonal dot?)
+- [ ] syslog mode?
 
 ** Other TODO
 - [[https://github.com/zsh-users/zsh-autosuggestions][zsh autocompletion]]
