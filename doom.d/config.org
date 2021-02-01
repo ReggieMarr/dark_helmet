@@ -257,6 +257,17 @@ Debugging using Dap Mode
       :prefix doom-leader-alt-key "j" #'universal-argument-more)
 #+END_SRC
 
+* FLX
+#+BEGIN_SRC emacs-lisp
+;; (require 'flx-ido)
+;; (ido-mode 1)
+;; (ido-everywhere 1)
+;; (flx-ido-mode 1)
+;; disable ido faces to see flx highlights.
+;; (setq ido-enable-flex-matching t)
+;; (setq ido-use-faces nil)
+#+END_SRC
+
 * Magit
 #+BEGIN_SRC emacs-lisp
 ;; (unmap! :leader
