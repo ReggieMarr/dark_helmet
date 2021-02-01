@@ -227,6 +227,16 @@ Debugging using Dap Mode
 
 (setq eaf-evil-leader-key "SPC")
 #+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(defun helm-files-insert-as-org-link (candidate)
+  (interactive)
+  (let* ((marked-files (helm-marked-candidates :with-wildcard t)))
+    (dolist (file marked-files)
+      (let ((target (expand-file-name (helm-substitute-in-filename file))))
+        (insert (format "[[file:%s] " file))))))
+#+END_SRC
+
 * Email
 ** Notmuch
 #+BEGIN_SRC emacs-lisp
