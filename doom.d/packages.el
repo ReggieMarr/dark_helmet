@@ -25,6 +25,7 @@
 (package! erc-image)
 (package! flyspell-correct-ivy)
 (package! org-jira)
+(package! org-latex-impatient)
 (package! flx-ido)
 (package! multiple-cursors)
 (package! quelpa-use-package)

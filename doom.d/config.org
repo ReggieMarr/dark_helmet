@@ -529,6 +529,24 @@ Default starting place is the home directory."
 ;; (custom-set-faces! '(org-block :background "#FF0000"))
 #+END_SRC
 
+** Latex
+For this minor mode to work, you need to install MathJax-node-cli via npm:
+
+cd $HOME
+npm install mathjax-node-cli
+
+You also need to set org-latex-impatient-tex2svg-bin to the location of the executable tex2svg
+
+#+BEGIN_SRC emacs-lisp
+(use-package! org-latex-impatient
+  :defer t
+  :hook (org-mode . org-latex-impatient-mode)
+  :init
+  (setq org-latex-impatient-tex2svg-bin
+        ;; location of tex2svg executable
+        "~/node_modules/mathjax-node-cli/bin/tex2svg"))
+#+END_SRC
+
 ** Org-Agenda
 #+BEGIN_SRC emacs-lisp
 (use-package! org
