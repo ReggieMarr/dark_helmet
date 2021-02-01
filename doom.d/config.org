@@ -75,8 +75,16 @@ Debugging using Dap Mode
 * View
 #+BEGIN_SRC emacs-lisp
 (setq doom-theme 'doom-monokai-classic ; Reminds me of Sublime-text & makes me feel at home
-      display-line-numbers-type nil) ; Improve performance & disable line #'s by default
-      ;; doom-font (font-spec :family "Emilbus Mono" :size 18)
+      display-line-numbers-type nil    ; Improve performance & disable line #'s by default
+      doom-font (font-spec :family "Hack" :size 14))
+      ;; doom-font (font-spec :family "Emilbus Mono" :size 10)
+      ;; doom-variable-pitch-font (font-spec :family "Fira Sans") ; inherits `doom-font''s :size
+      ;; doom-unicode-font (font-spec :family "Input Mono Narrow" :size 12)
+      ;; doom-big-font (font-spec :family "Fira Mono" :size 19))
+;; #<font-object "-SRC-Hack-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1">
+;; #<font-spec nil nil Ubuntu\ Mono nil nil nil nil nil 17 nil nil nil nil>
+;; (setq doom-theme 'doom-monokai-classic ; Reminds me of Sublime-text & makes me feel at home
+;;       display-line-numbers-type nil) ; Improve performance & disable line #'s by default
 #+END_SRC
 
 ** Buffer Narrowing
