@@ -308,6 +308,80 @@ Default starting place is the home directory."
 #+BEGIN_SRC emacs-lisp
 ;; (require 'notmuch)
 #+END_SRC
+* Matrix
+#+BEGIN_SRC emacs-lisp
+;; Bootstrap Quelpa
+;; (unless (package-installed-p 'quelpa)
+;;   (with-temp-buffer
+;;     (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
+;;     (eval-buffer)
+;;     (quelpa-self-upgrade)))
+;; (quelpa-use-package matrix-client
+;;   :quelpa (matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
+;;                          :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
+;; TODO figure out why this makes emacs mad
+;; (quelpa
+;;  '(quelpa-use-package
+;;    :fetcher git
+;;    :url "https://github.com/quelpa/quelpa-use-package.git"))
+;; (require 'quelpa-use-package)
+
+;; (use-package matrix-client
+;;   :quelpa (matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
+;;                          :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
+#+END_SRC
+* Messaging
+** ERC
+#+BEGIN_SRC emacs-lisp
+(defun my/erc ()
+  (interactive)
+  (erc :server "127.0.0.1" :port 6667 :nick "edyer"))
+
+(add-hook 'erc-after-connect
+          '(lambda (SERVER NICK)
+             (cond
+              ((string-match "localhost" SERVER)
+               (erc-message "PRIVMSG" "NickServ identify doom4lyfe")
+               (sit-for 5)
+               (message "noicee")
+               (reset-erc-track-mode))
+              ((string-match "oftc\\.net" SERVER)
+               (erc-message "PRIVMSG" "NickServ identify password2"))
+              ((string-match "jin\\.tekken" SERVER)
+               (erc-message "PRIVMSG" "#bitlbee identify password3")))))
+
+;; (add-hook 'erc-insert-post-hook
+;;           '(lambda ()
+;;              (message "this is a very long message that I want to display in the full message buffer so that it is persistent")
+;;              (message '(erc-find-parsed-property))))
+             ;; (message (erc-message-type-member
+             ;;           (or (erc-find-parsed-property)
+             ;;               (point-min))
+             ;;           erc-track-exclude-types))))
+
+(setq erc-track-exclude '("&facebook" "&bitlbee"))
+;; (setq erc-track-exclude-types '("NICK" "JOIN" "PART" "QUIT" "MODE" "USER" "OPER" "SERVICE" "TOPIC" "NAMES" "LIST" "INVITE" "KICK" "VERSION" "STATS" "LINKS" "TIME" "CONNECT" "TRACE" "ADMIN" "INFO" "SERVLIST" "SQUERY" "WHO" "WHOIS" "WHOWAS" "KILL" "PING" "PONG" "ERROR" "AWAY" "REHASH" "DIE" "RESTART" "SUMMON" "USERS" "WALLOPS" "USERHOST" "ISON" "333" "353"))
+(setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+                                    "324" "329" "332" "333" "353" "477"))
+(setq erc-track-exclude-server-buffer t) ;; Exclude messages sent by server when joining a channel
+
+;; Clears out annoying erc-track-mode stuff for when we don't care.
+;; Useful for when ChanServ restarts :P
+(defun reset-erc-track-mode ()
+  (interactive)
+  (setq erc-modified-channels-alist nil)
+  (erc-modified-channels-update))
+
+;; Display images inline
+;; (require 'erc-image)
+;; (add-to-list 'erc-modules "image")
+;; (erc-update-modules)
+;; (use-package! erc-image
+;;   :config
+;;   (add-to-list 'erc-modules 'image)
+;;   (erc-update-modules))
+#+END_SRC
+
 * Misc
 ** Open current buffer path in file explorer
 #+BEGIN_SRC emacs-lisp
@@ -1360,3 +1434,68 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 
 ** Other TODO
 - [[https://github.com/zsh-users/zsh-autosuggestions][zsh autocompletion]]
+* Bitlbee
+Install Bitlbee
+add to /etc/inetd.conf:
+6667    stream  tcp     nowait nobody /usr/local/sbin/bitlbee bitlbee
+
+You should create a directory where BitlBee can store it's data files. This should be the directory named after the value 'CONFIG' in Makefile.settings. The default is /var/lib/bitlbee, which can be created with the command
+
+mkdir -p /var/lib/bitlbee
+
+This directory has to be owned by the user that runs bitlbee. To make 'nobody' owner of this directory,
+
+run chown nobody /var/lib/bitlbee.
+
+Because things like passwords are saved in this directory, it's probably a good idea to make this directory owner-read-/writable only.
+
+-
+
+  Connect to bitlbee control channel (&bitlbee) -> 127.0.0.1/6667
+  #+BEGIN_SRC emacs-lisp
+(after! circe
+  (set-irc-server! "Freenode"
+    `(:tls t
+      :nick "dyereh"
+      :port 6667
+      :sasl-username "dyereh"
+      :sasl-password "doom4lyfe"
+      :channels ("#emacs-circe"))))
+  #+END_SRC
+
+ acc list - list all counts
+ /join &[account name] to join dedicated channel for specific account
+
+(setq circe-network-options
+      `(("Freenode"
+         :nick "dyereh"
+         :channels ("#emacs" "#emacs-circe")
+         :nickserv-password "doom4lyfe")))
+
+
+
+        acc add facebook dyereh@gmail.com *************
+        acc facebook on
+        acc list #list a all the account registered with bitlbee
+        /join &facebook #Join the facebook control channel
+        channel &facebook set #Show channel settings
+        channel &facebook set account facebook #Include contacts from facebook account
+        channel &facebook set fill_by account
+        channel &facebook set show_users online+,away,offline
+        channel &facebook set auto_join true
+
+        account facebook set group_chat_open all
+
+        channel list # list all channels
+        /part <channel name> # leave a channel
+        chat add facebook 1628051157236971 #chelsea-chanelle
+
+        account add discord dyereh@gmail.com ********
+        account discord on
+
+        chat list discord
+        chat add discord !1 #mydiscordchannel
+        chan #mydiscordchannel set auto_join true
+
+         root │     9  Fam.tech-tings              Fam Chat on the Cord/tech-tings
+         root │    10  Fam.general                 Fam Chat on the Cord/general

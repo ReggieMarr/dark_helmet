@@ -22,6 +22,7 @@
 (package! calfw)
 (package! dap-mode)
 (package! emojify)
+(package! erc-image)
 (package! flyspell-correct-ivy)
 (package! org-jira)
 (package! flx-ido)
