@@ -1540,7 +1540,12 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 - [ ] ONly turn on emojify mode for certain buffers
 - [ ] When in find file mode, C-u clears to home directory
 - [ ] Find even faster way to complete members in an object (will select member and put an additonal dot?)
+- [ ] Make it so evil state isn't per buffer
+- [ ] Integrate [[https://github.com/alphapapa/outorg][outorg]]g
+- [ ] Open files correctly in dired (xlxs etc)
 - [ ] syslog mode?
+- [ ] integrate [[https://github.com/alphapapa/magit-todos][magit todo's]]
+- [ ] rebuild with [[https://aur.archlinux.org/packages/emacs-pgtk-native-comp-git/][emacs-native-comp-pgtk]]
 
 ** Other TODO
 - [[https://github.com/zsh-users/zsh-autosuggestions][zsh autocompletion]]
