@@ -22,6 +22,7 @@
 (package! calfw)
 (package! dap-mode)
 (package! emojify)
+(package! flyspell-correct-ivy)
 (package! org-jira)
 (package! flx-ido)
 (package! multiple-cursors)
@@ -29,6 +30,7 @@
 (package! symbol-overlay)
 (package! tab-jump-out)
 (package! use-package)
+(package! wucuo) ; Fastest spell checking around
 (package! vterm)
 
 ;; (package! matrix-client

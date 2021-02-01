@@ -530,6 +530,75 @@ Not going to use for now.. pretty buggy
 ;;   (require 'pdf-continuous-scroll-mode))
 ;; (add-hook 'pdf-view-mode-hook 'pdf-continuous-scroll-mode)
 #+END_SRC
+* Spelling
+Install `aspell` as well as `aspell-en`
+
+Also install `flyspell-correct-ivy` for a nice completion experience
+#+BEGIN_SRC emacs-lisp
+(defun my/check-spelling ()
+  "Check spelling in a buffer from point"
+  (interactive)
+  (flyspell-prog-mode)
+  (flyspell-buffer)
+  (flyspell-correct-move (point) t 4))
+
+(use-package! flyspell
+  :config
+  (map! :leader
+      (:prefix "f"
+       :desc "Check spelling" "a"  #'my/check-spelling))
+
+  ;; This is an interesting hydra example
+  (defhydra hydra-spelling (:color blue)
+    "
+    ^
+  ^Spelling^          ^Errors^            ^Checker^
+  ^────────^──────────^──────^────────────^───────^───────
+  _q_ quit            _<_ previous        _c_ correction
+  ^^                  _>_ next            _d_ dictionary
+  ^^                  _f_ check           _m_ mode
+  ^^                  ^^                  ^^
+  "
+  ("q" nil)
+  ("<" flyspell-correct-previous :color pink)
+  (">" flyspell-correct-next :color pink)
+  ("c" ispell)
+  ("d" ispell-change-dictionary)
+  ("f" flyspell-buffer)
+  ("m" flyspell-mode))
+  )
+
+        ;; ispell-extra-args '("--sug-mode=ultra" "--lang=en_US" "--run-together" "--run-together-limit=16"))
+
+;; (use-package! wucuo
+;;   :init
+;;   (add-hook 'prog-mode-hook #'wucuo-start)
+;;   (add-hook 'text-mode-hook #'wucuo-start)
+;;   ;; (add-hook! '(prog-mode-hook)
+;;   ;;                #'flyspell-prog-mode)
+;;   :config
+;;   (setq
+;;         wucuo-debug t
+;;    ;; wucuo-flyspell-start-mode "fast" ; Only check spelling for currently visible region
+;;         ;; wucuo-update-interval 1          ; Interval (in seconds) to update spell check results
+;;         flyspell-issue-message-flag nil  ; Improve performance by preventing printing of messages for every word (when checking the entire buffer) as this can cause an enormous slowdown
+;;         ispell-program-name "hunspell"))
+
+  ;; (setq wucuo-spell-check-buffer-predicate
+  ;;     (lambda ()
+  ;;       (not (memq major-mode
+  ;;                  '(dired-mode
+  ;;                    log-edit-mode
+  ;;                    compilation-mode
+  ;;                    help-mode
+  ;;                    profiler-report-mode
+  ;;                    speedbar-mode
+  ;;                    gud-mode
+  ;;                    calc-mode
+  ;;                    Info-mode))))))
+
+#+END_SRC
+
 * Yas-Snippet
 #+BEGIN_SRC emacs-lisp
 ;; Add directory of personal snippets to path
