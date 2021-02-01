@@ -168,7 +168,6 @@ Debugging using Dap Mode
       (delete-other-windows))))
 #+END_SRC
 
-
 * Code
 ** ELISP
 #+BEGIN_SRC emacs-lisp
@@ -353,6 +352,7 @@ Debugging using Dap Mode
   (define-key magit-mode-map (kbd "C-M-j") 'magit-section-forward-sibling)
   (define-key magit-mode-map (kbd "C-M-k") 'magit-section-backward-sibling)
   (define-key magit-mode-map (kbd "C-K") 'magit-section-up)
+  (define-key magit-mode-map (kbd "M-RET") 'magit-diff-visit-file-worktree)
 
   ;; Section folding/expansion
   (define-key magit-mode-map (kbd "M-o") 'magit-section-toggle)
