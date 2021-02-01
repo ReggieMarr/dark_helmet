@@ -37,14 +37,21 @@
 (package! wucuo) ; Fastest spell checking around
 (package! vterm)
 
+;; (package! matrix-client)
+(package! matrix-client
+  :recipe (:host github :repo "alphapapa/matrix-client.el"))
+
 ;; (package! matrix-client
 ;;   :quelpa matrix-client ( :fetcher github :repo "alphapapa/matrix-client.el"
 ;;                          :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
-(package! matrix-client :recipe
-  (:host github
-   :repo "m-fleury/isabelle-release"
-   :branch "isabelle2019-more-vscode"
-   :files ("src/Tools/emacs-lsp/lsp-isar/lsp-*.el")))
+;; (package! matrix-client :recipe
+;;   (:host github
+;;    :repo "m-fleury/isabelle-release"
+;;    :branch "isabelle2019-more-vscode"
+;;    :files ("src/Tools/emacs-lsp/lsp-isar/lsp-*.el")))
+;; (package! matrix-client
+;;   :recipe (:fetcher github :repo "alphapapa/matrix-client.el"
+;;                          :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
 ;; Telega
 ;; (package! visual-fill-column)
 ;; (package! rainbow-identifiers)

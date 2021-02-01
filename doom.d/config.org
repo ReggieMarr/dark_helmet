@@ -1290,27 +1290,8 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 #+RESULTS:
 | ~/kinetis |
 
-* Matrix
 #+BEGIN_SRC emacs-lisp
-;; Bootstrap Quelpa
-;; (unless (package-installed-p 'quelpa)
-;;   (with-temp-buffer
-;;     (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
-;;     (eval-buffer)
-;;     (quelpa-self-upgrade)))
-;; (quelpa-use-package matrix-client
-;;   :quelpa (matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
-;;                          :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
-;; TODO figure out why this makes emacs mad
-;; (quelpa
-;;  '(quelpa-use-package
-;;    :fetcher git
-;;    :url "https://github.com/quelpa/quelpa-use-package.git"))
-;; (require 'quelpa-use-package)
 
-;; (use-package matrix-client
-;;   :quelpa (matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
-;;                          :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
 #+END_SRC
 
 * FLX
