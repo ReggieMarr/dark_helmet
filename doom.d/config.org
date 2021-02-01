@@ -1459,40 +1459,6 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 ;;                 'eide-smart-tab-jump-out-or-indent)
 #+END_SRC
 
-* Emojify
-#+BEGIN_SRC emacs-lisp
-(use-package emojify
-  :hook (after-init . global-emojify-mode))
-;; (setq emojify-inhibit-major-modes
-;;         (cl-union emojify-inhibit-major-modes
-;;                   '(cider-mode
-;;                     cider-repl-mode
-;;                     cider-test-report-mode
-;;                     sql-mode
-;;                     term-mode
-;;                     web-mode
-;;                     yaml-mode))
-;;         emojify-prog-contexts "comments"))
-#+END_SRC
-
-* EAF
-#+BEGIN_SRC emacs-lisp
-(use-package eaf
-  :load-path "~/dark_helmet/packages/emacs-application-framework"
-  :custom
-  (eaf-find-alternate-file-in-dired t)
-  :config
-  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key take_photo "p" eaf-camera-keybinding))
-
-(require 'eaf-evil)
-
-;; (setq eaf-evil-leader-keymap  spacemacs-cmds)
-
-(setq eaf-evil-leader-key "SPC")
-#+END_SRC
-
 * TODO's
 ** Keybind to go to org file associate with directory or create one if it doesn't exist
 *** yes
