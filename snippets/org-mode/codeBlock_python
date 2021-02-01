@@ -3,5 +3,6 @@
 # key: cp
 # uuid:codeBlock_python
 # --
-#+BEGIN_SRC python$0
+#+BEGIN_SRC python
+$0
 #+END_SRC
