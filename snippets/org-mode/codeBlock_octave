@@ -3,6 +3,6 @@
 # key: co
 # uuid:codeBlock_octave
 # --
-#+BEGIN_SRC octave :results output
+#+BEGIN_SRC octave :results output :exports both
 $0
 #+END_SRC
