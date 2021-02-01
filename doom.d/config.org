@@ -254,6 +254,22 @@ Debugging using Dap Mode
 #+END_SRC
 
 
+* Emojify
+#+BEGIN_SRC emacs-lisp
+(use-package emojify
+  :hook (after-init . global-emojify-mode))
+;; (setq emojify-inhibit-major-modes
+;;         (cl-union emojify-inhibit-major-modes
+;;                   '(cider-mode
+;;                     cider-repl-mode
+;;                     cider-test-report-mode
+;;                     sql-mode
+;;                     term-mode
+;;                     web-mode
+;;                     yaml-mode))
+;;         emojify-prog-contexts "comments"))
+#+END_SRC
+
 * Evil
 #+BEGIN_SRC emacs-lisp
 (evil-global-set-key 'normal (kbd "C-j") #'universal-argument)
