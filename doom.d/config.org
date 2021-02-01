@@ -1303,8 +1303,13 @@ Also install `flyspell-correct-ivy` for a nice completion experience
         "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f Make213371 \" && scp 213371-01X.axf edyer@pyrite:/home/bdi3000/edyer"
 
         ;; IBST
+        "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f Make231857 -j \" && scp 231857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
         "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f Make231857 -B -j \" && scp 231857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
         "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f Make231857 -B > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt && scp 231857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
+
+        ;; SZLC
+
+        "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f Make75868 -B -j \" && scp 75868-01X.axf edyer@pyrite:/home/bdi3000/edyer"
 
         "cd ~/kinetis && compiledb make -f MakeIBST_linux -B && ./ibstApp_linux"
         "cd ~/kinetis && compiledb -n make -B -f MakeIBST_linux"
