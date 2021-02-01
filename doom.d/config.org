@@ -19,8 +19,8 @@ Convenience tools to help with configuration development
 (map! :leader
       (:prefix ("e" . "emacs")
        :desc "reload-config" "r" #'my/reload-config
-       :desc "open-config" "c" #'my/open-config)
-      )
+       :desc "open-config" "c" #'my/open-config
+       :desc "eval-last-sexp" "e" #'eval-last-sexp))
 
 (defun my/reload-config ()
   (interactive)
@@ -44,7 +44,6 @@ Convenience tools to help with configuration development
   (dap-gdb-lldb-setup) ;; Automatically install debug adapters if needed
 )
 #+END_SRC
-
 
 * Debugging
 Debugging using Dap Mode
