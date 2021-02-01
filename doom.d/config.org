@@ -8,8 +8,8 @@ Configuration that needs to be exectuted as close to the beginning as possible
 #+BEGIN_SRC emacs-lisp
 ;; (setq comp-deferred-compilation t)
 ;; Recursively add subdirectories to the load path
-(let ((default-directory  "~/dark_helmet/packages/"))
-  (normal-top-level-add-subdirs-to-load-path))
+;; (let ((default-directory  "~/dark_helmet/packages/"))
+;;   (normal-top-level-add-subdirs-to-load-path))
 #+END_SRC
 
 * Build
