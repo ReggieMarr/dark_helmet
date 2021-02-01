@@ -153,6 +153,28 @@ Debugging using Dap Mode
   (setq dired-recursive-deletes "top"))
 #+END_SRC
 
+** File extensions
+#+BEGIN_SRC emacs-lisp
+#+END_SRC
+
+
+* EAF
+#+BEGIN_SRC emacs-lisp
+(use-package eaf
+  :load-path "~/dark_helmet/packages/emacs-application-framework"
+  :custom
+  (eaf-find-alternate-file-in-dired t)
+  :config
+  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key take_photo "p" eaf-camera-keybinding))
+
+(require 'eaf-evil)
+
+;; (setq eaf-evil-leader-keymap  spacemacs-cmds)
+
+(setq eaf-evil-leader-key "SPC")
+#+END_SRC
 * Email
 ** Notmuch
 #+BEGIN_SRC emacs-lisp
