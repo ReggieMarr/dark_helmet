@@ -580,7 +580,7 @@ Default starting place is the home directory."
         "u" #'outline-up-heading
 
         ";" #'org-edit-special
-        
+
         ;;Narrowing
         "n" nil ;; unmap default o mapping
         (:prefix ("n" . "narrow")
@@ -657,7 +657,18 @@ Default starting place is the home directory."
   (require 'color)
   (custom-set-faces! `(org-block :background
                                  ,(color-darken-name
-                                   (face-attribute 'default :background) 2))))
+                                   (face-attribute 'default :background) 2)))
+
+  (setq org-babel-default-header-args '((:session . "none") (:results . "replace output") (:exports . "both") (:cache . "no") (:hlines . "no") (:tangle . "no"))))
+;;  (setq org-babel-default-header-args
+;; ((:session . "none")
+;;  (:results . "replace")
+;;  (:exports . "code")
+;;  (:cache . "no")
+;;  (:noweb . "no")
+;;  (:hlines . "no")
+;;  (:tangle . "no")))
+;;   )
 ;;   (custom-set-faces! `(org-block :background ,(doom-darken 'bg 0.4))))
 ;;https://github.com/hlissner/emacs-doom-themes/blob/master/themes/doom-one-theme.el#L36
 ;; (custom-set-faces! '(org-block :background "#FF0000"))
