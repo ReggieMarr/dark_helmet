@@ -137,10 +137,13 @@ Debugging using Dap Mode
 (use-package dired
   :custom ((dired-listing-switches "-agho --group-directories-first"))
   :config
-  
+
   (map! :map dired-mode-map
         :localleader
         "q" #'dired-toggle-read-only)
+
+  ;; (add-to-list 'dired-guess-shell-alist-user '("\\.xlsx\\'" "xdg-open"))
+  ;; (add-to-list 'dired-guess-shell-alist-user '("\\.xlsb\\'" "xdg-open"))
 
   (evil-collection-define-key 'normal 'dired-mode-map
     ;; "h" 'dired-single-up-directory
