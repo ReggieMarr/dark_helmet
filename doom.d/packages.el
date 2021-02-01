@@ -24,6 +24,7 @@
 (package! emojify)
 (package! erc-image)
 (package! flyspell-correct-ivy)
+(package! nov)
 (package! org-jira)
 (package! org-latex-impatient)
 (package! flx-ido)

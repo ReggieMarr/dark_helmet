@@ -152,6 +152,13 @@ Debugging using Dap Mode
   (setq message-kill-buffer-on-exit t) ;; Kills buffer after sending an email (otherwise sent message buffers would accumulate)
   )
 #+END_SRC
+* EPUB
+#+BEGIN_SRC emacs-lisp
+(use-package! nov
+  :config
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+#+END_SRC
+
 
 * Evil
 #+BEGIN_SRC emacs-lisp
