@@ -1314,6 +1314,7 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 #+END_SRC
 
 * FLX
+* Semantic
 #+BEGIN_SRC emacs-lisp
 ;; (require 'flx-ido)
 ;; (ido-mode 1)
@@ -1322,6 +1323,12 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 ;; disable ido faces to see flx highlights.
 ;; (setq ido-enable-flex-matching t)
 ;; (setq ido-use-faces nil)
+(use-package! semantic
+    :init
+    (add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
+    (semantic-mode 1)
+    (require 'stickyfunc-enhance)
+  )
 #+END_SRC
 
 * Telega

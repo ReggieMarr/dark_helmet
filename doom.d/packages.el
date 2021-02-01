@@ -31,6 +31,7 @@
 (package! multiple-cursors)
 (package! quelpa-use-package)
 (package! symbol-overlay)
+(package! stickyfunc-enhance)
 (package! tab-jump-out)
 (package! use-package)
 (package! wucuo) ; Fastest spell checking around
