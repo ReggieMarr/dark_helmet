@@ -261,7 +261,7 @@ currently clocked-in org-mode task."
         :desc "Open std term"    "T"  #'open-std-terminal
         :desc "Go to std term"   "t"  #'find-std-terminal))
 
-(use-package symbol-overlay)
+;(use-package symbol-overlay)
 
 (use-package nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
@@ -375,8 +375,8 @@ currently clocked-in org-mode task."
 )
 
 ;; LSP
-(load "~/.doom.d/ccls_lspCfg.el")
-;; (load "~/.doom.d/clangd_lspCfg.el")
+;; (load "~/.doom.d/ccls_lspCfg.el")
+(load "~/.doom.d/clangd_lspCfg.el")
 
 ;; Window Navigation (faster using hydras)
 ;; (defhydra hydra-move (:body-pre (evil-window-left 1))
@@ -432,20 +432,26 @@ currently clocked-in org-mode task."
   (setq compilation-auto-jump-to-first-error 1)
         (setq compile-commands
         '("docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=- -j -B\" && scp /home/reggiemarr/kinetis/231857-01-.axf rmarr@pyrite:/home/bdi3000/rmarr/"
-                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
-                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=Y -j -B\""
-                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\""
-                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make217750 SW_REV=Y -j -B\""
-                "cd ~/kinetis && docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\" | compiledb"
-                "cd ~/kinetis && docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=Y -j -B\" | compiledb"
-                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeLibraryModule SW_REV=X -j -B\""
-                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeTowerK60F SW_REV=X -j -B\""
-                "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make75177 SW_REV=Y -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
-                "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 77619-01X\""
-                "docker exec -i bob /bin/bash -c \"cd /shared/release && make.py 76617-02X -B | compiledb\""
-                "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 227269-01X -B\""
-                "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 77340-01X -B\""
-                ))
+          "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
+          "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j \" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
+          "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=Y -j -B\""
+          "cd ~/kinetis && docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\""
+          "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make217750 SW_REV=Y -j -B\""
+          "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
+          "ssh rmarr@pyrite 'cd ~/kinetis && make -f Make231857 SW_REV=X -j -B && cp -f /home/rmarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/'"
+          "ssh rmarr@pyrite 'cd ~/kinetis && make -f Make231857 SW_REV=X -j -B'"
+          "cd ~/kinetis && docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=X -j -B\" | compiledb"
+          "cd ~/kinetis && docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make231857 SW_REV=Y -j -B\" | compiledb"
+          "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeLibraryModule SW_REV=X -j -B\""
+          "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeTowerK60F SW_REV=X -j -B\""
+          "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make75177 SW_REV=Y -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
+          "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 77619-01X\""
+          "docker exec -i bob /bin/bash -c \"cd /shared/release && make.py 76617-02X -B | compiledb\""
+          "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 227269-01X -B\""
+          "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 77340-01X -B\""
+          "cd ~/release && docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 76507-11X -B\""
+          "cd ~/release && docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 76507-11X -B\" | compiledb"
+               ))
 (defun my/ivy/compile ()
   (interactive)
   (ivy-read "compile-command: " compile-commands
@@ -796,3 +802,183 @@ Default starting place is the home directory."
 (use-package! webkit)
 (use-package! webkit-ace) ;; If you want link hinting
 (use-package! webkit-dark) ;; If you want to use the simple dark mode
+
+;; See the above explination in the Background section
+;; This must be set before webkit.el is loaded so certain hooks aren't installed
+;; (setq webkit-own-window t)
+
+;; Set webkit as the default browse-url browser
+(setq browse-url-browser-function 'webkit-browse-url)
+
+;; Force webkit to always open a new session instead of reusing a current one
+;; (setq webkit-browse-url-force-new t)
+
+;; Globally disable javascript
+;; (add-hook 'webkit-new-hook #'webkit-enable-javascript)
+
+;; Override the "loading:" mode line indicator with an icon from `all-the-icons.el'
+;; You could also use a unicode icon like ↺
+(defun webkit--display-progress (progress)
+  (setq webkit--progress-formatted
+        (if (equal progress 100.0)
+            ""
+          (format "%s%.0f%%  " (all-the-icons-faicon "spinner") progress)))
+  (force-mode-line-update))
+
+;; Set action to be taken on a download request. Predefined actions are
+;; `webkit-download-default', `webkit-download-save', and `webkit-download-open'
+;; where the save function saves to the download directory, the open function
+;; opens in a temp buffer and the default function interactively prompts.
+(setq webkit-download-action-alist '(("\\.pdf\\'" . webkit-download-open)
+                                     ("\\.png\\'" . webkit-download-save)
+                                     (".*" . webkit-download-default)))
+
+;; Globally use a proxy
+;; (add-hook 'webkit-new-hook (lambda () (webkit-set-proxy "socks://localhost:8000")))
+
+;; Globally use the simple dark mode
+(setq webkit-dark-mode t)
+(use-package evil-collection-webkit
+ :config
+ (evil-collection-xwidget-setup))
+
+(use-package! matrix-client)
+
+(use-package! docker
+  :bind ("C-c d" . docker))
+
+(setq org-todo-keywords '((sequence "TODO(t)" "START(s)" "INPROGRESS(i)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")
+ (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")))
+
+(use-package! python-pytest)
+(setq lsp-enable-links nil)
+(use-package helm-lsp
+  :after (lsp-mode)
+  :commands (helm-lsp-workspace-symbol)
+  :init (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
+
+(use-package! lsp-mode
+  :diminish (lsp-mode . "lsp")
+  :bind (:map lsp-mode-map
+    ("C-c C-d" . lsp-describe-thing-at-point))
+  :hook ((python-mode . #'lsp-deferred)
+    (js-mode . #'lsp-deferred)
+    (go-mode-hook . #'lsp-deferred))
+  :init
+  (setq lsp-auto-guess-root t       ; Detect project root
+   lsp-log-io nil
+   lsp-enable-indentation t
+   lsp-enable-imenu t
+   lsp-keymap-prefix "C-l"
+   lsp-file-watch-threshold 500
+   lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
+
+  (defun lsp-on-save-operation ()
+    (when (or (boundp 'lsp-mode)
+         (bound-p 'lsp-deferred))
+      (lsp-organize-imports)
+      (lsp-format-buffer))))
+
+;; (require 'lsp-clients)
+
+;; (use-package! lsp-clients
+;;   :after (lsp-mode)
+;;   :init (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/")))
+
+(use-package! lsp-ui
+  :after (lsp-mode)
+  :commands lsp-ui-doc-hide
+  :bind (:map lsp-ui-mode-map
+         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+         ([remap xref-find-references] . lsp-ui-peek-find-references)
+         ("C-c u" . lsp-ui-imenu))
+  :init (setq lsp-ui-doc-enable t
+         lsp-ui-doc-use-webkit nil
+         lsp-ui-doc-header nil
+         lsp-ui-doc-delay 0.2
+         lsp-ui-doc-include-signature t
+         lsp-ui-doc-alignment 'at-point
+         lsp-ui-doc-use-childframe nil
+         lsp-ui-doc-border (face-foreground 'default)
+         lsp-ui-peek-enable t
+         lsp-ui-peek-show-directory t
+         lsp-ui-sideline-update-mode 'line
+         lsp-ui-sideline-enable t
+         lsp-ui-sideline-show-code-actions t
+         lsp-ui-sideline-show-hover nil
+         lsp-ui-sideline-ignore-duplicate t)
+  :config
+  (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
+
+  ;; `C-g'to close doc
+  (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
+
+  ;; Reset `lsp-ui-doc-background' after loading theme
+  (add-hook 'after-load-theme-hook
+       (lambda ()
+         (setq lsp-ui-doc-border (face-foreground 'default))
+         (set-face-background 'lsp-ui-doc-background
+                              (face-background 'tooltip))))
+
+  ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
+  ;; @see https://github.com/emacs-lsp/lsp-ui/issues/243
+  (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
+    (setq mode-line-format nil)))
+
+;; Debug
+(use-package! dap-mode
+  :diminish dap-mode
+  :after (lsp-mode)
+  :functions dap-hydra/nil
+  :bind (:map lsp-mode-map
+         ("<f5>" . dap-debug)
+         ("M-<f5>" . dap-hydra))
+  :hook ((dap-mode . dap-ui-mode)
+    (dap-session-created . (lambda (&_rest) (dap-hydra)))
+    (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))))
+
+(use-package! lsp-treemacs
+  :after (lsp-mode treemacs)
+  :commands lsp-treemacs-errors-list
+  :bind (:map lsp-mode-map
+         ("M-9" . lsp-treemacs-errors-list)))
+
+(use-package! treemacs
+  :commands (treemacs)
+  :after (lsp-mode))
+
+;Dap cfgs
+;; (dap-debug
+;;  (list :type "python"
+;;        :args ""
+;;        :cwd nil
+;;        :program "/home/reggiemarr/mim/mim/siml/system_if/tests/test_mx_types.py::TestFieldTypes::test_serialize_scaled_field_analog"
+;;        :module "pytest"
+;;        :request "launch"
+;;        :name "Run single test"))
+(require 'dap-python)
+(dap-register-debug-template "My App"
+ (list :type "python"
+       :args ""
+       :cwd nil
+       :program "/home/reggiemarr/mim/mim/siml/system_if/tests/test_mx_types.py::TestFieldTypes::test_serialize_scaled_field_analog"
+       :module "pytest"
+       :request "launch"
+       :name "Run single test"))
+
+;; (use-package
+;;   :load-path "~/Downloads/gitDownloads/manual_emacs_packages/transient-posframe/transient-posframe.el"
+;;   :config
+;;   (transient-posframe-mode))
+
+;for code compass
+(use-package! async)
+(use-package! dash)
+(use-package! f)
+(use-package! s)
+(use-package! simple-httpd)
+
+(use-package code-compass
+  :load-path "~/Downloads/gitDownloads/manual_emacs_packages/code-compass")
+
+(load "~/.doom.d/publish.el")

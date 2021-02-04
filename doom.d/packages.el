@@ -49,16 +49,35 @@
 (package! ccls)
 (package! dap-mode)
 (package! vterm)
+(package! nov)
+(package! srefactor)
+(package! fast-scroll)
+(package! matrix-client)
+(package! docker)
+(package! docker-tramp)
+(package! lsp-mode)
+(package! lsp-python-ms)
+(package! lsp-ui)
+(package! shackle)
+(package! python-pytest)
+(package! weblorg)
+(package! htmlize)
 
 (straight-use-package
- '(webkit :type git :host github :repo "akirakyle/emacs-webkit"
-          :branch "main"
-          :files (:defaults "*.js" "*.css" "*.so")
-          :build ("make")))
-(package! webkit :recipe
+'(webkit :type git :host github :repo "akirakyle/emacs-webkit"
+         :branch "main"
+         :files (:defaults "*.js" "*.css" "*.so")))
+         ;:build ("make")))
+;(package! webkit :recipe
+;  (:host github
+;   :repo "akirakyle/emacs-webkit"
+;   :branch "main"
+;   :files (:defaults "*.js" "*.css" "*.so")
+;   ))
+
+
+(package! matrix-client :recipe
   (:host github
-   :repo "akirakyle/emacs-webkit"
-   :branch "main"
-   :files (:defaults "*.js" "*.css" "*.so")
-   :build ("make")
-   ))
+   :repo "alphapapa/matrix-client.el"
+   :branch "master"
+   :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
