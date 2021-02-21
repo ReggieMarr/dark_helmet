@@ -27,6 +27,7 @@
 ;(setq use-package-always-ensure t) ;;Globally ensure that a package will be automatically installed
 
 (setq doom-localleader-key ";")
+(setq org-startup-with-inline-images t)
 
 ;; ORG MODE
 (add-hook! 'evil-org-mode-hook 'my/evil-org-mode-keybinds)
@@ -857,13 +858,64 @@ Default starting place is the home directory."
   :commands (helm-lsp-workspace-symbol)
   :init (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
 
+(use-package lsp-pyright
+  :ensure t
+  :after python
+  :config
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-tramp-connection (lambda ()
+                                                            (cons "pyright-langserver"
+                                                                  lsp-pyright-langserver-command-args)))
+                    :major-modes '(python-mode)
+                    :remote? t
+                    :server-id 'pyright-remote
+                    :multi-root lsp-pyright-multi-root
+                    :initialization-options (lambda () (ht-merge (lsp-configuration-section "pyright")
+                                                            (lsp-configuration-section "python")))
+                    :initialized-fn (lambda (workspace)
+                                      (with-lsp-workspace workspace
+                                        (lsp--set-configuration
+                                         (make-hash-table :test 'equal))))
+                    :download-server-fn (lambda (_client callback error-callback _update?)
+                                          (lsp-package-ensure 'pyright callback error-callback))
+                    :notification-handlers (lsp-ht ("pyright/beginProgress" 'lsp-pyright--begin-progress-callback)
+                                                   ("pyright/reportProgress" 'lsp-pyright--report-progress-callback)
+                                                   ("pyright/endProgress" 'lsp-pyright--end-progress-callback)))))
 (use-package! lsp-mode
   :diminish (lsp-mode . "lsp")
   :bind (:map lsp-mode-map
     ("C-c C-d" . lsp-describe-thing-at-point))
-  :hook ((python-mode . #'lsp-deferred)
-    (js-mode . #'lsp-deferred)
-    (go-mode-hook . #'lsp-deferred))
+  :config
+  ;; make sure we have lsp-imenu everywhere we have LSP
+  (require 'lsp-ui-imenu)
+  (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)
+  ;; get lsp-python-enable defined
+  ;; NB: use either projectile-project-root or ffip-get-project-root-directory
+  ;;     or any other function that can be used to find the root directory of a project
+  ;; (lsp-define-stdio-client lsp-python "python"
+  ;;                          #'projectile-project-root
+  ;;                          '("pyright"))
+        (lsp-register-client
+        (make-lsp-client :new-connection (lsp-stdio-connection "pyls")
+                        :major-modes '(python-mode)
+                        :server-id 'pyls))
+  ;; make sure this is activated when python-mode is activated
+  ;; lsp-python-enable is created by macro above
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (lsp-python-enable)))
+
+  ;; lsp extras
+  (use-package lsp-ui
+    :ensure t
+    :config
+    (setq lsp-ui-sideline-ignore-duplicate t)
+    (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+  ;;(use-package company-lsp
+  ;;  :config
+  ;;  (push 'company-lsp company-backends))
+
   :init
   (setq lsp-auto-guess-root t       ; Detect project root
    lsp-log-io nil
@@ -877,7 +929,8 @@ Default starting place is the home directory."
     (when (or (boundp 'lsp-mode)
          (bound-p 'lsp-deferred))
       (lsp-organize-imports)
-      (lsp-format-buffer))))
+      (lsp-format-buffer)))
+  )
 
 ;; (require 'lsp-clients)
 
@@ -937,6 +990,35 @@ Default starting place is the home directory."
     (dap-session-created . (lambda (&_rest) (dap-hydra)))
     (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))))
 
+(use-package! python-mode
+  :config
+  (require 'dap-python))
+
+(define-minor-mode +dap-running-session-mode
+  "A mode for adding keybindings to running sessions"
+  nil
+  nil
+  (make-sparse-keymap)
+  (evil-normalize-keymaps) ;; if you use evil, this is necessary to update the keymaps
+  ;; The following code adds to the dap-terminated-hook
+  ;; so that this minor mode will be deactivated when the debugger finishes
+  (when +dap-running-session-mode
+    (let ((session-at-creation (dap--cur-active-session-or-die)))
+      (add-hook 'dap-terminated-hook
+                (lambda (session)
+                  (when (eq session session-at-creation)
+                    (+dap-running-session-mode -1)))))))
+
+        ;; Activate this minor mode when dap is initialized
+        (add-hook 'dap-session-created-hook '+dap-running-session-mode)
+
+        ;; Activate this minor mode when hitting a breakpoint in another file
+        (add-hook 'dap-stopped-hook '+dap-running-session-mode)
+
+        ;; Activate this minor mode when stepping into code in another file
+        (add-hook 'dap-stack-frame-changed-hook (lambda (session)
+                                                (when (dap--session-running session)
+                                                (+dap-running-session-mode 1))))
 (use-package! lsp-treemacs
   :after (lsp-mode treemacs)
   :commands lsp-treemacs-errors-list
@@ -982,3 +1064,9 @@ Default starting place is the home directory."
   :load-path "~/Downloads/gitDownloads/manual_emacs_packages/code-compass")
 
 (load "~/.doom.d/publish.el")
+
+(setq evil-snipe-scope 'whole-visible)
+
+(use-package! anaconda-mode)
+
+(setq org-src-window-setup 'current-window)

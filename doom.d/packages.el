@@ -62,6 +62,11 @@
 (package! python-pytest)
 (package! weblorg)
 (package! htmlize)
+(package! anaconda-mode)
+(package! pyimport)
+(package! py-isort)
+(package! company-jedi)
+(package! company-lsp)
 
 (straight-use-package
 '(webkit :type git :host github :repo "akirakyle/emacs-webkit"
