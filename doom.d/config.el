@@ -122,6 +122,47 @@ currently clocked-in org-mode task."
   (interactive)
   (org-capture nil "f"))
 
+(after! org
+        (defvar yt-iframe-format
+        ;; You may want to change your width and height.
+        (concat "<iframe width=\"440\""
+                " height=\"335\""
+                " src=\"https://www.youtube.com/embed/%s\""
+                " frameborder=\"0\""
+                " allowfullscreen>%s</iframe>"))
+
+        (org-add-link-type
+        "yt"
+        (lambda (handle)
+        (browse-url
+        (concat "https://www.youtube.com/embed/"
+                handle)))
+        (lambda (path desc backend)
+        (cl-case backend
+        (html (format yt-iframe-format
+                        path (or desc "")))
+        (latex (format "\href{%s}{%s}"
+                        path (or desc "video"))))))
+        ;;
+        ;; https://www.youtube.com/watch?v=AAuQFz1CgNY&feature=emb_logo
+        (defvar plotly-iframe-format
+        ;; You may want to change your width and height.
+        (concat "<iframe width=\"1200\""
+                " height=\"850\""
+                " src=\"%s\""
+                " frameborder=\"0\""
+                " allowfullscreen>%s</iframe>"))
+
+        (org-add-link-type
+        "plotly"
+        (lambda (handle)
+        (browse-url handle))
+        (lambda (path desc backend)
+        (cl-case backend
+        (html (format plotly-iframe-format
+                        path (or desc "")))
+        )))
+)
 
 ;(add-to-list 'org-capture-templates
 ;            '("c" ;Key used to select this template
@@ -887,6 +928,9 @@ Default starting place is the home directory."
     ("C-c C-d" . lsp-describe-thing-at-point))
   :config
   ;; make sure we have lsp-imenu everywhere we have LSP
+  (setq lsp-completion-provider :capf)
+  (setq lsp-idle-delay 0.25)
+  (setq gc-cons-threshold 100000000)
   (require 'lsp-ui-imenu)
   (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)
   ;; get lsp-python-enable defined
@@ -896,14 +940,14 @@ Default starting place is the home directory."
   ;;                          #'projectile-project-root
   ;;                          '("pyright"))
         (lsp-register-client
-        (make-lsp-client :new-connection (lsp-stdio-connection "pyls")
+        (make-lsp-client :new-connection (lsp-stdio-connection "pyright")
                         :major-modes '(python-mode)
-                        :server-id 'pyls))
+                        :server-id 'pyright))
   ;; make sure this is activated when python-mode is activated
   ;; lsp-python-enable is created by macro above
-  (add-hook 'python-mode-hook
-            (lambda ()
-              (lsp-python-enable)))
+  ;; (add-hook 'python-mode-hook
+  ;;           (lambda ()
+  ;;             (lsp-python-enable)))
 
   ;; lsp extras
   (use-package lsp-ui
@@ -989,10 +1033,6 @@ Default starting place is the home directory."
   :hook ((dap-mode . dap-ui-mode)
     (dap-session-created . (lambda (&_rest) (dap-hydra)))
     (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))))
-
-(use-package! python-mode
-  :config
-  (require 'dap-python))
 
 (define-minor-mode +dap-running-session-mode
   "A mode for adding keybindings to running sessions"
