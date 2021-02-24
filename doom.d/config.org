@@ -12,46 +12,104 @@ Configuration that needs to be exectuted as close to the beginning as possible
 ;;   (normal-top-level-add-subdirs-to-load-path))
 #+END_SRC
 
+** Load path
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/dark_helmet/packages/emacs-webkit")
+#+END_SRC
+
+** Subprocess
+Had issues using xdg-open to open links in org files
+From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
+
+#+BEGIN_SRC emacs-lisp
+;; (setq process-connection-type nil)
+#+END_SRC
+
+* User interface
+#+BEGIN_SRC emacs-lisp
+(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+  (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+  (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+#+END_SRC
+
+* Debugging
+#+BEGIN_SRC emacs-lisp
+(use-package! command-log-mode
+  :config
+  (setq command-log-mode t
+        command-log-mode-window-font-size 1
+        command-log-mode-window-size 60))
+#+END_SRC
+
+
 * Build
 #+BEGIN_SRC emacs-lisp
 
 
 (use-package! transient
   :config
+  (setq my/build-directory/kinetis "~/kinetis"
+        my/build-directory/release "~/release")
+
   (transient-define-prefix my/build ()
     "Entry to invoke a build system"
     ["Execute build"
-     ("k" "kinetis" my/transient-suffix/build-kinetis)
+     ("k" "kinetis" my/build/kinetis)
      ("r" "release" my/ivy/compile)])
 
-  (transient-define-prefix my/transient-suffix/build-kinetis ()
+  (transient-define-prefix my/build/kinetis ()
     ["Build Kinetis"
      ["Args"
-      ("-B" "alway make" "--always-make")
+      ("-B" "always make" "--always-make")
       ("-j" "jobs" "--jobs")
-      ("-c" "compiledb" "compiledb")]
+      ("-C" "compiledb" "compiledb")]
      ["Project"
       ("c" "common servo" my/build-kinetis/ibst)
       ("t" "ibst" my/build-kinetis/ibst)]]))
 
 (setq kinetis-docker-build-premable "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis")
 
+        "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f Make231857 -B > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt && scp 231857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
+
+(defun my/common-elements (list1 list2)
+  "Return common elements between 2 lists"
+  (let ((common-elements))
+        (-each list1
+          (lambda (item) (if (member item list2) (setq common-elements (cons item common-elements))))
+    )
+        (symbol-value 'common-elements)
+  ))
+
+;; (my/common-elements '("neat" "cool" "wut") '("wow" "wut" "cool"))
+
 (transient-define-suffix my/build-kinetis/ibst (args)
-  (interactive (list (transient-args 'my/transient-suffix/build-kinetis)))
-  (print args)
+  (interactive (list (transient-args 'my/build/kinetis)))
+  ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
   )
+(transient-define-suffix my/build-kinetis/ibst (args)
+  (interactive (list (transient-args 'my/build/kinetis)))
+  ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
+  (let ((build-args (my/common-elements args '("--always-make" "--jobs")))
+        (move-to-directory (concat "cd " 'my/build-directory/kinetis))
+        ;; (docker-command (concat "docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f " "Make231857 " "-B " (if (member "compiledb" '("asdf" "compiledb")) "> buildlog.txt\"")))
+        ;; (docker-command (concat "Make231857 " "-B "))
+        ;; (print docker-command)
+        ;; (print build-args)
+    )
+  ))
 
 (transient-define-suffix my/build-kinetis/common-servo (args)
   (interactive (list (transient-args 'my/transient-suffix/build-kinetis)))
   (print args)
   )
 
-(defun my-args ()
-  (transient-args 'my/transient-build-kinetis))
+;; (defun my-args ()
+;;   (transient-args 'my/transient-build-kinetis))
 
-(transient-define-suffix my/test-suffix (args)
-  (interactive (list (my-args)))
-  (print args))
+;; (transient-define-suffix my/test-suffix (args)
+;;   (interactive (list (my-args)))
+;;   (print args))
 ;; (defun my/build-kinetis (args)
 ;;   (interactive (list (transient-args 'my/transient-build-kinetis)))
 ;;   (message args))
@@ -126,7 +184,7 @@ Debugging using Dap Mode
 
 * View
 #+BEGIN_SRC emacs-lisp
-(setq doom-theme 'doom-monokai-classic ; Reminds me of Sublime-text & makes me feel at home
+(setq doom-theme 'doom-palenight ;'doom-monokai-classic ; Reminds me of Sublime-text & makes me feel at home
       display-line-numbers-type nil    ; Improve performance & disable line #'s by default
       doom-font (font-spec :family "Hack" :size 14))
       ;; doom-font (font-spec :family "Emilbus Mono" :size 10)
@@ -174,7 +232,8 @@ Debugging using Dap Mode
 (setq doom-scratch-initial-major-mode 'lisp-interaction-mode)
 #+END_SRC
 
-* Dired
+* Files and Directories
+** Dired
 #+BEGIN_SRC emacs-lisp
 (map! :leader
       "x" nil
@@ -538,10 +597,77 @@ Default starting place is the home directory."
 (use-package! ivy
  :config
  (map! :leader
-     "A" #'ivy-switch-buffer))
+     "A" #'ivy-switch-buffer
+      "a" nil
+      (:prefix ("a" . "switch-to-buffer")
+       :desc "c"   "c"  #'(lambda () (interactive) (my/ivy-switch-buffer "c"))
+       :desc "org" "o"  #'(lambda () (interactive) (my/ivy-switch-buffer "org"))
+       :desc "el"  "e"  #'(lambda () (interactive) (my/ivy-switch-buffer "el")))))
+
+(defun my/ivy-switch-buffer (extension)
+  ;; Show available buffers for a given extension
+  (interactive)
+  (let ((completion-regexp-list (list (concat ".*\\." extension "$"))))
+  (ivy-read "Switch to buffer: " #'internal-complete-buffer
+            :keymap ivy-switch-buffer-map
+            :preselect (buffer-name (other-buffer (current-buffer)))
+            :action #'ivy--switch-buffer-action
+            :matcher #'ivy--switch-buffer-matcher
+            :caller 'ivy-switch-buffer)))
+
+(defun my/switch-to-next-buffer-with-same-extension ()
+  (interactive)
+(save-match-data ; is usually a good idea
+  (string-match "\\..*$" (buffer-name))))
+
+;; (save-match-data ; is usually a good idea
+;;       (and (string-match "\\(\\..*$\\).*" "eric.dyer@l3harris.com")
+;;            (setq user (match-string 1 "eric.dyer@l3harris.com")
+;;                  domain (match-string 1 "eric.dyer@l3harris.com") ) ))
 #+END_SRC
 
 * Org
+** Font & Bullets
+#+BEGIN_SRC emacs-lisp
+(use-package! org-superstar
+  :after org
+  :hook (org-mode . org-superstar-mode)
+  :custom
+  (org-superstar-remove-leading-stars t)
+  (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+;; Replace list hyphen with dot
+;; (font-lock-add-keywords 'org-mode
+;;                         '(("^ *\\([-]\\) "
+;;                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+;; Increase the size of various headings
+(set-face-attribute 'org-document-title nil :font "Cantarell" :weight 'bold :height 1.3)
+(dolist (face '((org-level-1 . 1.2)
+                (org-level-2 . 1.1)
+                (org-level-3 . 1.05)
+                (org-level-4 . 1.0)
+                (org-level-5 . 1.1)
+                (org-level-6 . 1.1)
+                (org-level-7 . 1.1)
+                (org-level-8 . 1.1)))
+  (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
+
+;; Make sure org-indent face is available
+(require 'org-indent)
+
+;; Ensure that anything that should be fixed-pitch in Org files appears that way
+(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+(set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+#+END_SRC
+
 ** General
 #+BEGIN_SRC emacs-lisp
 (add-hook! 'evil-org-mode-hook 'my/evil-org-mode-keybinds)
@@ -561,10 +687,10 @@ Default starting place is the home directory."
                                (file . find-file-other-window)
                                (wl . wl-other-frame)))
 
-  (map! :leader
-        "a" nil
-        (:prefix ("a" . "switch buffer")
-         :desc "org" "o" #'org-switchb))
+  ;; (map! :leader
+  ;;       "a" nil
+  ;;       (:prefix ("a" . "switch buffer")
+  ;;        :desc "org" "o" #'org-switchb))
 
  (evil-define-key* '(normal visual insert) org-mode-map
    (kbd "C-j") #'org-forward-element
@@ -657,7 +783,7 @@ Default starting place is the home directory."
   (require 'color)
   (custom-set-faces! `(org-block :background
                                  ,(color-darken-name
-                                   (face-attribute 'default :background) 2)))
+                                   (face-attribute 'default :background) 4)))
 
   (setq org-babel-default-header-args '((:session . "none") (:results . "replace output") (:exports . "both") (:cache . "no") (:hlines . "no") (:tangle . "no"))))
 ;;  (setq org-babel-default-header-args
@@ -898,6 +1024,73 @@ Also install `flyspell-correct-ivy` for a nice completion experience
   ;;        :desc "subtree" "s" #'org-narrow-to-subtree
   ;;        :desc "widen"   "w" #'widen))
 #+END_SRC
+
+* Web Browsing
+;; Also need to enable this
+;; (add-to-list 'load-path "/home/edyer/dark_helmet/packages/emacs-webkit")
+
+;; If you don't care so much about privacy and want to give your data to google
+(setq webkit-search-prefix "https://google.com/search?q=")
+
+;; ;; Specify a different set of characters use in the link hints
+;; ;; For example the following are more convienent if you use dvorak
+;; ;; (setq webkit-ace-chars "aoeuidhtns")
+
+;; ;; If you want history saved in a different place or
+;; ;; Set to `nil' to if you don't want history saved to file (will stay in memory)
+;; ;; (setq webkit-history-file "~/path/to/webkit-history")
+
+;; ;; If you want cookies saved in a different place or
+;; ;; Set to `nil' to if you don't want cookies saved
+;; ;; (setq webkit-cookie-file "~/path/to/cookies")
+
+;; ;; See the above explination in the Background section
+;; ;; This must be set before webkit.el is loaded so certain hooks aren't installed
+;; (setq webkit-own-window t)
+
+;; Set webkit as the default browse-url browser
+(setq browse-url-browser-function 'webkit-browse-url)
+
+;; ;; Force webkit to always open a new session instead of reusing a current one
+;; (setq webkit-browse-url-force-new t)
+
+;; ;; Globally disable javascript
+;; (add-hook 'webkit-new-hook #'webkit-enable-javascript)
+
+;; ;; Override the "loading:" mode line indicator with an icon from `all-the-icons.el'
+;; ;; You could also use a unicode icon like ↺
+;; (defun webkit--display-progress (progress)
+;;   (setq webkit--progress-formatted
+;;         (if (equal progress 100.0)
+;;             ""
+;;           (format "%s%.0f%%  " (all-the-icons-faicon "spinner") progress)))
+;;   (force-mode-line-update))
+
+;; ;; Set action to be taken on a download request. Predefined actions are
+;; ;; `webkit-download-default', `webkit-download-save', and `webkit-download-open'
+;; ;; where the save function saves to the download directory, the open function
+;; ;; opens in a temp buffer and the default function interactively prompts.
+;; (setq webkit-download-action-alist '(("\\.pdf\\'" . webkit-download-open)
+;;                                      ("\\.png\\'" . webkit-download-save)
+;;                                      (".*" . webkit-download-default))
+
+;; ;; Globally use a proxy
+;; ;; (add-hook 'webkit-new-hook (lambda () (webkit-set-proxy "socks://localhost:8000")))
+
+;; ;; Globally use the simple dark mode
+;; (setq webkit-dark-mode t)
+
+;; This is the bit I included
+;; (require 'webkit)
+;; (global-set-key (kbd "s-b") 'webkit) ;; Bind to whatever global key binding you want if you want
+;; (require 'webkit-ace) ;; If you want link hinting
+;; (require 'webkit-dark) ;; If you want to use the simple dark mode
+
+;; (use-package! webkit
+;;   :bind ("s-b" 'webkit)) ;; Bind to whatever global key binding you want if you want
+;; (use-package 'webkit-ace) ;; If you want link hinting
+;; (use-package 'webkit-dark) ;; If you want to use the simple dark mode
+
 * Vterm
 #+BEGIN_SRC emacs-lisp
 (use-package! vterm
@@ -997,10 +1190,13 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 ;;               ("v" . xwwp-follow-link)
 ;;               ("t" . xwwp-ace-toggle)))
 #+END_SRC
+
+#+RESULTS:
+
 * null a
 #+BEGIN_SRC emacs-lisp
-(map! :leader
-      "a" nil)
+;; (map! :leader
+;;       "a" nil)
 #+END_SRC
 * To organize
 #+BEGIN_SRC emacs-lisp
@@ -1069,8 +1265,7 @@ Also install `flyspell-correct-ivy` for a nice completion experience
     ;; :desc "Open vterm" "t"    #'vterm)
   (:prefix "f"
     ;; :desc "find-file-in-known-projects" "f" #'projectile-find-file-in-known-projects
-    :desc "counsel-find-file" "d" #'counsel-find-file)
-   :desc "switch-to-buffer" "a" #'switch-to-buffer)
+    :desc "counsel-find-file" "d" #'counsel-find-file))
 
 ;; ATOMIC-CHROME
 ;; (use-package atomic-chrome)
@@ -1307,6 +1502,8 @@ Also install `flyspell-correct-ivy` for a nice completion experience
         "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f Make231857 -B -j \" && scp 231857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
         "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f Make231857 -B > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt && scp 231857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
 
+        "maint -f /home/edyer/projects/GA/backups/sysbackup_sept15_1351.bak -s /home/edyer/projects/GA/backups/testScript.sc"
+
         ;; SZLC
 
         "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f Make75868 -B -j \" && scp 75868-01X.axf edyer@pyrite:/home/bdi3000/edyer"
@@ -1540,6 +1737,7 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 - [ ] ONly turn on emojify mode for certain buffers
 - [ ] When in find file mode, C-u clears to home directory
 - [ ] Find even faster way to complete members in an object (will select member and put an additonal dot?)
+- [ ] Disable company mode while in org tables & for #'s
 - [ ] Make it so evil state isn't per buffer
 - [ ] Integrate [[https://github.com/alphapapa/outorg][outorg]]g
 - [ ] Open files correctly in dired (xlxs etc)
@@ -1549,6 +1747,30 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 
 ** Other TODO
 - [[https://github.com/zsh-users/zsh-autosuggestions][zsh autocompletion]]
+* Building Emacs
+- clone emacs repo
+- change to feature/native-comp branch
+- use make clean/distclean to reset repo to a clean state (if it has already been built from/your are experiencing build issues)
+  + make clean -> removes binaries & object files
+  + make distclean -> deletes entire build directory - **REQUIRED** if you want to build with different config options
+- Configure emacs
+  ./autogen.sh
+
+./configure --prefix=$HOME/Desktop/emacs-native-comp-feb16 --with-modules --with-x-toolkit=gtk3 --without-xaw3d --with-imagemagick --with-cairo --with-xwidgets --with-modules --without-gconf --without-gsettings --with-nativecomp --with-pgtk
+
+  | option | description |
+  |--------+-------------|
+  |        | k           |
+--with-x-toolkit=gtk3 '--without-xaw3d
+--with-imagemagick
+--with-cairo
+--with-xwidgets
+--with-modules
+--without-gconf
+   --without-gsettings
+   --with-nativecomp
+   --with-pgtk
+
 * Bitlbee
 Install Bitlbee
 add to /etc/inetd.conf:
@@ -1614,3 +1836,64 @@ Because things like passwords are saved in this directory, it's probably a good 
 
          root │     9  Fam.tech-tings              Fam Chat on the Cord/tech-tings
          root │    10  Fam.general                 Fam Chat on the Cord/general
+* Debugging a frozen emacs
+
+When emacs freezes, run `pkill -SIGUSR2 emacs` in another terminal
+
+Event 1:
+#+BEGIN_SRC bash
+csDebugger entered--entering a function:
+* substitute-command-keys("Quit")
+  redisplay_internal\ \(C\ function\)()
+#+END_SRC
+
+Event 2: uable to get log
+Error during redisplay: (clear-minibuffer-message) signaled (quit)
+
+# echo "hello"
+# sleep 1
+# echo "how are you"
+# sleep 1
+# echo "doing well"
+# sleep 1
+# echo "goodbye"
+#+BEGIN_SRC shell :session test
+#+END_SRC
+
+#+RESULTS:
+: hello
+: [00m [01;32m[edyer@edyer[01;37m doom.d[01;32m]$[00m how are you
+: [00m [01;32m[edyer@edyer[01;37m doom.d[01;32m]$[00m doing well
+: [00m [01;32m[edyer@edyer[01;37m doom.d[01;32m]$[00m goodbye
+
+
+# import time
+# print("hello")
+# time.sleep(1)
+# print("world")
+# time.sleep(1)
+# print("goodbye")
+#+BEGIN_SRC python :session test-python
+#+END_SRC
+
+#+RESULTS:
+: hello
+: world
+: goodbye
+> cd ~/emacs-pgtk                                                                                                   resources
+> ls                                                                                                               emacs-pgtk
+emacs
+> cd emacs                                                                                                         emacs-pgtk
+> ./configure --prefix=$HOME/Desktop/emacs-native-comp-feb16                                         emacs -> pgtk-nativecomp
+--with-modules
+--with-x-toolkit=gtk3
+--without-xaw3d
+--with-imagemagick
+--with-cairo
+--with-xwidgets
+--with-modules
+--without-gconf
+--without-gsettings
+--with-nativecomp
+--with-pgtk
+

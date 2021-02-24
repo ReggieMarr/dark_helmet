@@ -4,3 +4,6 @@
 [submodule "packages/emacs-application-framework"]
 	path = packages/emacs-application-framework
 	url = https://github.com/manateelazycat/emacs-application-framework.git
+[submodule "packages/emacs-webkit"]
+	path = packages/emacs-webkit
+	url = https://github.com/akirakyle/emacs-webkit.git

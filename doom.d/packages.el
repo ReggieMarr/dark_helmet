@@ -20,6 +20,7 @@
 ;
 (package! ob-async) ;asynchonous evaluation of org code blocks
 (package! calfw)
+(package! command-log-mode)
 (package! dap-mode)
 (package! emojify)
 (package! erc-image)
@@ -27,6 +28,7 @@
 (package! nov)
 (package! org-jira)
 (package! org-latex-impatient)
+(package! org-superstar)
 (package! flx-ido)
 (package! multiple-cursors)
 (package! quelpa-use-package)
