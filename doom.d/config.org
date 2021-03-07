@@ -1,5 +1,7 @@
 #+TITLE: Erks Literate Config
 
+#+STARTUP: fold
+
 # #+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-bigblow.setup
 
 * Initialization
@@ -411,7 +413,7 @@ Debugging using Dap Mode
   (define-key magit-mode-map (kbd "C-M-j") 'magit-section-forward-sibling)
   (define-key magit-mode-map (kbd "C-M-k") 'magit-section-backward-sibling)
   (define-key magit-mode-map (kbd "C-K") 'magit-section-up)
-  (define-key magit-mode-map (kbd "M-RET") 'magit-diff-visit-file-worktree)
+  (define-key magit-mode-map (kbd "M-RET") 'magit-diff-visit-worktree-file)
 
   ;; Section folding/expansion
   (define-key magit-mode-map (kbd "M-o") 'magit-section-toggle)
@@ -589,7 +591,8 @@ Default starting place is the home directory."
   :config
   (map! :leader
         "k" nil
-        :desc "ace-window" "k" #'ace-window))
+        :desc "ace-window" "k" #'ace-window)
+  (setq aw-scope 'global))
 #+END_SRC
 
 * Navigation
@@ -666,6 +669,31 @@ Default starting place is the home directory."
 (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
 (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
 (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+
+(after! org
+        (defvar plotly-iframe-format
+        ;; You may want to change your width and height.
+        (concat "<iframe width=\"1200\""
+                " height=\"850\""
+                " src=\"%s\""
+                " frameborder=\"0\""
+                " allowfullscreen>%s</iframe>"))
+
+        (org-add-link-type
+        "plotly"
+        (lambda (handle)
+        (browse-url handle))
+        (lambda (path desc backend)
+        (cl-case backend
+        (html (format plotly-iframe-format
+                        path (or desc "")))))))
+#+END_SRC
+** Global Defaults
+#+BEGIN_SRC emacs-lisp
+(use-package! org
+  :config
+  (setq org-hide-block-startup t
+        org-startup-folded t))
 #+END_SRC
 
 ** General
@@ -1628,6 +1656,15 @@ Also install `flyspell-correct-ivy` for a nice completion experience
   ;; '(("h" evil-window-left "left")
   ;; ("l" evil-window-right "right")))
 
+#+END_SRC
+
+* Reddit
+#+BEGIN_SRC emacs-lisp
+(use-package! reddigg
+  :config
+  (setq org-confirm-elisp-link-function nil
+        reddigg-subs '(emacs starcraft))
+  )
 #+END_SRC
 
 * Semantic

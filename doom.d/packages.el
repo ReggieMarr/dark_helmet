@@ -32,6 +32,7 @@
 (package! flx-ido)
 (package! multiple-cursors)
 (package! quelpa-use-package)
+(package! reddigg)
 (package! symbol-overlay)
 (package! stickyfunc-enhance)
 (package! tab-jump-out)
