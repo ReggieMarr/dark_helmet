@@ -152,6 +152,11 @@ currently clocked-in org-mode task."
                 " src=\"%s\""
                 " frameborder=\"0\""
                 " allowfullscreen>%s</iframe>"))
+        (defvar plotly-img-format
+          (concat "\\begin{center}"
+                "\\includegraphics[width=.9\\linewidth]{%s}"
+                "\\label{fig:%s}"
+                "\\end{center}"))
 
         (org-add-link-type
         "plotly"
@@ -161,8 +166,11 @@ currently clocked-in org-mode task."
         (cl-case backend
         (html (format plotly-iframe-format
                         path (or desc "")))
-        )))
-)
+        (latex (format plotly-img-format
+                        (concat (substring path 0 -4) "png") (f-base path)))
+                        ;; (concat (substring path 0 -4) "png") (or desc "") (f-base path)))
+        ))
+))
 
 ;(add-to-list 'org-capture-templates
 ;            '("c" ;Key used to select this template
@@ -662,6 +670,7 @@ concat (concat "\nstatic void " (concat snip_str "(int type, void *argPtr, int r
     (global-set-key (kbd "M-RET b") 'srefactor-lisp-format-buffer)
 
 ;org jira
+(require 'org-jira)
 (setq jiralib-url "http://cesium/jira")
 
 ;eric says i need this
@@ -899,6 +908,19 @@ Default starting place is the home directory."
   :commands (helm-lsp-workspace-symbol)
   :init (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
 
+(after! lsp
+        (map! :leader
+        (:prefix "l"
+                :desc "find definition" "d" #'lsp-find-definition
+                :desc "find declaration" "D" #'lsp-find-declaration
+                (:prefix "u"
+                :desc "dap breakpoint toggle" "d" #'dap-breakpoint-toggle
+                :desc "dap repl" "r" #'dap-ui-repl
+                :desc "dap debug hydra" "u" #'dap-hydra
+                :desc "run last dap cfg" "l" #'dap-debug-last)
+                ))
+        )
+
 (use-package lsp-pyright
   :ensure t
   :after python
@@ -921,7 +943,10 @@ Default starting place is the home directory."
                                           (lsp-package-ensure 'pyright callback error-callback))
                     :notification-handlers (lsp-ht ("pyright/beginProgress" 'lsp-pyright--begin-progress-callback)
                                                    ("pyright/reportProgress" 'lsp-pyright--report-progress-callback)
-                                                   ("pyright/endProgress" 'lsp-pyright--end-progress-callback)))))
+                                                   ("pyright/endProgress" 'lsp-pyright--end-progress-callback))))
+        :hook (python-mode . (lambda ()
+                                (require 'lsp-pyright)
+                                (lsp))))
 (use-package! lsp-mode
   :diminish (lsp-mode . "lsp")
   :bind (:map lsp-mode-map
@@ -1110,3 +1135,127 @@ Default starting place is the home directory."
 (use-package! anaconda-mode)
 
 (setq org-src-window-setup 'current-window)
+
+(use-package dired
+  :custom ((dired-listing-switches "-agho --group-directories-first"))
+  :config
+  (evil-collection-define-key 'normal 'dired-mode-map
+    ;; "h" 'dired-single-up-directory
+    ;; "l" 'dired-single-buffer)
+    "h" 'dired-up-directory
+    "l" 'dired-find-file)
+  (setq dired-recursive-deletes "top"))
+
+;dired
+  (evil-collection-define-key 'normal 'peep-dired-mode-map
+        "j" 'peep-dired-next-file
+        "k" 'peep-dired-prev-file)
+
+(add-hook 'peep-dired-hook 'evil-normalize-keymaps)
+(defadvice org-sbe (around get-err-msg activate)
+  "Issue messages at errors."
+  (condition-case err
+      (progn
+    ad-do-it)
+    ((error debug)
+     (message "Error in sbe: %S" err)
+     (signal (car err) (cdr err)))))
+(defadvice sbe (before escape-args activate)
+  "Apply prin1 to argument values."
+  (mapc '(lambda (var) (setcdr var (list (prin1-to-string (cadr var))))) variables))
+
+(defun my/eww (url &optional arg buffer)
+  "Fetch URL and render the page.
+If the input doesn't look like an URL or a domain name, the
+word(s) will be searched for via `eww-search-prefix'.
+
+If called with a prefix ARG, use a new buffer instead of reusing
+the default EWW buffer.
+
+If BUFFER, the data to be rendered is in that buffer.  In that
+case, this function doesn't actually fetch URL.  BUFFER will be
+killed after rendering."
+  (interactive
+   (let ((uris (eww-suggested-uris)))
+     (list (read-string (format-prompt "Enter URL or keywords"
+                                       (and uris (car uris)))
+                        nil 'eww-prompt-history uris)
+           (prefix-numeric-value current-prefix-arg))))
+  (setq url (eww--dwim-expand-url url))
+  (switch-to-buffer
+   (cond
+    ((eq arg 4)
+     (generate-new-buffer "*eww*"))
+    ((eq major-mode 'eww-mode)
+     (current-buffer))
+    (t
+     (get-buffer-create "*eww*"))))
+  (eww-setup-buffer)
+  ;; Check whether the domain only uses "Highly Restricted" Unicode
+  ;; IDNA characters.  If not, transform to punycode to indicate that
+  ;; there may be funny business going on.
+  (let ((parsed (url-generic-parse-url url)))
+    (when (url-host parsed)
+      (unless (puny-highly-restrictive-domain-p (url-host parsed))
+        (setf (url-host parsed) (puny-encode-domain (url-host parsed)))))
+    ;; When the URL is on the form "http://a/../../../g", chop off all
+    ;; the leading "/.."s.
+    (when (url-filename parsed)
+      (while (string-match "\\`/[.][.]/" (url-filename parsed))
+        (setf (url-filename parsed) (substring (url-filename parsed) 3))))
+    (setq url (url-recreate-url parsed)))
+  (plist-put eww-data :url url)
+  (plist-put eww-data :title "")
+  (eww-update-header-line-format)
+  (let ((inhibit-read-only t))
+    (insert (format "Loading %s..." url))
+    (goto-char (point-min)))
+  (let ((url-mime-accept-string eww-accept-content-types))
+    (if buffer
+        (let ((eww-buffer (current-buffer)))
+          (with-current-buffer buffer
+            (eww-render nil url nil eww-buffer)))
+      (eww-retrieve url #'eww-render
+                    (list url nil (current-buffer))))))
+
+(defun toggle-emacs-browser ()
+    (interactive
+        (cond
+        ((eq major-mode 'webkit-mode) (my/eww (webkit--get-uri webkit--id)))
+        ((eq major-mode 'eww-mode) (webkit-browse-url (plist-get eww-data :url)))
+     )))
+
+
+(map! :leader
+      :desc "Toggle Emacs Browser" "t o" #'toggle-emacs-browser)
+
+(defun my/eww-follow-link (&optional external mouse-event)
+  "Browse the URL under point.
+If EXTERNAL is single prefix, browse the URL using
+`browse-url-secondary-browser-function'.
+
+If EXTERNAL is double prefix, browse in new buffer."
+  (interactive
+   (list current-prefix-arg last-nonmenu-event)
+   eww-mode)
+  (mouse-set-point mouse-event)
+  (let ((url (get-text-property (point) 'shr-url)))
+    (cond
+     ((not url)
+      (message "No link under point"))
+     ((string-match-p eww-use-browse-url url)
+      ;; This respects the user options `browse-url-handlers'
+      ;; and `browse-url-mailto-function'.
+      (my/eww url))
+     ((and (consp external) (<= (car external) 4))
+      (funcall browse-url-secondary-browser-function url)
+      (shr--blink-link))
+     ;; This is a #target url in the same page as the current one.
+     ((and (url-target (url-generic-parse-url url))
+	   (eww-same-page-p url (plist-get eww-data :url)))
+      (let ((dom (plist-get eww-data :dom)))
+	(eww-save-history)
+	(plist-put eww-data :url url)
+	(eww-display-html 'utf-8 url dom nil (current-buffer))))
+     (t
+      (eww-browse-url url external)))))

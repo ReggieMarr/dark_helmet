@@ -67,6 +67,7 @@
 (package! py-isort)
 (package! company-jedi)
 (package! company-lsp)
+(package! peep-dired)
 
 (straight-use-package
 '(webkit :type git :host github :repo "akirakyle/emacs-webkit"

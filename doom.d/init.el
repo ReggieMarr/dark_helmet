@@ -145,7 +145,7 @@ See the docstrings of `defalias' and `make-obsolete' for more details."
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ;
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-       ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
+       javascript        ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
        (latex +lsp)        ; writing papers in Emacs has never been so fun
@@ -159,6 +159,8 @@ See the docstrings of `defalias' and `make-obsolete' for more details."
        ;;ocaml             ; an objective camel
        (org                ; organize your plain life in plain text
         +dragndrop         ; drag & drop files/images into org buffers
+        +pretty
+        +pandoc
         +roam
         +noweb
         +protocol
