@@ -68,12 +68,14 @@
 (package! company-jedi)
 (package! company-lsp)
 (package! peep-dired)
+(package! org-web-tools)
+(package! ox-hugo)
 
-(straight-use-package
-'(webkit :type git :host github :repo "akirakyle/emacs-webkit"
-         :branch "main"
-         :files (:defaults "*.js" "*.css" "*.so")))
-         ;:build ("make")))
+;; (straight-use-package
+;; '(webkit :type git :host github :repo "akirakyle/emacs-webkit"
+;;          :branch "main"
+;;          :files (:defaults "*.js" "*.css" "*.so")
+;;          :build ("make")))
 ;(package! webkit :recipe
 ;  (:host github
 ;   :repo "akirakyle/emacs-webkit"

@@ -495,12 +495,11 @@ currently clocked-in org-mode task."
           "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeLibraryModule SW_REV=X -j -B\""
           "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f MakeTowerK60F SW_REV=X -j -B\""
           "docker exec -it bob /bin/bash -c \"cd /shared/kinetis && make -f Make75177 SW_REV=Y -j -B\" && scp /home/reggiemarr/kinetis/231857-01X.axf rmarr@pyrite:/home/bdi3000/rmarr/"
-          "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 77619-01X\""
-          "docker exec -i bob /bin/bash -c \"cd /shared/release && make.py 76617-02X -B | compiledb\""
-          "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 227269-01X -B\""
-          "docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 77340-01X -B\""
-          "cd ~/release && docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 76507-11X -B\""
-          "cd ~/release && docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 76507-11X -B\" | compiledb"
+          "cd ~/release && docker exec -it bob /bin/bash -c \"cd /shared/release && make -f MakeMcuMx2XZnHDi_Gen2\""
+          "cd ~/release && docker exec -it bob /bin/bash -c \"cd /shared/release && make -f MakeMcuMx2XZnHDi_Gen2 -B\""
+          "cd ~/release && docker exec -it bob /bin/bash -c \"cd /shared/release && make -f MakeMcuMx2XZnHDi_Gen2 -B\" | compiledb"
+          "cd ~/release && docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 76320-01X -B\""
+          "cd ~/release && docker exec -it bob /bin/bash -c \"cd /shared/release && make.py 76320-01X -B\" | compiledb"
                ))
 (defun my/ivy/compile ()
   (interactive)
@@ -849,49 +848,6 @@ Default starting place is the home directory."
   (interactive)
   (execute-extended-command 16 "magit-status"))
 
-; web kit stuffs(use-package webkit
-(use-package! webkit)
-(use-package! webkit-ace) ;; If you want link hinting
-(use-package! webkit-dark) ;; If you want to use the simple dark mode
-
-;; See the above explination in the Background section
-;; This must be set before webkit.el is loaded so certain hooks aren't installed
-;; (setq webkit-own-window t)
-
-;; Set webkit as the default browse-url browser
-(setq browse-url-browser-function 'webkit-browse-url)
-
-;; Force webkit to always open a new session instead of reusing a current one
-;; (setq webkit-browse-url-force-new t)
-
-;; Globally disable javascript
-;; (add-hook 'webkit-new-hook #'webkit-enable-javascript)
-
-;; Override the "loading:" mode line indicator with an icon from `all-the-icons.el'
-;; You could also use a unicode icon like ↺
-(defun webkit--display-progress (progress)
-  (setq webkit--progress-formatted
-        (if (equal progress 100.0)
-            ""
-          (format "%s%.0f%%  " (all-the-icons-faicon "spinner") progress)))
-  (force-mode-line-update))
-
-;; Set action to be taken on a download request. Predefined actions are
-;; `webkit-download-default', `webkit-download-save', and `webkit-download-open'
-;; where the save function saves to the download directory, the open function
-;; opens in a temp buffer and the default function interactively prompts.
-(setq webkit-download-action-alist '(("\\.pdf\\'" . webkit-download-open)
-                                     ("\\.png\\'" . webkit-download-save)
-                                     (".*" . webkit-download-default)))
-
-;; Globally use a proxy
-;; (add-hook 'webkit-new-hook (lambda () (webkit-set-proxy "socks://localhost:8000")))
-
-;; Globally use the simple dark mode
-(setq webkit-dark-mode t)
-(use-package evil-collection-webkit
- :config
- (evil-collection-xwidget-setup))
 
 (use-package! matrix-client)
 
@@ -907,19 +863,6 @@ Default starting place is the home directory."
   :after (lsp-mode)
   :commands (helm-lsp-workspace-symbol)
   :init (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
-
-(after! lsp
-        (map! :leader
-        (:prefix "l"
-                :desc "find definition" "d" #'lsp-find-definition
-                :desc "find declaration" "D" #'lsp-find-declaration
-                (:prefix "u"
-                :desc "dap breakpoint toggle" "d" #'dap-breakpoint-toggle
-                :desc "dap repl" "r" #'dap-ui-repl
-                :desc "dap debug hydra" "u" #'dap-hydra
-                :desc "run last dap cfg" "l" #'dap-debug-last)
-                ))
-        )
 
 (use-package lsp-pyright
   :ensure t
@@ -1058,6 +1001,21 @@ Default starting place is the home directory."
   :hook ((dap-mode . dap-ui-mode)
     (dap-session-created . (lambda (&_rest) (dap-hydra)))
     (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))))
+(after! dap-mode
+  (setq dap-python-debugger 'debugpy)
+  (after! lsp-mode
+        (map! :leader
+                (:prefix "l"
+                        :desc "find definition" "d" #'lsp-find-definition
+                        :desc "find declaration" "D" #'lsp-find-declaration
+                        (:prefix "u"
+                        :desc "dap breakpoint toggle" "d" #'dap-breakpoint-toggle
+                        :desc "dap repl" "r" #'dap-ui-repl
+                        :desc "dap debug hydra" "u" #'dap-hydra
+                        :desc "run last dap cfg" "l" #'dap-debug-last)
+                        ))
+  )
+  )
 
 (define-minor-mode +dap-running-session-mode
   "A mode for adding keybindings to running sessions"
@@ -1164,98 +1122,6 @@ Default starting place is the home directory."
   "Apply prin1 to argument values."
   (mapc '(lambda (var) (setcdr var (list (prin1-to-string (cadr var))))) variables))
 
-(defun my/eww (url &optional arg buffer)
-  "Fetch URL and render the page.
-If the input doesn't look like an URL or a domain name, the
-word(s) will be searched for via `eww-search-prefix'.
+;; (load "~/.doom.d/browser_cfg.el")
 
-If called with a prefix ARG, use a new buffer instead of reusing
-the default EWW buffer.
-
-If BUFFER, the data to be rendered is in that buffer.  In that
-case, this function doesn't actually fetch URL.  BUFFER will be
-killed after rendering."
-  (interactive
-   (let ((uris (eww-suggested-uris)))
-     (list (read-string (format-prompt "Enter URL or keywords"
-                                       (and uris (car uris)))
-                        nil 'eww-prompt-history uris)
-           (prefix-numeric-value current-prefix-arg))))
-  (setq url (eww--dwim-expand-url url))
-  (switch-to-buffer
-   (cond
-    ((eq arg 4)
-     (generate-new-buffer "*eww*"))
-    ((eq major-mode 'eww-mode)
-     (current-buffer))
-    (t
-     (get-buffer-create "*eww*"))))
-  (eww-setup-buffer)
-  ;; Check whether the domain only uses "Highly Restricted" Unicode
-  ;; IDNA characters.  If not, transform to punycode to indicate that
-  ;; there may be funny business going on.
-  (let ((parsed (url-generic-parse-url url)))
-    (when (url-host parsed)
-      (unless (puny-highly-restrictive-domain-p (url-host parsed))
-        (setf (url-host parsed) (puny-encode-domain (url-host parsed)))))
-    ;; When the URL is on the form "http://a/../../../g", chop off all
-    ;; the leading "/.."s.
-    (when (url-filename parsed)
-      (while (string-match "\\`/[.][.]/" (url-filename parsed))
-        (setf (url-filename parsed) (substring (url-filename parsed) 3))))
-    (setq url (url-recreate-url parsed)))
-  (plist-put eww-data :url url)
-  (plist-put eww-data :title "")
-  (eww-update-header-line-format)
-  (let ((inhibit-read-only t))
-    (insert (format "Loading %s..." url))
-    (goto-char (point-min)))
-  (let ((url-mime-accept-string eww-accept-content-types))
-    (if buffer
-        (let ((eww-buffer (current-buffer)))
-          (with-current-buffer buffer
-            (eww-render nil url nil eww-buffer)))
-      (eww-retrieve url #'eww-render
-                    (list url nil (current-buffer))))))
-
-(defun toggle-emacs-browser ()
-    (interactive
-        (cond
-        ((eq major-mode 'webkit-mode) (my/eww (webkit--get-uri webkit--id)))
-        ((eq major-mode 'eww-mode) (webkit-browse-url (plist-get eww-data :url)))
-     )))
-
-
-(map! :leader
-      :desc "Toggle Emacs Browser" "t o" #'toggle-emacs-browser)
-
-(defun my/eww-follow-link (&optional external mouse-event)
-  "Browse the URL under point.
-If EXTERNAL is single prefix, browse the URL using
-`browse-url-secondary-browser-function'.
-
-If EXTERNAL is double prefix, browse in new buffer."
-  (interactive
-   (list current-prefix-arg last-nonmenu-event)
-   eww-mode)
-  (mouse-set-point mouse-event)
-  (let ((url (get-text-property (point) 'shr-url)))
-    (cond
-     ((not url)
-      (message "No link under point"))
-     ((string-match-p eww-use-browse-url url)
-      ;; This respects the user options `browse-url-handlers'
-      ;; and `browse-url-mailto-function'.
-      (my/eww url))
-     ((and (consp external) (<= (car external) 4))
-      (funcall browse-url-secondary-browser-function url)
-      (shr--blink-link))
-     ;; This is a #target url in the same page as the current one.
-     ((and (url-target (url-generic-parse-url url))
-	   (eww-same-page-p url (plist-get eww-data :url)))
-      (let ((dom (plist-get eww-data :dom)))
-	(eww-save-history)
-	(plist-put eww-data :url url)
-	(eww-display-html 'utf-8 url dom nil (current-buffer))))
-     (t
-      (eww-browse-url url external)))))
+(require 'ox-hugo)
