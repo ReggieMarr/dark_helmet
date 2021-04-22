@@ -969,6 +969,14 @@ You also need to set org-latex-impatient-tex2svg-bin to the location of the exec
         "~/node_modules/mathjax-node-cli/bin/tex2svg"))
 #+END_SRC
 
+*** PlantUML
+Install plantUML in manjaro -> `pacman -S plantuml`
+
+#+BEGIN_SRC emacs-lisp
+(setq org-plantuml-exec-mode 'plantuml ;; Use the executable
+      org-plantuml-executable-path "plantuml") ;; We assume plantuml is in the path
+#+END_SRC
+
 ** Org-Agenda
 #+BEGIN_SRC emacs-lisp
 (use-package! org
