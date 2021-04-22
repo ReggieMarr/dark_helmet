@@ -1064,6 +1064,17 @@ Add org links to magit buffers
     ("erk" :components ("org-erk" "org-static-erk"))
 )))
 #+END_SRC
+*** Hugo
+#+BEGIN_SRC emacs-lisp
+(use-package! ox-hugo
+  :after ox
+  :config
+  ;; (setq org-hugo-default-section-directory "/home/edyer/wemacs/static_site_generation/hugo/ibst/thermal_testing/content/motor testing")
+  (setq org-hugo-default-section-directory "content")
+  )
+#+END_SRC
+
+
 *** Plotly links
 #+BEGIN_SRC emacs-lisp
 (after! org
