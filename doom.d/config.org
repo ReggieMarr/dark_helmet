@@ -364,7 +364,8 @@ Debugging using Dap Mode
   :config
   (map! :leader
         (:prefix "f"
-         :desc "shortcuts" "j" #'my/directory-shortcuts)))
+         :desc "shortcuts" "j" #'my/directory-shortcuts
+         :desc "home"      "k" #'(lambda () (interactive) (counsel-find-file "~")))))
 #+END_SRC
 
 * EAF
