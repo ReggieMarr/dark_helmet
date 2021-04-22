@@ -18,24 +18,31 @@
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
 ;
-(package! ob-async) ;asynchonous evaluation of org code blocks
+(package! beacon) ;; Never lose your cursor again
 (package! calfw)
 (package! command-log-mode)
+(package! company-quickhelp)
 (package! dap-mode)
 (package! emojify)
 (package! erc-image)
 (package! flyspell-correct-ivy)
+(package! lispy)
+(package! lsp-pyright)
 (package! nov)
+(package! orgit)
 (package! org-jira)
 (package! org-latex-impatient)
 (package! org-superstar)
+(package! ox-hugo)
 (package! flx-ido)
 (package! multiple-cursors)
+(package! ob-async) ;asynchonous evaluation of org code blocks
 (package! quelpa-use-package)
 (package! reddigg)
 (package! symbol-overlay)
 (package! stickyfunc-enhance)
 (package! tab-jump-out)
+(package! undo-tree)
 (package! use-package)
 (package! wucuo) ; Fastest spell checking around
 (package! vterm)
