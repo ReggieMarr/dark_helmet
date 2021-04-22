@@ -1126,6 +1126,13 @@ Add org links to magit buffers
                         ;; (concat (substring path 0 -4) "png") (or desc "") (f-base path)))
         ))))
 #+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package! org
+  :config
+  (setq org-export-with-broken-links 'mark)) ;Mark broken links but don't fail the export
+#+END_SRC
+
 ** Exporting Org Files
 #+BEGIN_SRC emacs-lisp
 (use-package! org
@@ -2137,16 +2144,16 @@ Because things like passwords are saved in this directory, it's probably a good 
 
          root │     9  Fam.tech-tings              Fam Chat on the Cord/tech-tings
          root │    10  Fam.general                 Fam Chat on the Cord/general
+
 * Debugging a frozen emacs
 
 When emacs freezes, run `pkill -SIGUSR2 emacs` in another terminal
 
 Event 1:
-#+BEGIN_SRC bash
 csDebugger entered--entering a function:
+
 * substitute-command-keys("Quit")
   redisplay_internal\ \(C\ function\)()
-#+END_SRC
 
 Event 2: uable to get log
 Error during redisplay: (clear-minibuffer-message) signaled (quit)
