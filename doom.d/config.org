@@ -1019,6 +1019,51 @@ Add org links to magit buffers
  ("code.orgmode.org[:/]\\(.+\\)$" "https://code.orgmode.org/cgit.cgi/%n" "https://code.orgmode.org/cgit.cgi/%n/commits/%r" "https://code.orgmode.org/cgit.cgi/%n/commit/%r")
  ("git.kernel.org/pub/scm[:/]\\(.+\\)$" "https://git.kernel.org/cgit/%n" "https://git.kernel.org/cgit/%n/log/?h=%r" "https://git.kernel.org/cgit/%n/commit/?id=%r"))))
 #+END_SRC
+
+** Export
+*** Jekyll
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (setq org-publish-project-alist
+      '(
+
+  ("org-erk"
+          ;; Path to your org files.
+          :base-directory "~/jekyll_site/org/"
+          :base-extension "org"
+
+          ;; Path to your Jekyll project.
+          :publishing-directory "~/jekyll_site/jekyll/"
+          :recursive t
+          :publishing-function org-html-publish-to-html
+          :headline-levels 4
+          :html-extension "html"
+          :body-only t ;; Only export section between <body> </body>
+    )
+
+  ("org-MX25G2"
+          ;; Path to your org files.
+          :base-directory "~/erk_projects/MX25G2"
+          :base-extension "org"
+
+          ;; Path to your Jekyll project.
+          :publishing-directory "~/erk_projects/MX25G2/publish"
+          :recursive f
+          :publishing-function org-html-publish-to-html
+          :headline-levels 4
+          :html-extension "html"
+    )
+
+    ("org-static-erk"
+          :base-directory "~/jekyll_site/org/"
+          :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php"
+          :publishing-directory "~/jekyll_site/"
+          :recursive t
+          :publishing-function org-publish-attachment)
+
+    ("erk" :components ("org-erk" "org-static-erk"))
+)))
+#+END_SRC
 *** Plotly links
 #+BEGIN_SRC emacs-lisp
 (after! org
