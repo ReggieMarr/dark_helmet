@@ -717,7 +717,8 @@ Default starting place is the home directory."
      "A" #'ivy-switch-buffer
       "a" nil
       (:prefix ("a" . "switch-to-buffer")
-       :desc "c"   "c"  #'(lambda () (interactive) (my/ivy-switch-buffer "c"))
+       :desc "c"   "c"  #'(lambda () (interactive) (my/ivy-switch-buffer "\\(cpp\\|c\\)"))
+       :desc "h"   "h"  #'(lambda () (interactive) (my/ivy-switch-buffer "\\(hpp\\|h\\)"))
        :desc "org" "o"  #'(lambda () (interactive) (my/ivy-switch-buffer "org"))
        :desc "el"  "e"  #'(lambda () (interactive) (my/ivy-switch-buffer "el")))))
 
