@@ -986,6 +986,23 @@ You also need to set org-latex-impatient-tex2svg-bin to the location of the exec
   (setq jiralib-url "http://cesium:8080/jira"))
 #+END_SRC
 
+** Orgit
+Add org links to magit buffers
+
+#+BEGIN_SRC emacs-lisp
+(use-package! orgit
+
+  :config
+  ;; Used to transale git urls to web urls when exporting orgit links
+(setq orgit-export-alist '(("github.com[:/]\\(.+?\\)\\(?:\\.git\\)?$" "https://github.com/%n" "https://github.com/%n/commits/%r" "https://github.com/%n/commit/%r")
+ ;;("cesium:7990/bitbucket[:/]\\(.+?\\)\\(?:\\.git\\)?$" "http://cesium:7990/bitbucket/%n" "http://cesium:7990/bitbucket/%n/commits/%r" "http://cesium:7990/bitbucket/%n/commit/%r")
+ ("ssh://git@cesium:7999[:/]\\(.+?\\)\\(?:\\.git\\)?$" "http://cesium:7990/bitbucket/%n" "http://cesium:7990/bitbucket/projects/mx/repos/%n/commits/%r" "http://cesium:7990/bitbucket/projects/mx/repos/%n/commit/%r")
+ ("gitlab.com[:/]\\(.+?\\)\\(?:\\.git\\)?$" "https://gitlab.com/%n" "https://gitlab.com/%n/commits/%r" "https://gitlab.com/%n/commit/%r")
+ ("git.sr.ht[:/]\\(.+?\\)\\(?:\\.git\\)?$" "https://git.sr.ht/%n" "https://git.sr.ht/%n/log/%r" "https://git.sr.ht/%n/commit/%r")
+ ("bitbucket.org[:/]\\(.+?\\)\\(?:\\.git\\)?$" "https://bitbucket.org/%n" "https://bitbucket.org/%n/commits/branch/%r" "https://bitbucket.org/%n/commits/%r")
+ ("code.orgmode.org[:/]\\(.+\\)$" "https://code.orgmode.org/cgit.cgi/%n" "https://code.orgmode.org/cgit.cgi/%n/commits/%r" "https://code.orgmode.org/cgit.cgi/%n/commit/%r")
+ ("git.kernel.org/pub/scm[:/]\\(.+\\)$" "https://git.kernel.org/cgit/%n" "https://git.kernel.org/cgit/%n/log/?h=%r" "https://git.kernel.org/cgit/%n/commit/?id=%r"))))
+#+END_SRC
 ** Exporting Org Files
 #+BEGIN_SRC emacs-lisp
 (use-package! org
