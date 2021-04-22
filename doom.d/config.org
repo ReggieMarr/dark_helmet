@@ -1974,6 +1974,7 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 *** yes
 ** Better way to go up by bullet points
 ** TODO
+- [ ] dired-peep or RANGER
 - [ ] reduce delay for continuous movment holding down arrow keys
 - [ ] Show all marks in killring buffer
   + Show all jumps in killring buffer
@@ -2052,6 +2053,8 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 - [ ] syslog mode?
 - [ ] integrate [[https://github.com/alphapapa/magit-todos][magit todo's]]
 - [ ] rebuild with [[https://aur.archlinux.org/packages/emacs-pgtk-native-comp-git/][emacs-native-comp-pgtk]]
+- [ ] add compilation mode commands to compilation mode local leader
+- [ ] format on diff of file before save
 
 ** Other TODO
 - [[https://github.com/zsh-users/zsh-autosuggestions][zsh autocompletion]]
