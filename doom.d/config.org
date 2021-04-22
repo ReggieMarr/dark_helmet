@@ -54,21 +54,73 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
   (setq my/build-directory/kinetis "~/kinetis"
         my/build-directory/release "~/release")
 
+  (setq projects/kinetis
+        '(("ibst" . "231857")
+          ("common servo" . "213371")))
+
+  (setq my/list/cool '("yis", 'projects/kinetis))
+
+  (setq a '("my" "new" "list")
+        b '("another" "cool" "list")
+        c '(a b))
+
+
+  (transient-define-argument transient-arg/kinetis/projects ()
+    "Choose a project to build"
+    :description "Choose a project to build"
+    :class 'transient-option
+    :shortarg "-p"
+    :argument "--project="
+    :choices projects/kinetis)
+
   (transient-define-prefix my/build ()
     "Entry to invoke a build system"
     ["Execute build"
      ("k" "kinetis" my/build/kinetis)
      ("r" "release" my/ivy/compile)])
 
-  (transient-define-prefix my/build/kinetis ()
-    ["Build Kinetis"
-     ["Args"
+  (setq my/vector
+     ["Compile Args"
       ("-B" "always make" "--always-make")
       ("-j" "jobs" "--jobs")
-      ("-C" "compiledb" "compiledb")]
+      ])
+
+  (setq my/full-vector
+    ["Build Kinetis"
+
+     'my/vector
+
      ["Project"
-      ("c" "common servo" my/build-kinetis/ibst)
-      ("t" "ibst" my/build-kinetis/ibst)]]))
+      ("p" transient-arg/kinetis/projects)]
+
+     ["Other"
+      ("s" "copy-to-pyrite" "copy-to-pyrite")
+      ("c" "compiledb" "compiledb")]
+
+     ["Action"
+      ("RET" "compile" my/compile)]])
+
+  ;; Kinetis
+  (transient-define-prefix my/build/kinetis ()
+    ["Build Kinetis"
+
+     my/vector
+
+     ["Project"
+      ("p" transient-arg/kinetis/projects)]
+
+     ["Other"
+      ("s" "copy-to-pyrite" "copy-to-pyrite")
+      ("c" "compiledb" "compiledb")]
+
+     ["Action"
+      ("RET" "compile" my/compile)
+      ]]))
+
+(transient-define-suffix my/compile (args)
+  (interactive (list (transient-args 'my/build/kinetis)))
+  ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
+  )
 
 (setq kinetis-docker-build-premable "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis")
 
@@ -83,22 +135,27 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
         (symbol-value 'common-elements)
   ))
 
+(transient-define-suffix my/build/kinetis/compiledb (args)
+  (interactive (list (transient-args 'my/build/kinetis)))
+  ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
+  )
+
 ;; (my/common-elements '("neat" "cool" "wut") '("wow" "wut" "cool"))
 
 (transient-define-suffix my/build-kinetis/ibst (args)
   (interactive (list (transient-args 'my/build/kinetis)))
   ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
   )
-(transient-define-suffix my/build-kinetis/ibst (args)
+(transient-define-suffix my/build/kinetis/ibst (args)
   (interactive (list (transient-args 'my/build/kinetis)))
   ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
   (let ((build-args (my/common-elements args '("--always-make" "--jobs")))
-        (move-to-directory (concat "cd " 'my/build-directory/kinetis))
+        ;; (move-to-directory (concat "cd " 'my/build-directory/kinetis))
         ;; (docker-command (concat "docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f " "Make231857 " "-B " (if (member "compiledb" '("asdf" "compiledb")) "> buildlog.txt\"")))
         ;; (docker-command (concat "Make231857 " "-B "))
         ;; (print docker-command)
         ;; (print build-args)
-    )
+        )
   ))
 
 (transient-define-suffix my/build-kinetis/common-servo (args)
@@ -121,8 +178,9 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
      ;;  ("c" "common servo" my/ivy/compile)]
      ;; ["Release"
      ;;  ("r" "AO" my/ivy/compile)]]))
+;; build without compile
+;; compiledb -n make -f Make213371
 #+END_SRC
-
 
 * Config Development
 Convenience tools to help with configuration development
