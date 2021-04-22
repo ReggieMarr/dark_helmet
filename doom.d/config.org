@@ -299,10 +299,17 @@ Debugging using Dap Mode
       "x" nil
       (:prefix ("x" . "dired")
        :desc "dired here" "d" #'(lambda () (interactive) (dired default-directory))
-       :desc "dired" "D" #'dired
-      ))
+       :desc "dired" "D" #'dired))
 
 (setq delete-by-moving-to-trash t) ; Move to trash bin instead of permanently deleting it
+
+(defun my/dired-open-externally ()
+  "Open marked dired file/folder(s) (or file/folder(s) at point if no marks)
+  with external application"
+  (interactive)
+  (let ((files (dired-get-marked-files)))
+    (dired-run-shell-command
+     (dired-shell-stuff-it "xdg-open" files t))))
 
 (use-package dired
   :custom ((dired-listing-switches "-agho --group-directories-first"))
@@ -315,11 +322,15 @@ Debugging using Dap Mode
   ;; (add-to-list 'dired-guess-shell-alist-user '("\\.xlsx\\'" "xdg-open"))
   ;; (add-to-list 'dired-guess-shell-alist-user '("\\.xlsb\\'" "xdg-open"))
 
+ (evil-define-key* '(normal) dired-mode-map
+   (kbd "M-RET") #'my/dired-open-externally)
+
   (evil-collection-define-key 'normal 'dired-mode-map
     ;; "h" 'dired-single-up-directory
     ;; "l" 'dired-single-buffer)
     "h" 'dired-up-directory
-    "l" 'dired-find-file)
+    "l" 'dired-find-file
+    )
   (setq dired-recursive-deletes "top"))
 #+END_SRC
 
@@ -327,6 +338,51 @@ Debugging using Dap Mode
 #+BEGIN_SRC emacs-lisp
 #+END_SRC
 
+** Find file
+#+BEGIN_SRC emacs-lisp
+(setq my/directory-shortcuts
+      '(("zybo" .  "/ssh:root@192.168.0.102:")
+        ("pyrite" .  "/ssh:edyer@pyrite:")
+
+        ("kinetis" . "~/kinetis/")
+        ("release" . "~/release/")
+        ("stellaris" . "~/stellaris/")
+        ("wemacs"    . "~/wemacs/")
+
+        ("downloads" . "~/Downloads/")
+        ("desktop" . "~/Desktop/")
+
+        ("project"         . "~/erk_projects/")
+        ("2nd Source HDIR" . "~/erk_projects/CMX-10_2nd-Source-HDIR")
+        ("ga"              . "~/erk_projects/GA")
+        ("lens sustaining" . "~/erk_projects/lens_sustaining")
+        ("GCS"             . "~/erk_projects/GCS")
+        ("CPPLR"           . "~/erk_projects/GCS/CPPLR")
+        ("IBST"            . "~/erk_projects/MX25G2/IBST")
+        ("MMG2"            . "~/erk_projects/MMG2")
+        ("MX25G2"          . "~/erk_projects/MX25G2")
+        ("VISSWIR"         . "~/erk_projects/VISSWIR")
+        ))
+
+(defun my/directory-shortcuts ()
+  (interactive)
+
+    (ivy-read "directory: " my/directory-shortcuts
+              :matcher #'counsel--find-file-matcher
+              :action #'(lambda (x)
+                          (counsel-find-file (cdr x)))
+              :preselect (counsel--preselect-file)
+              :require-match 'confirm-after-completion
+              :history 'file-name-history
+              :keymap counsel-find-file-map
+              :caller 'my/directory-shortcuts))
+
+(use-package! counsel
+  :config
+  (map! :leader
+        (:prefix "f"
+         :desc "shortcuts" "j" #'my/directory-shortcuts)))
+#+END_SRC
 
 * EAF
 #+BEGIN_SRC emacs-lisp
