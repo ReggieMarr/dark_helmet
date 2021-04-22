@@ -1753,7 +1753,13 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 
 * LSP
 #+BEGIN_SRC emacs-lisp
-(setq lsp-file-watch-threshold 1000)
+(use-package! lsp-mode
+  :config
+  (setq lsp-ui-doc-enable t
+        lsp-ui-doc-max-width 100
+        lsp-ui-doc-max-height 160
+        lsp-file-watch-threshold 1000
+        lsp-file-watch-threshold 1000))
 
 (setq ccls-executable "/usr/bin/ccls")
 (setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
