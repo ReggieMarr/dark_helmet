@@ -44,7 +44,6 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
         command-log-mode-window-size 60))
 #+END_SRC
 
-
 * Build
 #+BEGIN_SRC emacs-lisp
 
@@ -201,20 +200,6 @@ Convenience tools to help with configuration development
   (find-file "~/dark_helmet/doom.d/config.org"))
 #+END_SRC
 
-* C
-#+BEGIN_SRC emacs-lisp
-(use-package! cc-mode
-  :init
-  (message "cmode is NOICE")
-
-  :config
-  (require 'dap-mode)
-  (require 'dap-lldb)
-  (require 'dap-gdb-lldb)
-  (dap-gdb-lldb-setup) ;; Automatically install debug adapters if needed
-)
-#+END_SRC
-
 * Debugging
 Debugging using Dap Mode
 **Note the first time you use this you will have to call `dap-gdb-lldb-setup` to install the vscode extension
@@ -256,7 +241,6 @@ Debugging using Dap Mode
 ;; (setq doom-theme 'doom-monokai-classic ; Reminds me of Sublime-text & makes me feel at home
 ;;       display-line-numbers-type nil) ; Improve performance & disable line #'s by default
 #+END_SRC
-
 ** Buffer Narrowing
 #+BEGIN_SRC emacs-lisp
 (map! :leader
@@ -269,7 +253,6 @@ Debugging using Dap Mode
        :desc "widen"   "w" #'widen
        ))
 #+END_SRC
-
 
 ** Window
 #+BEGIN_SRC emacs-lisp
@@ -427,7 +410,6 @@ Debugging using Dap Mode
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 #+END_SRC
 
-
 * Emojify
 #+BEGIN_SRC emacs-lisp
 (use-package emojify
@@ -466,6 +448,30 @@ Debugging using Dap Mode
 ;; disable ido faces to see flx highlights.
 ;; (setq ido-enable-flex-matching t)
 ;; (setq ido-use-faces nil)
+#+END_SRC
+
+* Languages
+** C
+#+BEGIN_SRC emacs-lisp
+(use-package! cc-mode
+  :init
+  (message "cmode is NOICE")
+
+  :config
+  (require 'dap-mode)
+  (require 'dap-lldb)
+  (require 'dap-gdb-lldb)
+  (dap-gdb-lldb-setup) ;; Automatically install debug adapters if needed
+)
+#+END_SRC
+
+** Python
+*** LSP
+#+BEGIN_SRC emacs-lisp
+(use-package! lsp-pyright
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp))))  ; or lsp-deferred
 #+END_SRC
 
 * Magit
@@ -607,6 +613,7 @@ Default starting place is the home directory."
 ** TODO
 - [ ] SPC g g fails when run in ~/projects.. gotta find out why
 - Use 'q' instead of 'ESC' to go back on/delete magit buffers?
+
 * Mail
 #+BEGIN_SRC emacs-lisp
 ;; (require 'notmuch)
@@ -943,7 +950,8 @@ Default starting place is the home directory."
 ;; (custom-set-faces! '(org-block :background "#FF0000"))
 #+END_SRC
 
-** Latex
+** Languages
+*** Latex
 For this minor mode to work, you need to install MathJax-node-cli via npm:
 
 cd $HOME
