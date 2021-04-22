@@ -1331,6 +1331,9 @@ Also install `flyspell-correct-ivy` for a nice completion experience
     confirm-kill-processes nil
     ;; Prevent premature horizontal scrolling
     hscroll-margin 0)
+  (map! :localleader
+        :map (vterm-mode-map vterm-copy-mode-map)
+          "c" #'vterm-copy-mode)
   ;; Restore the point's location when leaving and re-entering insert mode.
   ;; (add-hook! 'vterm-mode-hook
   ;;   (defun +vterm-init-remember-point-h ()
