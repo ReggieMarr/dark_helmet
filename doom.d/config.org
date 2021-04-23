@@ -46,121 +46,131 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
 
 * Build
 #+BEGIN_SRC emacs-lisp
-
-
 (use-package! transient
   :config
-  (setq my/build-directory/kinetis "~/kinetis"
-        my/build-directory/release "~/release")
+  ;; (defun my/func1 ()
+  ;;   (print "my func 1"))
 
-  (setq projects/kinetis
-        '(("ibst" . "231857")
-          ("common servo" . "213371")))
+  ;; (defun my/func2 ()
+  ;;   (print "my func 2"))
 
-  (setq my/list/cool '("yis", 'projects/kinetis))
+  ;; (setq my/build-targets
+  ;;       '(("ibst" . (my/func1 "~/kinentis/Make231857" "first thing"))
+  ;;         ("common servo" . (my/func2 "~/kinetis/Make213371" "second thing"))))
 
-  (setq a '("my" "new" "list")
-        b '("another" "cool" "list")
-        c '(a b))
+  ;; (funcall (nth 0 (cdr (assoc "common servo" my/build-targets))))
 
+  ;; (transient-define-prefix my/build ()
+  ;;   "Entry to invoke a build system"
+  ;;   ["Execute build"
+  ;;    ("k" "kinetis" my/build/kinetis)
+  ;;    ("r" "release" my/ivy/compile)])
 
-  (transient-define-argument transient-arg/kinetis/projects ()
+  (setq my/makefiles
+        '("~/kinetis/Make213371"
+          "~/kinetis/Make231857"))
+
+  ;; Makefile list
+  (transient-define-argument my/transient-arg/makefiles ()
     "Choose a project to build"
-    :description "Choose a project to build"
+    :description "Makefile"
     :class 'transient-option
-    :shortarg "-p"
-    :argument "--project="
-    :choices projects/kinetis)
+    :shortarg "-m"
+    :argument "--makefile="
+    :choices my/makefiles)
 
-  (transient-define-prefix my/build ()
-    "Entry to invoke a build system"
-    ["Execute build"
-     ("k" "kinetis" my/build/kinetis)
-     ("r" "release" my/ivy/compile)])
+  ;; Additional compiler flags
+  (defvar my--additional-compiler-flags "Additional compiler flags" "alsdkfj")
 
-  (setq my/vector
-     ["Compile Args"
-      ("-B" "always make" "--always-make")
-      ("-j" "jobs" "--jobs")
-      ])
+  (transient-define-argument my/transient-arg/additional-compiler-flags ()
+    "Set a lisp variable, pmx--variable.  Won't show up in infix arguments."
+    :description "Additional compiler flags"
+    :class 'transient-lisp-variable
+    :shortarg ""
+    :variable 'my--additional-compiler-flags
+    :argument "")
 
-  (setq my/full-vector
-    ["Build Kinetis"
+  ;; (setq my/full-vector
+  ;;       ["Build Kinetises"
 
-     'my/vector
+  ;;        ["Compile Args"
+  ;;         ("-B" "always make" "--always-make")
+  ;;         ("-j" "jobs" "--jobs")
+  ;;         ]
 
-     ["Project"
-      ("p" transient-arg/kinetis/projects)]
+  ;;        ["Project"
+  ;;         ("p" transient-arg/kinetis/projects)]
 
-     ["Other"
-      ("s" "copy-to-pyrite" "copy-to-pyrite")
-      ("c" "compiledb" "compiledb")]
+  ;;        ["Other"
+  ;;         ("s" "copy-to-pyrite" "copy-to-pyrite")
+  ;;         ("c" "compiledb" "compiledb")]
 
-     ["Action"
-      ("RET" "compile" my/compile)]])
+  ;;        ["Action"
+  ;;         ("RET" "compile" my/compile)]])
+
+  (setq my/transient-infix/makefile
+        ["Makefile"
+         ("m" my/transient-arg/makefiles)
+         ])
+
+  (setq my/transient-infix/compiler-args/gcc
+        ["Compiler Args"
+         ("-B" "always make" "--always-make")
+         ("-j" "jobs" "--jobs")
+         ("v" "additional flags" my/transient-arg/additional-compiler-flags)
+         ])
 
   ;; Kinetis
-  (transient-define-prefix my/build/kinetis ()
-    ["Build Kinetis"
+  (transient-define-prefix my/build ()
+    my/transient-infix/makefile
+    my/transient-infix/compiler-args/gcc)
 
-     my/vector
-
-     ["Project"
-      ("p" transient-arg/kinetis/projects)]
-
-     ["Other"
-      ("s" "copy-to-pyrite" "copy-to-pyrite")
-      ("c" "compiledb" "compiledb")]
-
-     ["Action"
-      ("RET" "compile" my/compile)
-      ]]))
-
-(transient-define-suffix my/compile (args)
-  (interactive (list (transient-args 'my/build/kinetis)))
-  ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
-  )
-
-(setq kinetis-docker-build-premable "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis")
-
-        "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f Make231857 -B > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt && scp 231857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
-
-(defun my/common-elements (list1 list2)
-  "Return common elements between 2 lists"
-  (let ((common-elements))
-        (-each list1
-          (lambda (item) (if (member item list2) (setq common-elements (cons item common-elements))))
+  (transient-define-suffix my/compile (args)
+    (interactive (list (transient-args 'my/build/kinetis)))
+    ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
     )
-        (symbol-value 'common-elements)
-  ))
 
-(transient-define-suffix my/build/kinetis/compiledb (args)
-  (interactive (list (transient-args 'my/build/kinetis)))
-  ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
-  )
+  (setq kinetis-docker-build-premable "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis")
 
-;; (my/common-elements '("neat" "cool" "wut") '("wow" "wut" "cool"))
+  "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f Make231857 -B > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt && scp 231857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
 
-(transient-define-suffix my/build-kinetis/ibst (args)
-  (interactive (list (transient-args 'my/build/kinetis)))
-  ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
-  )
-(transient-define-suffix my/build/kinetis/ibst (args)
-  (interactive (list (transient-args 'my/build/kinetis)))
-  ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
-  (let ((build-args (my/common-elements args '("--always-make" "--jobs")))
-        ;; (move-to-directory (concat "cd " 'my/build-directory/kinetis))
-        ;; (docker-command (concat "docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f " "Make231857 " "-B " (if (member "compiledb" '("asdf" "compiledb")) "> buildlog.txt\"")))
-        ;; (docker-command (concat "Make231857 " "-B "))
-        ;; (print docker-command)
-        ;; (print build-args)
+  (defun my/common-elements (list1 list2)
+    "Return common elements between 2 lists"
+    (let ((common-elements))
+      (-each list1
+        (lambda (item) (if (member item list2) (setq common-elements (cons item common-elements))))
         )
-  ))
+      (symbol-value 'common-elements)
+      ))
 
-(transient-define-suffix my/build-kinetis/common-servo (args)
-  (interactive (list (transient-args 'my/transient-suffix/build-kinetis)))
-  (print args)
-  )
+  (transient-define-suffix my/build/kinetis/compiledb (args)
+    (interactive (list (transient-args 'my/build/kinetis)))
+    ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
+    )
+
+  ;; (my/common-elements '("neat" "cool" "wut") '("wow" "wut" "cool"))
+
+  (transient-define-suffix my/build-kinetis/ibst (args)
+    (interactive (list (transient-args 'my/build/kinetis)))
+    ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
+    )
+  (transient-define-suffix my/build/kinetis/ibst (args)
+    (interactive (list (transient-args 'my/build/kinetis)))
+    ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
+    (let ((build-args (my/common-elements args '("--always-make" "--jobs")))
+          ;; (move-to-directory (concat "cd " 'my/build-directory/kinetis))
+          ;; (docker-command (concat "docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f " "Make231857 " "-B " (if (member "compiledb" '("asdf" "compiledb")) "> buildlog.txt\"")))
+          ;; (docker-command (concat "Make231857 " "-B "))
+          ;; (print docker-command)
+          ;; (print build-args)
+          )
+      ))
+
+  (transient-define-suffix my/build-kinetis/common-servo (args)
+    (interactive (list (transient-args 'my/transient-suffix/build-kinetis)))
+    (print args)
+    ))
+
 
 ;; (defun my-args ()
 ;;   (transient-args 'my/transient-build-kinetis))
