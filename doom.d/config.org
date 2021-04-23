@@ -486,6 +486,46 @@ Debugging using Dap Mode
 #+END_SRC
 
 * Magit
+** Add new SSH key to GitHub account
+*** Check for existing SSH key
+
+`ls -al ~/.ssh`
+
+#+BEGIN_SRC bash :tangle no
+id_rsa.pub
+id_ecdsa.pub
+id_ed25519.pub
+#+END_SRC
+
+*** Generate a new SSH key
+Create a new SSH key (provide email) - press enter to accept default location (no need for passphrase either)
+
+#+BEGIN_SRC bash :tangle no
+ssh-keygen -t ed25519 -C "your_email@example.com"
+#+END_SRC
+
+*** Adding your SSH key to the SSH-agent
+
+Start the ssh-agent in the background
+
+#+BEGIN_SRC bash :tangle no
+eval "$(ssh-agent -s)"
+#+END_SRC
+
+Add SSH private key to the ssh-agent
+
+#+BEGIN_SRC bash :tangle no
+ssh-add ~/.ssh/<private key file ex. id_ed25519>
+#+END_SRC
+
+*** Add SSH key to GitHub acount
+
+1. Copy contents of the ".pub" ssh key file (make sure not to copy additional whitespace/newlines)
+2. In github user profile buttom -> Settings -> SSH and GPG keys -> New/Add SSH key
+3. Add a title and paste the key in the "key" field
+4. Click `Add SSH Key`
+
+** Magit
 #+BEGIN_SRC emacs-lisp
 ;; (unmap! :leader
   ;; (:prefix "g"
