@@ -110,7 +110,7 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
               :keymap counsel-find-file-map))
   ;; :caller caller))
 
-  (defvar my--current-makefile "")
+  (defvar my--current-makefile nil)
   (transient-define-argument my/transient-arg/current-makefile ()
     "Set a lisp variable, pmx--variable.  Won't show up in infix arguments."
     :description "Makefile path"
@@ -119,7 +119,7 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
     :variable 'my--current-makefile
     :argument "")
 
-  (defvar my--copy-location "")
+  (defvar my--copy-location nil)
   (transient-define-argument my/transient-arg/copy-location ()
     "Set a lisp variable, pmx--variable.  Won't show up in infix arguments."
     :description "Location to copy binary"
@@ -128,7 +128,7 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
     :variable 'my--copy-location
     :argument "")
 
-  (defvar my--build-container "")
+  (defvar my--build-container nil)
   (transient-define-argument my/transient-arg/build-container ()
     "Set a lisp variable, pmx--variable.  Won't show up in infix arguments."
     :description "Docker container to use for build"
@@ -138,7 +138,7 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
     :argument "")
 
   ;; (defvar my--additional-compiler-flags "Additional compiler flags" "alsdkfj")
-  (defvar my--additional-compiler-flags "")
+  (defvar my--additional-compiler-flags nil)
   (transient-define-argument my/transient-arg/additional-compiler-flags ()
     "Set a lisp variable, pmx--variable.  Won't show up in infix arguments."
     :description "Additional compiler flags"
@@ -199,9 +199,20 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
     ;; (setq my/test (mapconcat 'identity args " "))
     ;; (print my/test))
     (let*
-        ((my--make-command (concat "make -f " (combine-and-quote-strings (list(print my--current-makefile)))))
-         (my--build-command (concat my--make-command " " (mapconcat 'identity args " "))))
-      (print my--build-command)))
+        ((my--make-command (concat "cd " (file-name-directory my--current-makefile) " && make -f " (file-name-nondirectory my--current-makefile)))
+         (my--build-command (concat my--make-command " " (mapconcat 'identity args " ") " " my--additional-compiler-flags)))
+
+      ;; (if (not (string= my--build-container ""))
+      (if my--build-container
+          (setq my--build-command
+                (concat "docker exec -u root -it "
+                        my--build-container
+                        " /bin/bash -c "
+                        (combine-and-quote-strings (list my--build-command)))))
+      ;; (if my--build-container (print "not nil") (print "nil"))
+
+      (print my--build-command)
+      (compile my--build-command)))
 
 
       ;; (setq my/compile-command (combine-and-quote-strings (list "make -f" "neat o" (print my--current-makefile))))
