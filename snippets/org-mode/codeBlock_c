@@ -3,6 +3,6 @@
 # key: cc
 # uuid:codeBlock_c
 # --
-#+BEGIN_SRC c
+#+begin_src c
 $0
-#+END_SRC
+#+end_src

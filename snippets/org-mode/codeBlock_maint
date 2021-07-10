@@ -3,6 +3,6 @@
 # key: cm
 # uuid:codeBlock_maint
 # --
-#+BEGIN_SRC maint-script
+#+begin_src maint-script
 $0
-#+END_SRC
+#+end_src

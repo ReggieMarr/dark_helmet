@@ -3,6 +3,6 @@
 # key: cp
 # uuid:codeBlock_python
 # --
-#+BEGIN_SRC python
+#+begin_src python :results output
 $0
-#+END_SRC
+#+end_src
