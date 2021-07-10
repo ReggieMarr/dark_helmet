@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: latex_bmatrix_block
+# key: mat
+# uuid: latex_bmatrix_block
+# --
+\begin{bmatrix}
+$0
+\end{bmatrix}

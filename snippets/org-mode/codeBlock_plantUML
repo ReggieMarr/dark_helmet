@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: codeBLock_plantUML
+# key: cu
+# uuid:codeBlock_plantUML
+# --
+#+begin_src plantuml :file ${1:filename}.png
+$0
+#+end_src

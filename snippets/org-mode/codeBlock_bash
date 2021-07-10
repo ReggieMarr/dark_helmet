@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: codeBlock_bash
+# key: cb
+# uuid:codeBlock_bash
+# --
+#+begin_src bash
+$0
+#+end_src
