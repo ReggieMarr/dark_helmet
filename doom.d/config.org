@@ -4,6 +4,9 @@
 
 # #+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-bigblow.setup
 
+#+HUGO_BASE_DIR: ../../wemacs/static_site_generation/hugo/ibst/thermal_testing/content/posts/
+#+HUGO_SECTION: ./
+
 * Initialization
 Configuration that needs to be exectuted as close to the beginning as possible
 
@@ -108,34 +111,34 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
               :require-match 'confirm-after-completion
               :history 'file-name-history
               :keymap counsel-find-file-map))
-  ;; :caller caller))
 
   (defvar my--current-makefile nil)
   (transient-define-argument my/transient-arg/current-makefile ()
-    "Set a lisp variable, pmx--variable.  Won't show up in infix arguments."
+    "Set a lisp variable"
     :description "Makefile path"
     :class 'my--transient-lisp-path-variable
-    :shortarg ""
-    :variable 'my--current-makefile
-    :argument "")
+    :variable 'my--current-makefile)
 
-  (defvar my--copy-location nil)
-  (transient-define-argument my/transient-arg/copy-location ()
-    "Set a lisp variable, pmx--variable.  Won't show up in infix arguments."
-    :description "Location to copy binary"
+  (defvar my--copy-source nil)
+  (transient-define-argument my/transient-arg/copy-source ()
+    "Set a lisp variable"
+    :description "Copy source"
     :class 'my--transient-lisp-path-variable
-    :shortarg ""
-    :variable 'my--copy-location
-    :argument "")
+    :variable 'my--copy-source)
+
+  (defvar my--copy-destination nil)
+  (transient-define-argument my/transient-arg/copy-destination ()
+    "Set a lisp variable"
+    :description "Copy destination"
+    :class 'my--transient-lisp-path-variable
+    :variable 'my--copy-destination)
 
   (defvar my--build-container nil)
   (transient-define-argument my/transient-arg/build-container ()
-    "Set a lisp variable, pmx--variable.  Won't show up in infix arguments."
+    "Set a lisp variable"
     :description "Docker container to use for build"
     :class 'transient-lisp-variable
-    :shortarg ""
-    :variable 'my--build-container
-    :argument "")
+    :variable 'my--build-container)
 
   ;; (defvar my--additional-compiler-flags "Additional compiler flags" "alsdkfj")
   (defvar my--additional-compiler-flags nil)
@@ -143,27 +146,7 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
     "Set a lisp variable, pmx--variable.  Won't show up in infix arguments."
     :description "Additional compiler flags"
     :class 'transient-lisp-variable
-    :shortarg ""
-    :variable 'my--additional-compiler-flags
-    :argument "")
-
-  ;; (setq my/full-vector
-  ;;       ["Build Kinetises"
-
-  ;;        ["Compile Args"
-  ;;         ("-B" "always make" "--always-make")
-  ;;         ("-j" "jobs" "--jobs")
-  ;;         ]
-
-  ;;        ["Project"
-  ;;         ("p" transient-arg/kinetis/projects)]
-
-  ;;        ["Other"
-  ;;         ("s" "copy-to-pyrite" "copy-to-pyrite")
-  ;;         ("c" "compiledb" "compiledb")]
-
-  ;;        ["Action"
-  ;;         ("RET" "compile" my/compile)]])
+    :variable 'my--additional-compiler-flags)
 
   (setq my/transient-infix/makefile
         ["Makefile"
@@ -174,7 +157,8 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
   (setq my/transient-infix/additional-options
         ["Additional Options"
          ("b" "build container" my/transient-arg/build-container)
-         ("C" "copy location" my/transient-arg/copy-location)])
+         ("s" "copy source" my/transient-arg/copy-source)
+         ("d" "copy destination" my/transient-arg/copy-destination)])
 
   (setq my/transient-infix/compiler-args/gcc
         ["Compiler Args"
@@ -187,7 +171,7 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
         ["Actions"
          ("c" "compile" my/compile)
          ("l" "compile + load" my/compileAndLoad)
-         ("d" "compiledb" my/compiledb)])
+         ("p" "compiledb" my/compiledb)])
 
   (transient-define-suffix my/compiledb (args)
     (interactive (list (transient-args 'my/build)))
@@ -196,36 +180,23 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
 
   (transient-define-suffix my/compile (args)
     (interactive (list (transient-args 'my/build)))
-    ;; (setq my/test (mapconcat 'identity args " "))
-    ;; (print my/test))
     (let*
         ((my--make-command (concat "cd " (file-name-directory my--current-makefile) " && make -f " (file-name-nondirectory my--current-makefile)))
-         (my--build-command (concat my--make-command " " (mapconcat 'identity args " ") " " my--additional-compiler-flags)))
+         (my--build-command (concat my--make-command " " (mapconcat 'identity args " ") " " my--additional-compiler-flags))
+         (my--copy-command ""))
 
-      ;; (if (not (string= my--build-container ""))
       (if my--build-container
           (setq my--build-command
                 (concat "docker exec -u root -it "
                         my--build-container
                         " /bin/bash -c "
                         (combine-and-quote-strings (list my--build-command)))))
+
+      ;; (if my--copy-source )
       ;; (if my--build-container (print "not nil") (print "nil"))
 
       (print my--build-command)
       (compile my--build-command)))
-
-
-      ;; (setq my/compile-command (combine-and-quote-strings (list "make -f" "neat o" (print my--current-makefile))))
-      ;; (print my/compile-command)))
-      ;; (setq my/compile-command (combine-and-quote-strings "make -f" my--current-makefile args "neat"))
-    ;;   (print compile-command))
-    ;; (print args))
-
-    ;; (let ((build-args (my/common-elements args '("--always-make" "--jobs")))
-    ;;                   (print build-args)
-    ;;                   (print "sikk"))
-    ;; ;; (let ((setq build-args (my/get-build-args args '("--always-make")))))
-    ;; ))
 
   (transient-define-suffix my/compileAndLoad (args)
     (interactive (list (transient-args 'my/build)))
@@ -307,6 +278,8 @@ From https://lists.gnu.org/archive/html/emacs-orgmode/2014-04/msg00912.html
 ;; compiledb -n make -f Make213371
 #+END_SRC
 
+#+RESULTS:
+
 * Config Development
 Convenience tools to help with configuration development
 
@@ -324,6 +297,84 @@ Convenience tools to help with configuration development
 (defun my/open-config ()
   (interactive)
   (find-file "~/dark_helmet/doom.d/config.org"))
+#+END_SRC
+
+* Completions
+** Company
+
+#+BEGIN_SRC emacs-lisp
+(defun my/yas-company ()
+  (interactive)
+  ;; (when company-candidates
+  ;;   (company-complete-selection))
+  (yas-next-field))
+
+(use-package! company
+  :config
+  ;; (define-key company-active-map (kbd "TAB") nil)
+  ;; (define-key company-active-map (kbd "<tab>") nil)
+  ;; (setq company-active-map nil)
+  (map! :map company-active-map
+        "TAB" #'yas-next-field
+        "<tab>" #'yas-next-field
+        )
+;;   (map! :map company-active-map
+;;         ;; "tab" nil
+;; "<backtab>"       company-select-previous
+;; "<down-mouse-1>"  ignore
+;; "<down-mouse-3>  ignore
+;; "<down>          company-select-next-or-abort
+;; "<f1>            nil
+;; "<mouse-1>       company-complete-mouse
+;; "<mouse-3>       company-select-mouse
+;; "<return>        company-complete-selection
+;; "<tab>           my/yas-company
+;; "<up-mouse-1>    ignore
+;; "<up-mouse-3>    ignore
+;; "<up>            company-select-previous-or-abort
+;; "-M-s           company-filter-candidates
+;; "-S-s           helm-company
+;; "-SPC           company-complete-common
+;; "-d             company-next-page
+;; "-g             company-abort
+;; "-h             company-show-doc-buffer
+;; "-j             company-select-next
+;; "-k             company-select-previous
+;; "-n             company-select-next
+;; "-p             company-select-previous
+;; "-s             company-filter-candidates
+;; "-u             company-previous-page
+;; "-v             company-next-page
+;; "-w             nil
+;; "SC ESC ESC     company-abort
+;; "-0             company-complete-number
+;; "-1             company-complete-number
+;; "-2             company-complete-number
+;; "-3             company-complete-number
+;; "-4             company-complete-number
+;; "-5             company-complete-number
+;; "-6             company-complete-number
+;; "-7             company-complete-number
+;; "-8             company-complete-number
+;; "-9             company-complete-number
+;; "-n             company-select-next
+;; "-p             company-select-previous
+;; "-v             company-previous-page
+;; "ET             company-complete-selection
+;; "AB             my/yas-company
+;;         "<tab>" #'my/yas-company
+;;         "TAB" #'my/yas-company)
+        ;; "<tab>" #'company-complete-selection)
+  (setq company-idle-delay 0.01
+        company-minimum-prefix-length 1)
+        ;; company-active-map nil)
+)
+
+
+;; Trying to get company to abort on escape no just quit out this is interesting
+;; (evil-collection-define-key nil 'company-active-map
+;;     (kbd "<escape>") 'company-select-next-or-abort
+;;     (kbd "C-k") 'company-select-next-or-abort)
 #+END_SRC
 
 * Debugging
@@ -395,6 +446,21 @@ Debugging using Dap Mode
       (delete-other-windows))))
 #+END_SRC
 
+** Locate your cursor with beacon
+#+BEGIN_SRC emacs-lisp
+;; (use-package! beacon
+;;   :config
+;;   (beacon-mode 1) ; Turn it on everywhere!
+;;   (setq beacon-color 0.7
+;;         beacon-size 50
+;;         beacon-blink-delay 0
+;;         beacon-blink-duration 0.3
+;;         beacon-dont-blink-major-modes nil
+;;         )
+;;   )
+#+END_SRC
+I found this to be kind cool but ultimately distracting.. disabling for now and going back to nav-flash
+
 * Code
 ** ELISP
 #+BEGIN_SRC emacs-lisp
@@ -450,26 +516,37 @@ Debugging using Dap Mode
 ** Find file
 #+BEGIN_SRC emacs-lisp
 (setq my/directory-shortcuts
-      '(("zybo" .  "/ssh:root@192.168.0.102:")
+      '(("zybo" .  "/ssh:root@192.168.0.121:")
         ("pyrite" .  "/ssh:edyer@pyrite:")
+        ("builds" .  "/ssh:edyer@pyrite:/home/sw-eng/builds")
 
-        ("kinetis" . "~/kinetis/")
-        ("release" . "~/release/")
+        ("cfgdb"     . "~/cfgdb/")
+        ("kinetis"   . "~/kinetis/")
+        ("release"   . "~/release/")
         ("stellaris" . "~/stellaris/")
         ("wemacs"    . "~/wemacs/")
 
-        ("downloads" . "~/Downloads/")
-        ("desktop" . "~/Desktop/")
+        ("dark_helmet" . "~/dark_helmet/")
+        ("downloads"   . "~/Downloads/")
+        ("dropbox"     . "~/Dropbox/")
+        ("desktop"     . "~/Desktop/")
+        ("reading"     . "~/reading/")
 
-        ("project"         . "~/erk_projects/")
+        ("lib_ldd"           . "~/libwdfldd_v1")
+        ("lib_cpplr"         . "~/libwdfcpplrdecoder")
+
+        ("projects"        . "~/erk_projects/")
         ("2nd Source HDIR" . "~/erk_projects/CMX-10_2nd-Source-HDIR")
-        ("ga"              . "~/erk_projects/GA")
-        ("lens sustaining" . "~/erk_projects/lens_sustaining")
-        ("GCS"             . "~/erk_projects/GCS")
+        ("CART"            . "~/erk_projects/CART")
         ("CPPLR"           . "~/erk_projects/GCS/CPPLR")
+        ("GA"              . "~/erk_projects/GA")
+        ("GCS"             . "~/erk_projects/GCS")
         ("IBST"            . "~/erk_projects/MX25G2/IBST")
+        ("Lens Sustaining" . "~/erk_projects/lens_sustaining")
+        ("Leonardo"        . "~/erk_projects/MX15HDi/Leonardo_Demo")
         ("MMG2"            . "~/erk_projects/MMG2")
         ("MX25G2"          . "~/erk_projects/MX25G2")
+        ("Navigation"      . "~/erk_projects/Navigation")
         ("VISSWIR"         . "~/erk_projects/VISSWIR")
         ))
 
@@ -490,12 +567,46 @@ Debugging using Dap Mode
   :config
   (map! :leader
         (:prefix "f"
-         :desc "shortcuts" "j" #'my/directory-shortcuts
-         :desc "home"      "k" #'(lambda () (interactive) (counsel-find-file "~")))))
+         :desc "recursive find" "D" #'counsel-file-jump
+         :desc "shortcuts" "j"      #'my/directory-shortcuts
+         :desc "home"      "k"      #'(lambda () (interactive) (counsel-find-file "~")))))
 #+END_SRC
 
-* EAF
+** Recoll
 #+BEGIN_SRC emacs-lisp
+;; (defun helm-ff-recoll-index-directory (directory)
+;;   "Create a recoll index directory from DIRECTORY.
+;; Add the new created directory to `helm-recoll-directories' using the
+;; basename of DIRECTORY as name.
+;; By using `customize-set-variable', a new source is created for this
+;; new directory."
+;;   (cl-assert (boundp 'helm-recoll-directories) nil
+;;              "Package helm-recoll not installed or configured")
+;;   (let* ((bn (helm-basename (expand-file-name directory)))
+;;          (index-dir (format "~/.recoll-%s" bn))
+;;          (conf-file (expand-file-name "recoll.conf" index-dir)))
+;;     (mkdir index-dir)
+;;     (with-current-buffer (find-file-noselect conf-file)
+;;       (insert (format "topdirs = %s" (expand-file-name directory)))
+;;       (save-buffer)
+;;       (kill-buffer))
+;;     (customize-set-variable 'helm-recoll-directories
+;;                             (append `((,bn . ,index-dir)) helm-recoll-directories))
+;;     (message "Don't forget to index config directory with 'recollindex -c %s'" index-dir)))
+
+;; (helm-ff-recoll-index-directory "~/erk_projects/MX25G2/")
+
+;; (defmethod helm-setup-user-source ((source helm-source-ffiles))
+;;   (helm-source-add-action-to-source-if
+;;    "Recoll index directory"
+;;    'helm-ff-recoll-index-directory
+;;    source
+;;    'file-directory-p
+;;    3))
+   #+END_SRC
+
+* EAF
+This code seems to be broken after some EAF update
 (use-package eaf
   :load-path "~/dark_helmet/packages/emacs-application-framework"
   :custom
@@ -510,16 +621,13 @@ Debugging using Dap Mode
 ;; (setq eaf-evil-leader-keymap  spacemacs-cmds)
 
 (setq eaf-evil-leader-key "SPC")
-#+END_SRC
 
-#+BEGIN_SRC emacs-lisp
 (defun helm-files-insert-as-org-link (candidate)
   (interactive)
   (let* ((marked-files (helm-marked-candidates :with-wildcard t)))
     (dolist (file marked-files)
       (let ((target (expand-file-name (helm-substitute-in-filename file))))
         (insert (format "[[file:%s] " file))))))
-#+END_SRC
 
 * Email
 ** Notmuch
@@ -579,6 +687,119 @@ Debugging using Dap Mode
 
 * Languages
 ** C
+vscode-cpptools - I found that the native gdb/lldb wasn't able to show local variables well.. sticking with vscode-cpptools for now
+
+;; Add this to your config & execute to add cpptool defuns
+(require 'dap-cpptools)
+
+run command `dap-cpptools-setup` to download bins & automatically setup
+
+Make sure to compile files with -g (for debugging symbols) and -O0 (no opimization) flags
+
+(dap-register-debug-template
+  "cpptools::Run Configuration"
+  (list :type "cppdbg"
+        :request "launch"
+        :name "cpptools::Run Configuration"
+        :MIMode "gdb"
+        :program "${workspaceFolder}/bin/main"
+        :cwd "${workspaceFolder}"))
+
+Latest
+(dap-register-debug-template
+  "cpplr::runzz"
+  (list :type "cppdbg"
+        :request "launch"
+        :MIMode "lldb"
+        :program "${workspaceFolder}/bin/main"
+        :arguments ["../src/data and this"]
+        :cwd "${workspaceFolder}"))
+
+(dap-register-debug-template
+  "cp::gdb"
+  (list :type "cppdbg"
+        :request "launch"
+        :MIMode "lldb"
+        :program "${workspaceFolder}/bin/main"
+        :arguments ["../src/data and this"]
+        :cwd "${workspaceFolder}"))
+
+;; run cpplr main
+(dap-register-debug-template
+  "GDB::Run2"
+  (list :type "gdb"
+        :request "launch"
+        :name "GDB::Run"
+        :target nil
+        :arguments "../src/data"
+        :cwd nil))
+
+(dap-register-debug-template
+  "cpptools::pretty-printt"
+  (list :type "cppdbg"
+        :request "launch"
+        :name "cpptools::pretty-printt"
+        :MIMode "lldb"
+        :program "${workspaceFolder}/bin/main"
+        :arguments "../src/data"
+        :cwd "${workspaceFolder}"))
+
+# THESE TWO THING??
+(setq dap-cpptools-debug-program '("/home/edyer/.emacs.d/.extension/llvm-org.lldb-vscode-0.1.0/bin/lldb-vscode"))
+(dap-register-debug-template
+  "cpptools::pretty-printt-args"
+  (list :type "lldb-vscode"
+        :request "launch"
+        :name "cpptools::pretty-printt"
+        :MIMode "lldb"
+        :program "${workspaceFolder}/bin/main"
+        :args ["./src/data"]
+        :cwd "${workspaceFolder}"))
+        And the lldb-vscode is just a symlink to the one in usr/bin
+
+#(setq dap-cpptools-debug-program '("/home/edyer/llvm-project/bin/lldb-vscode"))
+(setq dap-cpptools-debug-program '("/home/edyer/.emacs.d/.extension/vscode/cpptools/extension/debugAdapters/OpenDebugAD7"))
+
+Gdb doesn't seem to work well (vector just says "std" and doesn't give any info..)
+
+LLDB also had issues
+
+Using cpptools seems to work the best for dkisplaying vectors but also need to run with  lldb? (see config below)
+
+(dap-register-debug-template
+  "cpptools::pretty-printt"
+  (list :type "cppdbg"
+        :request "launch"
+        :name "cpptools::pretty-printt"
+        :MIMode "lldb"
+        :program "${workspaceFolder}/bin/main"
+        :cwd "${workspaceFolder}"))
+
+
+;; May 15 solution
+(require 'dap-codelldb)
+The run M-x dap-codelldb-setup
+(dap-register-debug-template
+  "codelldb-test"
+  (list :type "codelldb"
+        :request "launch"
+        :MIMode "lldb"
+        :args ["./src/data"]
+        :program "${workspaceFolder}/bin/main"
+        :cwd "${workspaceFolder}"))
+
+#+BEGIN_SRC emacs-lisp
+(require 'dap-cpptools)
+(dap-register-debug-template
+  "cpptools::pretty-princ-lldb"
+  (list :type "cppdbg"
+        :request "launch"
+        :name "cpptools::pretty-printt"
+        :MIMode "lldb"
+        :program "${workspaceFolder}/bin/main"
+        :cwd "${workspaceFolder}"))
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp
 (use-package! cc-mode
   :init
@@ -586,10 +807,18 @@ Debugging using Dap Mode
 
   :config
   (require 'dap-mode)
-  (require 'dap-lldb)
-  (require 'dap-gdb-lldb)
-  (dap-gdb-lldb-setup) ;; Automatically install debug adapters if needed
-)
+  (require 'dap-codelldb)
+  ;; (require 'dap-lldb)
+  ;; (require 'dap-gdb-lldb)
+  (dap-codelldb-setup) ;; Automatically install the codelldb adapter if not already installed
+  (dap-register-debug-template
+   "codelldb-test"
+   (list :type "codelldb"
+         :request "launch"
+         :MIMode "lldb"
+         :args ["./src/data"]
+         :program "${workspaceFolder}/bin/main"
+         :cwd "${workspaceFolder}")))
 #+END_SRC
 
 ** Python
@@ -880,7 +1109,9 @@ Default starting place is the home directory."
   (map! :leader
         "k" nil
         :desc "ace-window" "k" #'ace-window)
-  (setq aw-scope 'global))
+  (setq aw-scope 'global
+        aw-ignore-on nil ; allow ace to jump to any buffer
+        ))
 #+END_SRC
 
 * Navigation
@@ -894,6 +1125,8 @@ Default starting place is the home directory."
        :desc "c"   "c"  #'(lambda () (interactive) (my/ivy-switch-buffer "\\(cpp\\|c\\)"))
        :desc "h"   "h"  #'(lambda () (interactive) (my/ivy-switch-buffer "\\(hpp\\|h\\)"))
        :desc "m"   "m"  #'(lambda () (interactive) (my/ivy-switch-buffer "\\(mat\\|m\\)"))
+       :desc "pdf" "f"  #'(lambda () (interactive) (my/ivy-switch-buffer "pdf"))
+       :desc "py"  "p"  #'(lambda () (interactive) (my/ivy-switch-buffer "py"))
        :desc "org" "o"  #'(lambda () (interactive) (my/ivy-switch-buffer "org"))
        :desc "el"  "e"  #'(lambda () (interactive) (my/ivy-switch-buffer "el")))))
 
@@ -917,6 +1150,23 @@ Default starting place is the home directory."
 ;;       (and (string-match "\\(\\..*$\\).*" "eric.dyer@l3harris.com")
 ;;            (setq user (match-string 1 "eric.dyer@l3harris.com")
 ;;                  domain (match-string 1 "eric.dyer@l3harris.com") ) ))
+#+END_SRC
+
+** Kill buffer
+I don't want vterm buffers to warn about killing the process
+#+BEGIN_SRC emacs-lisp
+(defun my/kill-buffer ()
+  (interactive)
+  ;; Always kill vterm buffers without asking questions
+  (if (string= major-mode "vterm-mode")
+      (let ((kill-buffer-query-functions nil))
+        (kill-buffer))
+    (kill-buffer)))
+
+(map!
+ :leader
+ :prefix "b"
+ :desc "Kill-buffer" "k" #'my/kill-buffer)
 #+END_SRC
 
 * Org
@@ -1098,12 +1348,17 @@ Default starting place is the home directory."
 #+BEGIN_SRC emacs-lisp
 (use-package! org
   :config
+  (setq org-plantuml-jar-path (expand-file-name "/home/you/path/to/plantuml.jar"))
+(add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+(org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t)))
+  ;; (org-babel-do-load-languages 'org-babel-load-languages '((ruby . t)
+  ;;                                                          (plantuml . t)))
   (require 'color)
   (custom-set-faces! `(org-block :background
                                  ,(color-darken-name
-                                   (face-attribute 'default :background) 4)))
+                                   (face-attribute 'default :background) 4))))
 
-  (setq org-babel-default-header-args '((:session . "none") (:results . "replace output") (:exports . "both") (:cache . "no") (:hlines . "no") (:tangle . "no"))))
+  ;; (setq org-babel-default-header-args '((:session . "none") (:results . "replace output") (:exports . "both") (:cache . "no") (:hlines . "no") (:tangle . "no"))))
 ;;  (setq org-babel-default-header-args
 ;; ((:session . "none")
 ;;  (:results . "replace")
@@ -1241,6 +1496,22 @@ Add org links to magit buffers
   (setq org-hugo-default-section-directory "content")
   )
 #+END_SRC
+*** Latex
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'ox-latex
+(add-to-list 'org-latex-classes
+             '("org-plain-latex"
+               "\\documentclass{article}
+           [NO-DEFAULT-PACKAGES]
+           [PACKAGES]
+           [EXTRA]"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+#+END_SRC
+
 
 
 *** Plotly links
@@ -1699,11 +1970,6 @@ Also install `flyspell-correct-ivy` for a nice completion experience
   (evil-global-set-key 'normal (kbd "K") #'er/expand-region)
   (evil-global-set-key 'visual (kbd "K") #'er/expand-region))
 
-(use-package! company
-  :config
-  (setq company-idle-delay 0.01
-        company-minimum-prefix-length 1))
-
 (add-hook! 'c-mode-hook
   (setq which-function-mode t))
   ;; (setq which-func-mode t))
@@ -1963,6 +2229,10 @@ Also install `flyspell-correct-ivy` for a nice completion experience
         "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f Make231857 -B -j \" && scp 231857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
         "cd ~/kinetis && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/kinetis && make -f Make231857 -B > buildlog.txt\" && cat buildlog.txt && compiledb --parse buildlog.txt && scp 231857-01X.axf edyer@pyrite:/home/bdi3000/edyer"
 
+        ;; Airbus
+        "cd ~/airbus && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/airbus && make.py 76441-99X -B \" "
+        "cd ~/airbus && docker exec -u root -it build_container /bin/bash -c \"cd $HOME/airbus && make.py 77239-99X -B --debug \" "
+
         "maint -f /home/edyer/projects/GA/backups/sysbackup_sept15_1351.bak -s /home/edyer/projects/GA/backups/testScript.sc"
 
         ;; SZLC
@@ -2001,7 +2271,8 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 #+RESULTS:
 | ~/kinetis |
 
-* LSP
+* Language Servers
+** LSP
 #+BEGIN_SRC emacs-lisp
 (use-package! lsp-mode
   :config
@@ -2046,21 +2317,32 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 (map!
  ;; :after lsp
  :leader
- :prefix "l"
+ (:prefix "l"
+ :desc "lsp-code-action"     "x" #'lsp-execute-code-action
  :desc "lsp-find-definition" "d" #'lsp-find-definition
  :desc "lsp-format"          "f" #'lsp-format-buffer
  :desc "lsp-find-references" "r" #'lsp-find-references
  :desc "lsp-ui-imenu"        "i" #'lsp-ui-imenu
+ :desc "lsp-workspace-symbol" "a" #'helm-lsp-workspace-symbol
+ :desc "lsp-global-workspace-symbol" "A" #'helm-lsp-global-workspace-symbol
  :desc "peek definition"     "l" #'lsp-ui-peek-find-definitions
  :desc "peek definition"     "s" #'lsp-ui-peek-find-references
  :desc "lsp-rename"          "n" #'lsp-rename
+
+ :desc "dap-hydra" "h" #'dap-hydra
+ :desc "dap-debug-last" "g" #'dap-debug-last
+ (:prefix "G"
+  :desc "dap-debu")
+ (:prefix "t"
+  :desc "lsp-treemacs-symbols" "s" #'lsp-treemacs-symbols
+  :desc "lsp-treemacs-errors" "e" #'lsp-treemacs-errors-list)
 
  ;;navigation
  :desc "next-func" "j" #'my/next-func
  :desc "prev-func" "k" #'my/prev-func
 
  :desc "find-related-file"   "o" #'ff-find-related-file
- :desc "find-related-file-other-window" "O" #'projectile-find-other-file-other-window)
+ :desc "find-related-file-other-window" "O" #'projectile-find-other-file-other-window))
 
 (setq lsp-ui-peek-enable t)
 (setq lsp-ui-peek-always-show t) ;; Show peek view even if only 1 cross reference
@@ -2096,6 +2378,14 @@ Also install `flyspell-correct-ivy` for a nice completion experience
   ;; ("l" evil-window-right "right")))
 
 #+END_SRC
+** DAP
+#+BEGIN_SRC emacs-lisp
+(use-package! dap-mode
+  :custom
+  (dap-auto-configure-features '(locals)))
+#+END_SRC
+
+    dap-auto-configure-features
 
 * Reddit
 #+BEGIN_SRC emacs-lisp
@@ -2114,6 +2404,17 @@ Also install `flyspell-correct-ivy` for a nice completion experience
     (semantic-mode 1)
     (require 'stickyfunc-enhance)
   )
+#+END_SRC
+
+* Search
+
+** Fuzzy Matching with FLX
+Use flx to provide better fuzzy matching/candidate sorting - something I always missed from Sublime Text
+
+#+BEGIN_SRC emacs-lisp
+;; Use fuzzy everywhere! Ivy sorts results using flx package's scoring mechanism, if it's installed
+;; (setq ivy-re-builders-alist
+;;       '((t . ivy--regex-fuzzy)))
 #+END_SRC
 
 * Telega
@@ -2143,6 +2444,7 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 ** Better way to go up by bullet points
 ** TODO
 - [ ] dired-peep or RANGER
+- [ ] Learn how to customize faces with diredful
 - [ ] reduce delay for continuous movment holding down arrow keys
 - [ ] Show all marks in killring buffer
   + Show all jumps in killring buffer
@@ -2222,7 +2524,19 @@ Also install `flyspell-correct-ivy` for a nice completion experience
 - [ ] integrate [[https://github.com/alphapapa/magit-todos][magit todo's]]
 - [ ] rebuild with [[https://aur.archlinux.org/packages/emacs-pgtk-native-comp-git/][emacs-native-comp-pgtk]]
 - [ ] add compilation mode commands to compilation mode local leader
+- [ ] [[https://github.com/abo-abo/lispy][lispy]]
+- [ ] [[https://github.com/emacs-evil/evil-surround][evil-surround]]
 - [ ] format on diff of file before save
+- [ ] [[https://github.com/hlissner/doom-emacs/issues/2214][step through using elisp debugger]]
+- [ ] [[https://www.mathworks.com/matlabcentral/mlc-downloads/downloads/submissions/104/versions/3/previews/matlab-emacs-faq.html][Matlab mode]]
+  + [ ] [[https://www.reddit.com/r/emacs/comments/jt6tfv/run_matlab_script_in_emacs_and_print_plots/][run matlab script and print plots in emacs]]
+  + [ ] [[http://matlab-emacs.sourceforge.net/][MATLAB sourceforge]]
+  + [ ] [[http://gewhere.github.io/blog/2017/12/19/setup-matlab-in-emacs-and-babel-orgmode/][MATLAB in Emacs & Babel orgmode]]
+  + [ ] [[https://blogs.mathworks.com/community/2009/09/14/matlab-emacs-integration-is-back/][Mathworks emacs integration (2009)]]
+- [ ] [[https://stackoverflow.com/questions/4079830/how-to-configure-highlighting-in-emacs-diff-mode][Better highlighting for diff modes]]
+- [ ] [[https://github.com/ubolonton/emacs-tree-sitter][Tree-sitter]]
+- [ ] Copy current filepath to clipboard
+
 
 ** Other TODO
 - [[https://github.com/zsh-users/zsh-autosuggestions][zsh autocompletion]]
@@ -2376,3 +2690,69 @@ emacs
 --with-nativecomp
 --with-pgtk
 
+* Statically generated website
+pacman -S ruby-bundler
+
+
+5.4.105-1-MANJARO
+
+* SSH
+** Generate ssh keys
+`ssh-keygen -t rsa`
+No need to provide filename or password (less secure but more convenient)
+This will create id_rsa (private key) and id_rsa.pub (public key)
+
+** Add SSH Keys to remote machine
+
+*** Add ssh file structure if it doesn't already exist
+`mkdir -p ~/.ssh
+`touch ~/.ssh/authorized_keys`
+
+*** Copy public key from host to remote machine
+`scp ~/.ssh/id_rsa.pub remote@machine:/home/username/.ssh`
+
+*** Add public key to a new line in authoized_keys
+`cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys`
+You can now delete the public key if desired
+
+* Share Guest VPN with Host
+
+** Set up host only adapter
+https://carleton.ca/scs/2019/creating-a-new-host-only-adapter-in-virtualbox/
+This creates a host only adapater and you also add it as the 2nd adpater for the specific virtualbox machine
+you should be able to ping the adapter
+#+BEGIN_SRC bash :tangle no
+ifconfig
+
+vboxnet0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.56.1  netmask 255.255.255.0  broadcast 192.168.56.255
+        inet6 fe80::800:27ff:fe00:0  prefixlen 64  scopeid 0x20<link>
+        ether 0a:00:27:00:00:00  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 25  bytes 3054 (2.9 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+> ping 192.168.56.1                               release -> erk/feature/WR-4298_Computer-Safran-Elevation-in-MSL $ ?
+PING 192.168.56.1 (192.168.56.1) 56(84) bytes of data.
+64 bytes from 192.168.56.1: icmp_seq=1 ttl=64 time=0.032 ms
+64 bytes from 192.168.56.1: icmp_seq=2 ttl=64 time=0.027 ms
+64 bytes from 192.168.56.1: icmp_seq=3 ttl=64 time=0.053 ms
+64 bytes from 192.168.56.1: icmp_seq=4 ttl=64 time=0.046 ms
+#+END_SRC
+
+route -p add xxx.xxx.xxx.0 mask 255.255.255.0 192.168.yyy.yyy
+where xxx - is your office network IP. yyy - is your local VM ip (Ethernet3
+route -p add 142.65.58.34 mask 255.255.255.0 192.168.56.101
+ip route add 142.65.58.34 via 192.168.56.101 dev vboxnet0
+ip route add 142.65.58.34 via 192.168.56.100 dev vboxnet0
+
+
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         _gateway        0.0.0.0         UG    600    0        0 wlp2s0
+172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0
+192.168.0.0     0.0.0.0         255.255.255.0   U     600    0        0 wlp2s0
+192.168.56.0    0.0.0.0         255.255.255.0   U     0      0        0 vboxnet0
+
+Maybe use ssh tunneling?
