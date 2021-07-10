@@ -1,0 +1,65 @@
+
+#+LaTeX_CLASS: org-plain-latex
+#+LaTeX_CLASS_OPTIONS: [letterpaper, 11pt]
+
+% #+LATEX_HEADER: \usepackage{lmodern} % Ensures we have the right font
+
+% Page geometry
+#+LATEX_HEADER: \usepackage{geometry}
+#+LATEX_HEADER: \geometry{left=2.5cm,right=2.5cm,top=3.5cm,bottom=2.5cm}
+
+#+LATEX_HEADER: \usepackage{graphicx}
+#+LATEX_HEADER: \usepackage{amsmath, amsthm, amssymb}
+#+LATEX_HEADER: \usepackage[table, xcdraw]{xcolor}
+#+LATEX_HEADER: \usepackage{ragged2e}
+#+LATEX_HEADER: \usepackage{hyperref} % Links
+#+LATEX_HEADER: \usepackage{listings} % Code highlighting
+#+LATEX_HEADER: \usepackage{titling}  % To get access to title-page metadata (thetitle etc.)
+
+% Header/Footer
+#+LATEX_HEADER: \usepackage{fancyhdr}
+#+LATEX_HEADER: \pagestyle{fancy}
+
+#+LATEX_HEADER: \setlength{\headheight}{15.5pt}
+#+LATEX_HEADER: \fancyhead[L]{\setlength{\unitlength}{1mm} \begin{picture}(0,0) {\includegraphics[width=8cm]{L3HarrisLogo.jpg}} \end{picture}}
+
+#+LATEX_HEADER: \fancyhead[R]{\fontsize{7}{7} \selectfont rev. 12345 \linebreak Printed: \thedate}
+% #+LATEX_HEADER: \fancyhead[R]{\fontsize{7}{7} \selectfont rev. 12345 \linebreak Printed: 2021-06-25 14:01}
+#+LATEX_HEADER: \lfoot{\parbox[t]{0.1\textwidth}{\RaggedLeft\leftmark\strut}}
+#+LATEX_HEADER: \fancyfoot[C]{\parbox[t]{0.7\textwidth}{\fontsize{5}{7} \selectfont \centering INTERNAL USE ONLY. This document contains information proprietary to Wescam Inc. (A Subsidiary of L3Harris Technologies, Inc) and is not to be divulged or used for any purpose without a written authorization)}}
+#+LATEX_HEADER: \fancyfoot[L]{\thepage}
+
+#+LATEX_HEADER: \renewcommand{\headrulewidth}{0pt}
+#+LATEX_HEADER: \renewcommand{\footrulewidth}{0.1pt}
+
+:%%%%%%%%%%%%%%
+% Title Page %
+%%%%%%%%%%%%%%
+
+#+LATEX_HEADER: \renewcommand{\maketitle}{%
+#+LATEX_HEADER:   \thispagestyle{fancy}
+#+LATEX_HEADER:      \vspace*{\fill}
+#+LATEX_HEADER:      \begin{center}
+#+LATEX_HEADER:        {\fontsize{15}{15} \selectfont INTERNAL USE ONLY}
+#+LATEX_HEADER:        \linebreak
+#+LATEX_HEADER:        \linebreak
+#+LATEX_HEADER:        {\fontsize{40}{40} \selectfont \thetitle}
+#+LATEX_HEADER:        \linebreak
+#+LATEX_HEADER:        \linebreak
+#+LATEX_HEADER:        {\fontsize{30}{30} \selectfont \thesubtitle}
+#+LATEX_HEADER:        {\fontsize{10}{10} \selectfont \theauthor}
+#+LATEX_HEADER:    \end{center}
+#+LATEX_HEADER:    \vspace*{\fill}
+#+LATEX_HEADER:    \newpage
+#+LATEX_HEADER: }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colorizing links in a nicer way %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#+LATEX_HEADER: \definecolor{bblue}{HTML}{0645AD}
+#+LATEX_HEADER: \usepackage[colorlinks]{hyperref}
+#+LATEX_HEADER: \hypersetup{colorlinks, linkcolor=blue, urlcolor=bblue}
+
+% Prevent 1st line indent
+#+LATEX_HEADER: \parindent=0pt
