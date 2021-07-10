@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: latex_equation_block
+# key: eqn
+# uuid: latex_equation_block
+# --
+\begin{equation}
+$0
+\end{equation}
