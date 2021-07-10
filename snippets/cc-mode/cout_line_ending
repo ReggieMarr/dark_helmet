@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: cout_line_ending
+# key: ce
+# --
+cout << ${1} << endl;

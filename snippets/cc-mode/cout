@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: cout
+# key: co
+# --
+cout << $1;

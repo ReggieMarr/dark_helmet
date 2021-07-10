@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: crumb
+# key: cr
+# --
+cout << __FILE__ << ":" << __LINE__ << endl;
